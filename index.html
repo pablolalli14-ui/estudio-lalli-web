@@ -32,16 +32,23 @@
     }
   </script>
 
-  <!-- Google Analytics 4 — reemplazar G-XXXXXXXXXX con tu Measurement ID -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <!-- Google Analytics 4 + Google Ads Conversion Tracking -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J12SDZEF9B"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
-    gtag('config', 'AW-XXXXXXXXX');
+    gtag('config', 'G-J12SDZEF9B');
+    gtag('config', 'AW-17938773454');
+    // Etiquetas de conversión por área — ID/Label de Google Ads
+    var CONV = {
+      familia: 'AW-17938773454/VkroCNX54LAcEM7r7-lC',
+      penal:   'AW-17938773454/PENAL_LABEL_PENDING'
+    };
     function trackConversion(type) {
-      gtag('event', 'conversion', { send_to: 'AW-XXXXXXXXX/XXXXXXXX', event_category: 'lead', event_label: type });
+      var campaign = new URLSearchParams(window.location.search).get('utm_campaign') || '';
+      var sendTo = campaign === 'penal' ? CONV.penal : CONV.familia;
+      gtag('event', 'conversion', { send_to: sendTo, event_category: 'lead', event_label: type });
       gtag('event', type, { event_category: 'lead' });
     }
   </script>
