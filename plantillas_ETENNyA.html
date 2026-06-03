@@ -18,10 +18,11 @@
 
   .ts-wrapper.single .ts-control { border:2px solid #d1c9bb; border-radius:0.5rem; padding:0.6rem 0.85rem; font-size:0.95rem; background:#fff; min-height:2.8rem; }
   .ts-wrapper.single.focus .ts-control { border-color:var(--navy); box-shadow:0 0 0 3px rgba(26,39,68,.12); }
-  .ts-dropdown { border:2px solid var(--navy); border-radius:0.5rem; font-size:0.9rem; z-index:9999; position:absolute; }
-  .ts-wrapper { position:relative; z-index:100; }
-  .ts-dropdown .ts-dropdown-content .option.active { background:var(--navy); color:#fff; }
-  .ts-dropdown .ts-dropdown-content .option:hover { background:#e8e2d8; }
+  .ts-dropdown { border:2px solid var(--navy); border-radius:0.5rem; font-size:0.9rem; z-index:99999 !important; background-color:#fff !important; opacity:1 !important; box-shadow:0 8px 24px rgba(0,0,0,.18); }
+  .ts-dropdown, .ts-dropdown .ts-dropdown-content { background-color:#fff !important; }
+  .ts-dropdown .ts-dropdown-content .option { background-color:#fff; }
+  .ts-dropdown .ts-dropdown-content .option.active { background:var(--navy) !important; color:#fff; }
+  .ts-dropdown .ts-dropdown-content .option:hover { background:#e8e2d8 !important; }
 
   .campo-auto  { background:#eef2f9; border:1.5px solid #b8c5e0; }
   .campo-manual{ background:#fff;    border:1.5px solid #d1c9bb; }
