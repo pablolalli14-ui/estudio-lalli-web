@@ -37,6 +37,12 @@
   .cat-block  { border-left:3px solid var(--navy); padding-left:1rem; margin-bottom:1.4rem; }
 
   .badge-default { background:#d4edda; color:#155724; font-size:.65rem; font-weight:700; padding:.1rem .5rem; border-radius:.25rem; margin-left:.4rem; }
+
+  .campo-requerido input, .campo-requerido select, .campo-requerido textarea { border-color:var(--gold) !important; background:#fffbf0 !important; }
+  .campo-requerido label { color:#7a5c00 !important; font-weight:700 !important; }
+  .campo-dim { opacity:.35; pointer-events:none; }
+  .paquete-btn { border:2px solid var(--navy); border-radius:.6rem; padding:.35rem .85rem; font-size:.8rem; font-weight:600; color:var(--navy); background:#fff; cursor:pointer; transition:background .15s,color .15s; }
+  .paquete-btn:hover { background:var(--navy); color:#fff; }
 </style>
 </head>
 <body class="min-h-screen py-8 px-4">
@@ -106,11 +112,11 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <!-- Para SAME / División Infancia -->
-      <div>
+      <div id="wrap-domicilio">
         <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Domicilio del operativo <span class="badge-manual">Manual</span></label>
         <input id="f-domicilio" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" type="text" placeholder="Dirección para traslado (SAME / División)">
       </div>
-      <div>
+      <div id="wrap-hosp-destino">
         <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Hospital destino del traslado <span class="badge-manual">Manual</span></label>
         <select id="f-hosp-destino" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" onchange="toggleOtro('f-hosp-destino','f-hosp-destino-otro')">
           <option value="">— Para Oficio SAME y División Infancia —</option>
@@ -134,18 +140,18 @@
         </select>
         <input id="f-hosp-destino-otro" class="campo-manual w-full rounded-lg px-3 py-2 text-sm mt-2" type="text" placeholder="Nombre completo del hospital" style="display:none">
       </div>
-      <div>
+      <div id="wrap-fecha-op">
         <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Fecha del operativo <span class="badge-manual">Manual</span></label>
         <input id="f-fecha-op" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" type="text" placeholder="Ej: 27 de mayo del corriente">
       </div>
-      <div>
+      <div id="wrap-hora-op">
         <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Hora del operativo <span class="badge-manual">Manual</span></label>
         <input id="f-hora-op" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" type="text" placeholder="Ej: 9.30">
       </div>
       <!-- Para Hospital / Acompañante / Nota de Ejecución -->
-      <div>
+      <div id="wrap-hosp-intern">
         <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Hospital de internación actual <span class="badge-manual">Manual</span></label>
-        <select id="f-hosp-intern" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" onchange="toggleOtro('f-hosp-intern','f-hosp-intern-otro')">
+        <select id="f-hosp-intern" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" onchange="toggleOtro('f-hosp-intern','f-hosp-intern-otro'); autoComisaria();">
           <option value="">— Para Oficio Hospital, Acompañante, Nota Ejecución —</option>
           <option>Hospital General de Agudos «Dr. Cosme Argerich»</option>
           <option>Hospital General de Niños «Pedro de Elizalde»</option>
@@ -167,19 +173,23 @@
         </select>
         <input id="f-hosp-intern-otro" class="campo-manual w-full rounded-lg px-3 py-2 text-sm mt-2" type="text" placeholder="Nombre completo del hospital" style="display:none">
       </div>
+      <div id="wrap-comisaria">
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Comisaría vecinal <span class="badge-auto">Auto</span></label>
+        <input id="f-comisaria" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" type="text" placeholder="Se completa al elegir hospital (editable)">
+      </div>
       <!-- Para Nota de Ejecución -->
-      <div>
+      <div id="wrap-hosp-inicial">
         <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Hospital inicial (si hubo traslado) <span class="badge-manual">Manual</span></label>
         <input id="f-hosp-inicial" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" type="text" placeholder="Solo si el joven fue transferido luego (Nota Ejecución)">
       </div>
-      <div>
+      <div id="wrap-fecha-ejec">
         <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Fecha de ejecución de la medida <span class="badge-manual">Manual</span></label>
         <input id="f-fecha-ejec" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" type="text" placeholder="Ej: 05/05/26 (para Nota de Ejecución)">
       </div>
     </div>
 
     <!-- Hechos para Medidas Precautorias -->
-    <div class="mt-4">
+    <div class="mt-4" id="wrap-hechos">
       <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">
         Relato de hechos <span class="badge-manual">Manual</span>
         <span class="text-gray-400 font-normal">— para Medidas Precautorias</span>
@@ -193,6 +203,14 @@
     <div class="flex items-center gap-2 mb-5">
       <span class="w-7 h-7 rounded-full text-white text-sm font-bold flex items-center justify-center" style="background:var(--navy)">3</span>
       <h2 class="text-lg font-semibold" style="color:var(--navy)">Elegir documentos</h2>
+    </div>
+
+    <!-- Paquetes rápidos -->
+    <div class="mb-5">
+      <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Cargar paquete</p>
+      <div class="flex flex-wrap gap-2">
+        <button type="button" class="paquete-btn" onclick="cargarPaquete('internacion')">Internación activa</button>
+      </div>
     </div>
 
     <!-- Escritos Judiciales -->
@@ -248,6 +266,10 @@
           <input type="checkbox" class="doc-check" id="chk-acomp">
           <span class="text-sm font-medium text-gray-800"><strong>Pedido de Acompañante</strong> hospitalario</span>
         </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 cursor-pointer">
+          <input type="checkbox" class="doc-check" id="chk-comisaria">
+          <span class="text-sm font-medium text-gray-800">Oficio a <strong>Comisaría Vecinal</strong></span>
+        </label>
       </div>
     </div>
 
@@ -262,6 +284,56 @@
 </div><!-- /max-w -->
 
 <script>
+// ── MAPEO HOSPITAL → COMISARÍA ────────────────────────────────────────────
+const HOSP_COMISARIA = {
+  'Hospital General de Agudos «Dr. Cosme Argerich»':         'Comisaría Vecinal 4C',
+  'Hospital General de Niños «Pedro de Elizalde»':           'Comisaría Vecinal 4D',
+  'Hospital Infanto Juvenil «Dra. Carolina Tobar García»':   'Comisaría Vecinal 4D',
+  'Hospital de Emergencias Psiquiátricas Torcuato de Alvear':'Comisaría Vecinal 15A',
+  'Hospital General de Agudos «Dr. Juan A. Fernández»':      'Comisaría Vecinal 14C',
+  'Hospital General de Agudos «Dr. Carlos G. Durand»':       'Comisaría Vecinal 6A',
+  'Hospital General de Agudos «Dr. José María Ramos Mejía»': 'Comisaría Vecinal 3A',
+};
+
+// Campos requeridos por checkbox (IDs de los wrappers)
+const REQS = {
+  'chk-same':      ['wrap-domicilio','wrap-hosp-destino','wrap-fecha-op','wrap-hora-op'],
+  'chk-div':       ['wrap-domicilio','wrap-hosp-destino','wrap-fecha-op','wrap-hora-op'],
+  'chk-comisaria': ['wrap-hosp-intern','wrap-comisaria'],
+  'chk-hosp':      ['wrap-hosp-intern'],
+  'chk-acomp':     ['wrap-hosp-intern'],
+  'chk-nota-ejec': ['wrap-hosp-intern','wrap-hosp-inicial','wrap-fecha-ejec'],
+  'chk-medida-pre':['wrap-hechos'],
+  'chk-medida-nueva':['wrap-hechos'],
+};
+
+function actualizarCamposReq() {
+  const activos = new Set();
+  Object.entries(REQS).forEach(([chkId, wrapIds]) => {
+    const el = document.getElementById(chkId);
+    if (el && el.checked) wrapIds.forEach(w => activos.add(w));
+  });
+  const todos = new Set(Object.values(REQS).flat());
+  todos.forEach(wId => {
+    const w = document.getElementById(wId);
+    if (!w) return;
+    w.classList.toggle('campo-requerido', activos.has(wId));
+  });
+}
+
+function cargarPaquete(nombre) {
+  const paquetes = {
+    internacion: ['chk-hosp','chk-acomp','chk-comisaria'],
+  };
+  const ids = paquetes[nombre] || [];
+  // Desmarcar todo primero, luego marcar los del paquete
+  ['chk-medida-pre','chk-medida-nueva','chk-nota-ejec','chk-same','chk-div','chk-hosp','chk-acomp','chk-comisaria'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.checked = ids.includes(id);
+  });
+  actualizarCamposReq();
+}
+
 // ── DATOS ──────────────────────────────────────────────────────────────────
 const CASOS = [{"label":"ALVAREZ, Marcelo — ALVAREZ, MARCELO ALEJANDRO S/MEDIDAS PRECAUTORIAS — Expte. 13813/2023","nombre":"ALVAREZ, Marcelo","dni":"49245737","fecha_nac":"14 de enero de 2009","edad":"17","juzgado":"JUZGADO CIVIL 88 - SECRETARIA Nº 51","juzgado_nro":"88","expediente":"13813/2023","caratula":"ALVAREZ, MARCELO ALEJANDRO S/MEDIDAS PRECAUTORIAS"},{"label":"AVALOS RODRIGUEZ, Ulises Jeremías — AVALOS RODRIGUEZ, ULISES JEREMIAS S/MEDIDAS PRECAUTORIA… — Expte. 73432/2024","nombre":"AVALOS RODRIGUEZ, Ulises Jeremías","dni":"48873075","fecha_nac":"4 de agosto de 2008","edad":"17","juzgado":"JUZGADO CIVIL 56 - SECRETARIA Nº 86","juzgado_nro":"56","expediente":"73432/2024","caratula":"AVALOS RODRIGUEZ, ULISES JEREMIAS S/MEDIDAS PRECAUTORIAS"},{"label":"CASTRO, Esmeralda Bella — CASTRO, ESMERALDA BELLA LUNA S/CONTROL DE LEGALIDAD — Expte. 99762/2021","nombre":"CASTRO, Esmeralda Bella","dni":"49435711","fecha_nac":"27 de mayo de 2009","edad":"17","juzgado":"JUZGADO CIVIL 82- SECRETARIA N°16","juzgado_nro":"82","expediente":"99762/2021","caratula":"CASTRO, ESMERALDA BELLA LUNA S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"CASTRO, Mateo Facundo — CASTRO, MATEO FACUNDO S/CONTROL DE LEGALIDAD — Expte. 82040/2021","nombre":"CASTRO, Mateo Facundo","dni":"49089912","fecha_nac":"31 de enero de 2009","edad":"17","juzgado":"JUZGADO CIVIL 82- SECRETARIA N°16","juzgado_nro":"82","expediente":"82040/2021","caratula":"CASTRO, MATEO FACUNDO S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"COMAN, Karen — karen — Expte. 67618/2022","nombre":"COMAN, Karen","dni":"49530567","fecha_nac":"10 de abril de 2009","edad":"17","juzgado":"JUZGADO CIVIL 7 - SECRETARIA Nº 14","juzgado_nro":"7","expediente":"67618/2022","caratula":"karen"},{"label":"DOMINGUEZ PEREZ, Kyara Luna — DOMINGUEZ PEREZ, KYARA LUNA S/MEDIDAS PRECAUTORIAS — Expte. CIV 57878/2004","nombre":"DOMINGUEZ PEREZ, Kyara Luna","dni":"48312466","fecha_nac":"26 de mayo de 2008","edad":"18","juzgado":"JUZGADO CIVIL 87","juzgado_nro":"87","expediente":"CIV 57878/2004","caratula":"DOMINGUEZ PEREZ, KYARA LUNA S/MEDIDAS PRECAUTORIAS"},{"label":"DURANTE TORRILLA, Thiago Nicolas — TORRILLA DURANTE S/EVALUACION ART. 42 — Expte. 21886/2023","nombre":"DURANTE TORRILLA , Thiago Nicolas","dni":"48524008","fecha_nac":"11 de abril de 2008","edad":"18","juzgado":"JUZGADO CIVIL 23 - SECRETARIA Nº 46","juzgado_nro":"23","expediente":"21886/2023","caratula":"TORRILLA DURANTE, THIAGO NICOLAS S/EVALUACION ART. 42 CCCN"},{"label":"DURANTE TORRILLA, Thiago Nicolas — DURANTE TORRILLA S/MEDIDAS PRECAUTORIAS — Expte. 21886/2023","nombre":"DURANTE TORRILLA , Thiago Nicolas","dni":"48524008","fecha_nac":"11 de abril de 2008","edad":"18","juzgado":"JUZGADO CIVIL 23 - SECRETARIA Nº 46","juzgado_nro":"23","expediente":"21886/2023","caratula":"DURANTE TORRILLA, THIAGO NICOLAS S/MEDIDAS PRECAUTORIAS"},{"label":"FERNANDEZ, Daniel — FERNANDEZ, DANIEL s/MEDIDAS PRECAUTORIAS — Expte. 38815/2025","nombre":"FERNANDEZ, Daniel","dni":"53416100","fecha_nac":"7 de agosto de 2008","edad":"17","juzgado":"JUZGADO CIVIL 4 - SECRETARIA Nº 7","juzgado_nro":"4","expediente":"38815/2025","caratula":"FERNANDEZ, DANIEL s/MEDIDAS PRECAUTORIAS"},{"label":"GALEANO NUÑEZ, Jonathan de Jesús — GALEANO NUÑEZ S/CONTROL DE LEGALIDAD — Expte. 88844/2022","nombre":"GALEANO NUÑEZ, Jonathan de Jesús","dni":"95189934","fecha_nac":"18 de mayo de 2010","edad":"16","juzgado":"JUZGADO CIVIL 56 - SECRETARIA Nº 86","juzgado_nro":"56","expediente":"88844/2022","caratula":"GALEANO NUÑEZ, JONATHAN DE JESUS s/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"GARCETE CARDOZO, Brian Emanuel — GARCETE CARDOZO S/MEDIDAS PRECAUTORIAS — Expte. 8447/2025","nombre":"GARCETE CARDOZO, Brian Emanuel","dni":"49003420","fecha_nac":"14 de diciembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 83","juzgado_nro":"83","expediente":"8447/2025","caratula":"GARCETE CARDOZO, BRIAN EMANUEL S/MEDIDAS PRECAUTORIAS"},{"label":"GAUNA, Ignacio Nahuel — GAUNA S/CONTROL DE LEGALIDAD — Expte. 83568/2023","nombre":"GAUNA, Ignacio Nahuel","dni":"49364101","fecha_nac":"21 de febrero de 2009","edad":"17","juzgado":"JUZGADO CIVIL 81 - SECRETARIA Nº 13","juzgado_nro":"81","expediente":"83568/2023","caratula":"GAUNA, IGNACIO NAHUEL S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"GIMÉNEZ, Tiziano Emanuel — GIMENEZ S/EVALUACION ART. 42 CCCN — Expte. 67165/2023","nombre":"GIMÉNEZ, Tiziano Emanuel","dni":"50297012","fecha_nac":"19 de marzo de 2008","edad":"18","juzgado":"JUZGADO CIVIL 56 - SECRETARIA Nº 86","juzgado_nro":"56","expediente":"67165/2023","caratula":"GIMENEZ, TIZIANO EMANUEL S/EVALUACION ART. 42 CCCN"},{"label":"GOMEZ, Aron Javier — GOMEZ MORA VALENTINA S/ MEDIDAS — Expte. Expte. n° CCC","nombre":"GOMEZ, Aron Javier","dni":"48980884","fecha_nac":"31 de agosto de 2008","edad":"17","juzgado":"JUZGADO NACIONAL DE MENORES NRO. 2 Secretaría n° 6","juzgado_nro":"2","expediente":"Expte. n° CCC","caratula":"GOMEZ MORA VALENTINA S/ MEDIDAS"},{"label":"GOMEZ, Aron Javier — PRECAUTORIAS — Expte. 74190/2023/1 47998/2024","nombre":"GOMEZ, Aron Javier","dni":"48980884","fecha_nac":"31 de agosto de 2008","edad":"17","juzgado":"JUZGADO CIVIL 26 - GOMEZ MORA VALENTINA S/ MEDIDAS PRECAUTORIAS","juzgado_nro":"26","expediente":"74190/2023/1 47998/2024","caratula":"PRECAUTORIAS."},{"label":"GONZÁLEZ, Braiton Leonel — GONZALEZ S/EVALUACION ART. 42 CCCN — Expte. 76540/2024","nombre":"GONZÁLEZ, Braiton Leonel","dni":"49988716","fecha_nac":"29 de noviembre de 2009","edad":"16","juzgado":"JUZGADO CIVIL 83","juzgado_nro":"83","expediente":"76540/2024","caratula":"GONZALEZ, BRAITON LEONEL S/EVALUACION ART. 42 CCCN"},{"label":"GRANCE, Dante Ramiro — GRANCE S/MEDIDAS PRECAUTORIAS — Expte. 52948/2024","nombre":"GRANCE, Dante Ramiro","dni":"48990757","fecha_nac":"24 de agosto de 2008","edad":"17","juzgado":"JUZGADO CIVIL 83 - SECRETARIA Nº 18","juzgado_nro":"83","expediente":"52948/2024","caratula":"GRANCE, RAMIRO DANTE S/MEDIDAS PRECAUTORIAS"},{"label":"GUTIERREZ, Dylan Alexis — GUTIERREZ S/CONTROL DE LEGALIDAD — Expte. 79422/2016","nombre":"GUTIERREZ, Dylan Alexis","dni":"49093618","fecha_nac":"9 de septiembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 38 - SECRETARIA Nº 68","juzgado_nro":"38","expediente":"79422/2016","caratula":"GUTIERREZ, DYLAN ALEXIS Y OTRO S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"GÓMEZ, Ramiro Miguel Ángel — GOMEZ RAMIRO S/EVALUACION ART. 42 — Expte. 43513/2024","nombre":"GÓMEZ, Ramiro Miguel Ángel","dni":"49968803","fecha_nac":"22 de diciembre de 2009","edad":"16","juzgado":"JUZGADO CIVIL 88- SECRETARIA N°51","juzgado_nro":"88","expediente":"43513/2024","caratula":"GOMEZ RAMIRO, MIGUEL ANGEL S/EVALUACION ART. 42 CCCN"},{"label":"GÓMEZ, Ramiro Miguel Ángel — GOMEZ S/MEDIDAS PRECAUTORIAS — Expte. 55137/2024","nombre":"GÓMEZ, Ramiro Miguel Ángel","dni":"49968803","fecha_nac":"22 de diciembre de 2009","edad":"16","juzgado":"JUZGADO CIVIL 88- SECRETARIA N°51","juzgado_nro":"88","expediente":"55137/2024","caratula":"GOMEZ, RAMIRO MIGUEL ANGEL S/MEDIDAS PRECAUTORIAS"},{"label":"JIMENEZ, Dylan Luciano — JIMENEZ S/MEDIDAS PRECAUTORIAS — Expte. 1193/2025","nombre":"JIMENEZ, Dylan Luciano","dni":"48873601","fecha_nac":"18 de junio de 2008","edad":"17","juzgado":"JUZGADO CIVIL 26","juzgado_nro":"26","expediente":"1193/2025","caratula":"JIMENEZ, DYLAN LUCIANO S/MEDIDAS PRECAUTORIAS"},{"label":"KANEMANN, Kevin — KANEMANN S/MEDIDAS PRECAUTORIAS — Expte. 59394/2024","nombre":"KANEMANN, Kevin","dni":"19.132.507","fecha_nac":"15 de julio de 2009","edad":"16","juzgado":"JUZGADO CIVIL 38","juzgado_nro":"38","expediente":"59394/2024","caratula":"KANEMANN, KEVIN S/MEDIDAS PRECAUTORIAS"},{"label":"LEDESMA, Milagros — LEDESMA S/MEDIDAS PRECAUTORIAS — Expte. 9352/2025","nombre":"LEDESMA, Milagros","dni":"49316769","fecha_nac":"17 de enero de 2009","edad":"17","juzgado":"JUZGADO CIVIL 23","juzgado_nro":"23","expediente":"9352/2025","caratula":"LEDESMA, MILAGROS S/MEDIDAS PRECAUTORIAS"},{"label":"LEDESMA, Natanael Jonas — LEDESMA S/EVALUACION ART. 42 CCCN — Expte. 20921/2024","nombre":"LEDESMA, Natanael Jonas","dni":"48797934","fecha_nac":"4 de agosto de 2008","edad":"17","juzgado":"JUZGADO CIVIL 56 - SECRETARIA Nº 86","juzgado_nro":"56","expediente":"20921/2024","caratula":"LEDESMA, NATANAEL JONAS S/EVALUACION ART. 42 CCCN"},{"label":"LEITES, Kevin Nahuel — LEITES S/MEDIDAS PRECAUTORIAS — Expte. 69374/2024","nombre":"LEITES, Kevin Nahuel","dni":"51.140.254","fecha_nac":"3 de febrero de 2011","edad":"15","juzgado":"JUZGADO CIVIL 4","juzgado_nro":"4","expediente":"69374/2024","caratula":"LEITES, KEVIN NAHUEL S/MEDIDAS PRECAUTORIAS"},{"label":"MALDONADO, Ian Sebastian — MALDONADO S/MEDIDAS PRECAUTORIAS — Expte. 48629/2024","nombre":"MALDONADO, Ian Sebastian","dni":"51262625","fecha_nac":"12 de agosto de 2011","edad":"14","juzgado":"JUZGADO CIVIL 81 - SECRETARIA Nº 13","juzgado_nro":"81","expediente":"48629/2024","caratula":"MALDONADO, IAN SEBASTIAN S/MEDIDAS PRECAUTORIAS"},{"label":"MARCOS, Lautaro — MARCOS S/CONTROL DE LEGALIDAD — Expte. 54493/2022","nombre":"MARCOS, Lautaro","dni":"50414296","fecha_nac":"4 de junio de 2010","edad":"15","juzgado":"JUZGADO CIVIL 85 - SECRETARIA Nº 23","juzgado_nro":"85","expediente":"54493/2022","caratula":"MARCOS, LAUTARO S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"MARCOS, Lautaro — MARCOS S/EVALUACION ART. 42 CCCN — Expte. 53516/2023","nombre":"MARCOS, Lautaro","dni":"50414296","fecha_nac":"4 de junio de 2010","edad":"15","juzgado":"JUZGADO CIVIL 85 - SECRETARIA Nº 23","juzgado_nro":"85","expediente":"53516/2023","caratula":"MARCOS, LAUTARO S/EVALUACION ART. 42 CCCN"},{"label":"MARCOS, Lautaro — MARCOS S/EVALUACION ART. 42 CCCN — Expte. 15239/2024","nombre":"MARCOS, Lautaro","dni":"50414296","fecha_nac":"4 de junio de 2010","edad":"15","juzgado":"JUZGADO CIVIL 85 - SECRETARIA Nº 23","juzgado_nro":"85","expediente":"15239/2024","caratula":"MARCOS, LAUTARO S/EVALUACION ART. 42 CCCN"},{"label":"MONTES, Benjamín Emanuel — MONTES S/MEDIDAS PRECAUTORIAS — Expte. 26191/2024","nombre":"MONTES, Benjamín Emanuel","dni":"49824695","fecha_nac":"3 de octubre de 2009","edad":"16","juzgado":"JUZGADO CIVIL 8 - SECRETARIA Nº 15","juzgado_nro":"8","expediente":"26191/2024","caratula":"MONTES, BENJAMIN EMANUEL S/MEDIDAS PRECAUTORIAS"},{"label":"MORINIGO, Ariel Sergio — MORINIGO S/EVALUACION ART. 42 CCCN — Expte. 61435/2023","nombre":"MORINIGO, Ariel Sergio","dni":"48.999.472","fecha_nac":"14 de octubre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 56 - SECRETARIA Nº 86","juzgado_nro":"56","expediente":"61435/2023","caratula":"MORINIGO, SERGIO ARIEL S/EVALUACION ART. 42 CCCN"},{"label":"MORINIGO, Ariel Sergio — MORINIGO S/CONTROL DE LEGALIDAD — Expte. 79594/2023","nombre":"MORINIGO, Ariel Sergio","dni":"48.999.472","fecha_nac":"14 de octubre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 56 - SECRETARIA Nº 86","juzgado_nro":"56","expediente":"79594/2023","caratula":"MORINIGO, ARIEL SERGIO S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"MOYA, Jonatan Joaquín — MOYA s/MEDIDAS PRECAUTORIAS — Expte. 24142/2025","nombre":"MOYA, Jonatan Joaquín","dni":"49550485","fecha_nac":"30 de noviembre de 2009","edad":"16","juzgado":"JUZGADO CIVIL 102","juzgado_nro":"102","expediente":"24142/2025","caratula":"MOYA, JONATAN JOAQUIN s/MEDIDAS PRECAUTORIAS"},{"label":"NOGUERA, Yoel Sebastián — NOGUERA s/EVALUACION ART. 42 CCCN — Expte. 14531/2025","nombre":"NOGUERA, Yoel Sebastián","dni":"50417434","fecha_nac":"24 de julio de 2010","edad":"15","juzgado":"JUZGADO CIVIL 8 - SECRETARIA Nº 15","juzgado_nro":"8","expediente":"14531/2025","caratula":"NOGUERA, YOEL SEBASTIAN s/EVALUACION ART. 42 CCCN"},{"label":"PALACIOS CORREA, Franco Agustín — PALACIOS CORREA S/MEDIDAS PRECAUTORIAS — Expte. 101924/2023","nombre":"PALACIOS CORREA, Franco Agustín","dni":"49357433","fecha_nac":"13 de abril de 2009","edad":"17","juzgado":"JUZGADO CIVIL 86","juzgado_nro":"86","expediente":"101924/2023","caratula":"PALACIOS CORREA, FRANCO AGUSTIN S/MEDIDAS PRECAUTORIAS"},{"label":"PALACIOS CORREA, Franco Agustín — PALACIOS CORREA S/EVALUACION ART. 42 — Expte. 44086/2024","nombre":"PALACIOS CORREA, Franco Agustín","dni":"49357433","fecha_nac":"13 de abril de 2009","edad":"17","juzgado":"JUZGADO CIVIL 86","juzgado_nro":"86","expediente":"44086/2024","caratula":"PALACIOS CORREA, FRANCO S/EVALUACION ART. 42 CCCN"},{"label":"PALACIOS CORREA, Franco Agustín — PALACIOS CORREA S/EVALUACION ART. 42 — Expte. 57785/2024","nombre":"PALACIOS CORREA, Franco Agustín","dni":"49357433","fecha_nac":"13 de abril de 2009","edad":"17","juzgado":"JUZGADO CIVIL 86","juzgado_nro":"86","expediente":"57785/2024","caratula":"PALACIOS CORREA, FRANCO S/EVALUACION ART. 42 CCCN"},{"label":"PEREYRA, Cristian Elian — PEREYRA — Expte. 1106/2025 (1)","nombre":"PEREYRA, Cristian Elian","dni":"49002512","fecha_nac":"6 de noviembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 10","juzgado_nro":"10","expediente":"1106/2025","caratula":"MORINIGO, SERGIO ARIEL S/EVALUACION ART. 42 CCCN"},{"label":"PEREYRA, Cristian Elian — PEREYRA — Expte. 1106/2025 (2)","nombre":"PEREYRA, Cristian Elian","dni":"49002512","fecha_nac":"6 de noviembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 10","juzgado_nro":"10","expediente":"1106/2025","caratula":"MORINIGO, ARIEL SERGIO S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"POGONZA, Nahuel Alejandro — POGONZA s/MEDIDAS PRECAUTORIAS — Expte. 39959/2025","nombre":"POGONZA, Nahuel Alejandro","dni":"49249307","fecha_nac":"5 de enero de 2009","edad":"17","juzgado":"JUZGADO CIVIL 12 - SECRETARIA Nº 24","juzgado_nro":"12","expediente":"39959/2025","caratula":"POGONZA, NAHUEL ALEJANDRO s/MEDIDAS PRECAUTORIAS"},{"label":"QUINTEROS, Brandon Damián — PUMA FLORES S/MEDIDAS PRECAUTORIAS — Expte. 48691/2024","nombre":"QUINTEROS, Brandon Damián","dni":"48800019","fecha_nac":"25 de junio de 2008","edad":"17","juzgado":"JUZGADO CIVIL 106- SECRETARIA N°47","juzgado_nro":"106","expediente":"48691/2024","caratula":"PUMA FLORES, FLORENCIA MICAELA S/MEDIDAS PRECAUTORIAS"},{"label":"RECALDE, Magalí Evangelina — RECALDE S/MEDIDAS PRECAUTORIAS — Expte. 1727/2025","nombre":"RECALDE, Magalí Evangelina","dni":"49093403","fecha_nac":"21 de diciembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 56","juzgado_nro":"56","expediente":"1727/2025","caratula":"RECALDE, MAGALI EVANGELINA S/MEDIDAS PRECAUTORIAS"},{"label":"RECALDE, Magalí Evangelina — RECALDE S/CONTROL DE LEGALIDAD — Expte. 51083/2020","nombre":"RECALDE, Magalí Evangelina","dni":"49093403","fecha_nac":"21 de diciembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 56","juzgado_nro":"56","expediente":"51083/2020","caratula":"RECALDE, MAGALI EVANGELINA Y OTRO S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"REDONDO, Samir Erik Ezequiel — REDONDO S/MEDIDAS PRECAUTORIAS — Expte. 33393/2026","nombre":"REDONDO, Samir Erik Ezequiel","dni":"49593811","fecha_nac":"26 de agosto de 2009","edad":"16","juzgado":"JUZGADO CIVIL 84","juzgado_nro":"84","expediente":"33393/2026","caratula":"REDONDO, SAMIR ERIK EZEQUIEL S/MEDIDAS PRECAUTORIAS"},{"label":"SALATINO, Gonzalo Oscar — SALATINO S/MEDIDAS PRECAUTORIAS — Expte. 1769/2025","nombre":"SALATINO, Gonzalo Oscar","dni":"48854573","fecha_nac":"10 de junio de 2008","edad":"17","juzgado":"JUZGADO CIVIL 10","juzgado_nro":"10","expediente":"1769/2025","caratula":"SALATINO, GONZALO OSCAR S/MEDIDAS PRECAUTORIAS"},{"label":"SALCEDO, Fabricio José — SALCEDO S/EVALUACION ART. 42 CCCN — Expte. 05325/2024","nombre":"SALCEDO, Fabricio José","dni":"48901365","fecha_nac":"9 de noviembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 106 - SECRETARIA Nº 47","juzgado_nro":"106","expediente":"05325/2024","caratula":"SALCEDO, FABRICIO JOSE S/EVALUACION ART. 42 CCCN"},{"label":"SAMANIEGO GONZALEZ, Jorge Daniel — SAMANIEGO GONZALEZ s/MEDIDAS PRECAUTORIAS — Expte. 71009/2024","nombre":"SAMANIEGO GONZALEZ, Jorge Daniel","dni":"95904601","fecha_nac":"21 de septiembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 4","juzgado_nro":"4","expediente":"71009/2024","caratula":"SAMANIEGO GONZALEZ, JORGE DANIEL s/MEDIDAS PRECAUTORIAS"},{"label":"SANCHEZ, Benjamín Thomas — SANCHEZ S/MEDIDAS PRECAUTORIAS — Expte. 927/2025","nombre":"SANCHEZ, Benjamín Thomas","dni":"51400942","fecha_nac":"6 de junio de 2010","edad":"15","juzgado":"JUZGADO CIVIL 56","juzgado_nro":"56","expediente":"927/2025","caratula":"SANCHEZ, BENJAMIN THOMAS S/MEDIDAS PRECAUTORIAS"},{"label":"SANCHEZ, Roman Santiago — SANCHEZ ROMAN s/MEDIDAS PRECAUTORIAS — Expte. 34178/2025","nombre":"SANCHEZ, Roman Santiago","dni":"48805745","fecha_nac":"30 de abril de 2008","edad":"18","juzgado":"JUZGADO CIVIL 83 - SECRETARIA Nº 18","juzgado_nro":"83","expediente":"34178/2025","caratula":"SANCHEZ ROMAN, SANTIAGO s/MEDIDAS PRECAUTORIAS"},{"label":"SANCHEZ, Santino Sebastián — SANCHEZ S/CONTROL DE INTERNACION — Expte. 105065/2024","nombre":"SANCHEZ, Santino Sebastián","dni":"50074780","fecha_nac":"25 de junio de 2009","edad":"16","juzgado":"JUZGADO CIVIL 56","juzgado_nro":"56","expediente":"105065/2024","caratula":"SANCHEZ, SANTINO S/CONTROL DE INTERNACION - LEY 26.657"},{"label":"SEGOVIA, Thiago Eliel — SEGOVIA S/DILIGENCIAS PREPARATORIAS — Expte. 101092/2024","nombre":"SEGOVIA, Thiago Eliel","dni":"49175237","fecha_nac":"26 de febrero de 2009","edad":"17","juzgado":"JUZGADO CIVIL 102","juzgado_nro":"102","expediente":"101092/2024","caratula":"SEGOVIA, THIAGO ELLIEL S/DILIGENCIAS PREPARATORIAS"},{"label":"SILVA, Tomas Andrés — SILVA S/CONTROL DE LEGALIDAD — Expte. 51581/2023","nombre":"SILVA, Tomas Andrés","dni":"48.849.704","fecha_nac":"23 de julio de 2008","edad":"17","juzgado":"JUZGADO CIVIL 25 - SECRETARIA Nº 49","juzgado_nro":"25","expediente":"51581/2023","caratula":"SILVA, TOMAS ANDRES S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"TUPIA FERNANDEZ, Santino — TUPIA FERNANDEZ S/CONTROL DE LEGALIDAD — Expte. 03666/2020","nombre":"TUPIA FERNANDEZ, Santino","dni":"52954747","fecha_nac":"17 de enero de 2013","edad":"13","juzgado":"JUZGADO CIVIL 102 - SECRETARIA Nº 38","juzgado_nro":"102","expediente":"03666/2020","caratula":"TUPIA FERNANDEZ, SANTINO ARIEL Y OTRO S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"TUPIA FERNANDEZ, Santino — TUPIA FERNANDEZ S/EVALUACION ART. 42 CCCN — Expte. 76877/2023","nombre":"TUPIA FERNANDEZ, Santino","dni":"52954747","fecha_nac":"17 de enero de 2013","edad":"13","juzgado":"JUZGADO CIVIL 102 - SECRETARIA Nº 38","juzgado_nro":"102","expediente":"76877/2023","caratula":"TUPIA FERNANDEZ, SANTINO ARIEL S/EVALUACION ART. 42 CCCN"},{"label":"UNCOS, Kevin Benjamín — UNCOS S/MEDIDAS PRECAUTORIAS — Expte. 18239/2025","nombre":"UNCOS, Kevin Benjamín","dni":"50436913","fecha_nac":"30 de agosto de 2010","edad":"15","juzgado":"JUZGADO CIVIL 8","juzgado_nro":"8","expediente":"18239/2025","caratula":"UNCOS, KEVIN BENJAMIN S/MEDIDAS PRECAUTORIAS"},{"label":"UNCOS, Kevin Benjamín — INCIDENTE Nº 1 — Expte. 18239/2025/1","nombre":"UNCOS, Kevin Benjamín","dni":"50436913","fecha_nac":"30 de agosto de 2010","edad":"15","juzgado":"JUZGADO CIVIL 8","juzgado_nro":"8","expediente":"18239/2025/1","caratula":"INCIDENTE Nº 1 - ACTOR: UNCOS, KEVIN BENJAMIN S/INCIDENTE FAMILIA"},{"label":"URBANO, Aaron Nicolas Dario — URBANO s/EVALUACION ART. 42 CCCN — Expte. 57497/2025","nombre":"URBANO, Aaron Nicolas Dario","dni":"48877473","fecha_nac":"6 de julio de 2008","edad":"17","juzgado":"JUZGADO DE FAMILIA DE TURNO C","juzgado_nro":"","expediente":"57497/2025","caratula":"URBANO, AARON NICOLAS DARIO s/EVALUACION ART. 42 CCCN"},{"label":"VALVERDE TRUJILLO, Pedro David — VALVERDE TRUJILLO S/MEDIDAS PRECAUTORIAS — Expte. 6641/2024","nombre":"VALVERDE TRUJILLO, Pedro David","dni":"50704133","fecha_nac":"7 de diciembre de 2010","edad":"15","juzgado":"JUZGADO CIVIL 83 - SECRETARIA Nº 18","juzgado_nro":"83","expediente":"6641/2024","caratula":"VALVERDE TRUJILLO, PEDRO DAVID S/MEDIDAS PRECAUTORIAS"},{"label":"VELIZ, Thiago Manuel — VELIZ S/MEDIDAS PRECAUTORIAS — Expte. 1224/2025","nombre":"VELIZ, Thiago Manuel","dni":"49.368.524","fecha_nac":"21 de abril de 2008","edad":"18","juzgado":"JUZGADO CIVIL 82 - SECRETARIA Nº 16","juzgado_nro":"82","expediente":"1224/2025","caratula":"VELIZ, THIAGO MANUEL S/MEDIDAS PRECAUTORIAS"},{"label":"VIDELA, Dylan David — Expte. 18270/2025","nombre":"VIDELA, Dylan David","dni":"51327306","fecha_nac":"21 de junio de 2009","edad":"16","juzgado":"Juzgado Nacional en lo Civil N° 87","juzgado_nro":"87","expediente":"18270/2025","caratula":""},{"label":"VILLANUEVA, Lucas Eugenio — VILLANUEVA S/EVALUACION ART. 42 CCCN — Expte. 07229/2023","nombre":"VILLANUEVA, Lucas Eugenio","dni":"48640090","fecha_nac":"11 de abril de 2008","edad":"18","juzgado":"JUZGADO CIVIL 85 - SECRETARIA Nº 23","juzgado_nro":"85","expediente":"07229/2023","caratula":"VILLANUEVA, LUCAS EUGENIO S/EVALUACION ART. 42 CCCN"},{"label":"YARDIN MARASCO, Valentín Nicolás — YARDIN MARASCO S/MEDIDAS PRECAUTORIAS — Expte. 1771/2025","nombre":"YARDIN MARASCO, Valentín Nicolás","dni":"49379539","fecha_nac":"5 de marzo de 2009","edad":"17","juzgado":"JUZGADO CIVIL 8 - SECRETARIA Nº 15","juzgado_nro":"8","expediente":"1771/2025","caratula":"YARDIN MARASCO, VALENTIN NICOLAS S/MEDIDAS PRECAUTORIAS"}];
 
@@ -269,6 +341,11 @@ const CASOS = [{"label":"ALVAREZ, Marcelo — ALVAREZ, MARCELO ALEJANDRO S/MEDID
 function toggleOtro(selId, inpId) {
   document.getElementById(inpId).style.display =
     document.getElementById(selId).value === '__otro__' ? 'block' : 'none';
+}
+function autoComisaria() {
+  const hosp = document.getElementById('f-hosp-intern').value;
+  const com  = HOSP_COMISARIA[hosp] || '';
+  document.getElementById('f-comisaria').value = com;
 }
 function vHosp(selId, inpId) {
   const val = document.getElementById(selId).value;
@@ -301,6 +378,14 @@ const EDADES = {'10':'diez','11':'once','12':'doce','13':'trece','14':'catorce',
 function edadTexto(n) { return EDADES[String(n)] || String(n); }
 function v(id) { return (document.getElementById(id).value || '').trim(); }
 function mkG(genero) { return (m, f) => genero === 'F' ? f : m; }
+
+// Conectar checkboxes al resaltado dinámico
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.doc-check').forEach(chk => {
+    chk.addEventListener('change', actualizarCamposReq);
+  });
+  actualizarCamposReq();
+});
 
 // ── TOM SELECT ────────────────────────────────────────────────────────────
 const ts = new TomSelect('#caso-select', {
@@ -347,6 +432,7 @@ async function generarDocumentos() {
     hora_op:      v('f-hora-op'),
     fecha_ejec:   v('f-fecha-ejec'),
     hechos:       document.getElementById('f-hechos').value.trim(),
+    comisaria:    v('f-comisaria'),
   };
 
   if (!d.nombre) {
@@ -362,6 +448,7 @@ async function generarDocumentos() {
     [document.getElementById('chk-div').checked,         tplDivision,           'Oficio_Division_Infancia'],
     [document.getElementById('chk-hosp').checked,        tplHospital,           'Oficio_Hospital'],
     [document.getElementById('chk-acomp').checked,       tplAcomp,              'Pedido_Acompanante'],
+    [document.getElementById('chk-comisaria').checked,   tplComisaria,          'Oficio_Comisaria'],
   ];
 
   const sel = checks.filter(c => c[0]);
@@ -677,6 +764,30 @@ function tplAcomp(d, lib) {
     mkP(`${g('El joven se encuentra afectado','La joven se encuentra afectada')} al consumo problemático de sustancias psicoactivas, sin conciencia de enfermedad, en situación de calle y sin adulto en condiciones de garantizar sus cuidados, encontrándose los profesionales intervinientes evaluando su inclusión en el Protocolo de Actuación.`),
     sp(),
     mkP(`Cuenta, además, con intervención del ${d.juzgado}, autos "${d.caratula}", expediente N° ${d.expediente}, el cual ha determinado la medida cautelar solicitada la que en copia se adjunta.`),
+  ];
+}
+
+// ── TEMPLATE: OFICIO A COMISARÍA VECINAL ─────────────────────────────────
+function tplComisaria(d, lib) {
+  const {AlignmentType} = lib;
+  const nf  = nombreFormal(d.nombre);
+  const g   = mkG(d.genero);
+  const com = d.comisaria    || '[COMISARÍA VECINAL]';
+  const hi  = d.hosp_intern  || '[HOSPITAL]';
+  const dom = d.domicilio    || '[DOMICILIO]';
+  return [
+    mkP([BU('OFICIO ADMINISTRATIVO')], AlignmentType.CENTER, 16),
+    sp(),
+    mkP([C(`${com}.`)], AlignmentType.LEFT),
+    mkP([C('Policía de la Ciudad de Buenos Aires.')], AlignmentType.LEFT),
+    sp(),
+    mkP([U('S. / D.')], AlignmentType.LEFT, 16),
+    sp(),
+    mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de los Derechos de Niños, Niñas y Adolescentes, a fin de comunicar la internación ${g('del joven','de la joven')} ${nf}, DNI N° ${d.dni}, en el ${hi}, en el marco de la medida precautoria de salud dispuesta por el ${d.juzgado} en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}.`),
+    sp(),
+    mkP(`En tal sentido, se solicita a esa dependencia que tome conocimiento de la situación ${g('del joven','de la joven')} y, en caso de que se requiera intervención policial para garantizar la efectivización de la medida judicial, se preste la colaboración necesaria.`),
+    sp(),
+    mkP('El presente se libra con fundamento en la Ley de Procedimientos Administrativos y en las Leyes de Protección Integral de Derechos de Niñas, Niños y Adolescentes —Ley CABA N° 114 y Ley Nacional N° 26.061—, normativa que habilita expresamente a este organismo a requerir la intervención de distintos actores y dependencias en función de las atribuciones que le competen como autoridad de aplicación y ejecución de estrategias de restitución de derechos de NNyA.'),
   ];
 }
 </script>
