@@ -177,6 +177,12 @@
         <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Comisaría vecinal <span class="badge-auto">Auto</span></label>
         <input id="f-comisaria" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" type="text" placeholder="Se completa al elegir hospital (editable)">
       </div>
+      <div class="md:col-span-2">
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50 cursor-pointer select-none">
+          <input type="checkbox" id="chk-tiene-medida" class="doc-check">
+          <span class="text-sm text-gray-700">Existe <strong>medida judicial de salud</strong> emitida por el juzgado interviniente</span>
+        </label>
+      </div>
       <!-- Para Nota de Ejecución -->
       <div id="wrap-hosp-inicial">
         <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Hospital inicial (si hubo traslado) <span class="badge-manual">Manual</span></label>
@@ -433,6 +439,7 @@ async function generarDocumentos() {
     fecha_ejec:   v('f-fecha-ejec'),
     hechos:       document.getElementById('f-hechos').value.trim(),
     comisaria:    v('f-comisaria'),
+    tiene_medida: document.getElementById('chk-tiene-medida').checked,
   };
 
   if (!d.nombre) {
@@ -733,7 +740,6 @@ function tplHospital(d, lib) {
     sp(),
     mkP([C('Al Sr. Director / Sra. Directora Médica')], AlignmentType.LEFT),
     mkP([B(`${hi}`)], AlignmentType.LEFT),
-    mkP([C('Dirección / Guardia pediátrica / Servicio Social / Servicio de Salud Mental')], AlignmentType.LEFT),
     sp(),
     mkP([U('S. / D.')], AlignmentType.LEFT, 16),
     sp(),
@@ -741,10 +747,10 @@ function tplHospital(d, lib) {
     sp(),
     mkP(`Dicha evaluación deberá integrar: • Informe clínico integral • Informe toxicológico • Diagnóstico cardiológico • Diagnóstico por imágenes • Informe psicológico y psiquiátrico integral que dé cuenta de si ${g('el niño','la niña')} presenta riesgo para sí o para terceros • Amplio informe social, todo ello en virtud de la situación de riesgo al que se encontraría expuest${g('o','a')} ${g('el joven','la joven')} motivo de nuestra intervención.`),
     sp(),
-    mkP(`Es dable destacar que en la presente situación interviene, además, el ${d.juzgado} interviniente en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}, quienes han resuelto hacer lugar a la petición efectuada por los profesionales del ETENNyA determinando como medida cautelar la evaluación interdisciplinaria la cual deberá comprender un informe clínico integral y un informe psicológico y psiquiátrico integral, este último cumplido en el marco de la Ley de Salud Mental 26.657 y lo dispuesto en el artículo 42 del CCyCN, especificándose si ${g('el joven','la joven')} presenta riesgo cierto e inminente para sí o para terceros.`),
-    sp(),
-    mkP(`La mencionada medida, expresa en su parte pertinente: "(…) En el nosocomio ${g('el joven','la joven')} deberá ser ${g('evaluado','evaluada')} en forma integral por un equipo interdisciplinario, en los términos de lo dispuesto por la Ley de Salud Mental 26.657 y art. 42 Código Civil y Comercial de la Nación (…). Fdo. Sr. Juez".`),
-    sp(),
+    ...(d.tiene_medida ? [
+      mkP(`Es dable destacar que en la presente situación interviene, además, el ${d.juzgado} interviniente en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}, quienes han resuelto hacer lugar a la petición efectuada por los profesionales del ETENNyA, determinando como medida cautelar la realización de la evaluación interdisciplinaria precedentemente solicitada.`),
+      sp(),
+    ] : []),
     mkP('Requiero que una vez efectuadas las evaluaciones supra solicitadas, los resultados e informes sean remitidos al mail institucional etennya_cdnnya@buenosaires.gob.ar.'),
     sp(),
     mkP('El presente se libra con fundamento en la Ley de Procedimientos Administrativos y en las Leyes de Protección Integral de Derechos de Niñas, Niños y Adolescentes —Ley CABA N° 114 y Ley Nacional N° 26.061—, normativa que habilita expresamente a este Organismo a requerir la intervención de distintos actores y dependencias en función de las atribuciones que le competen como autoridad de aplicación y ejecución de estrategias de restitución de derechos de Niños, Niñas y Adolescentes.'),
