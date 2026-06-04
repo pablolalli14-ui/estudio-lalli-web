@@ -384,6 +384,16 @@ const EDADES = {'10':'diez','11':'once','12':'doce','13':'trece','14':'catorce',
 function edadTexto(n) { return EDADES[String(n)] || String(n); }
 function v(id) { return (document.getElementById(id).value || '').trim(); }
 function mkG(genero) { return (m, f) => genero === 'F' ? f : m; }
+function mkNNyA(genero, edad) {
+  const esF = genero === 'F';
+  const nom = parseInt(edad) >= 14 ? 'adolescente' : (esF ? 'niña' : 'niño');
+  return {
+    el:  (esF ? 'la ' : 'el ') + nom,
+    del: (esF ? 'de la ' : 'del ') + nom,
+    al:  (esF ? 'a la ' : 'al ') + nom,
+    nom,
+  };
+}
 
 // Conectar checkboxes al resaltado dinámico
 document.addEventListener('DOMContentLoaded', () => {
@@ -534,6 +544,7 @@ function tplMedidaPreexistente(d, lib) {
   const nf = nombreFormal(d.nombre);
   const nc = nombreCorto(d.nombre);
   const g = mkG(d.genero);
+  const nn = mkNNyA(d.genero, d.edad);
   return [
     mkP([BU('INFORMA EFECTIVIZACION DE MEDIDA CAUTELAR. SOLICITA NUEVA BUSQUEDA DE PARADERO Y MEDIDA DE SALUD PRECAUTORIA.-')], AlignmentType.CENTER, 16),
     sp(),
@@ -545,7 +556,7 @@ function tplMedidaPreexistente(d, lib) {
     sp(),
     mkP([U('MEDIDA DE SALUD. Conf. Art. 232 C.P.C.C.N.')], AlignmentType.LEFT, 8),
     sp(),
-    mkP('La medida que se solicita se orienta al cumplimiento del interés superior del joven para garantizar el pleno goce de sus derechos y la satisfacción de sus necesidades en un contexto donde su voluntad se encuentra gravemente afectada.'),
+    mkP(`La medida que se solicita se orienta al cumplimiento del interés superior ${nn.del} para garantizar el pleno goce de sus derechos y la satisfacción de sus necesidades en un contexto donde su voluntad se encuentra gravemente afectada.`),
     sp(),
     mkP('Debido al estado de alta vulnerabilidad en el que transita su cotidianidad, la problemática de consumo de sustancias psicoactivas que presentaría, puede afirmarse, conforme a la Ley Nacional de Salud Mental 26.657, una situación de riesgo cierto e inminente para sí mismo.'),
     sp(),
@@ -553,21 +564,21 @@ function tplMedidaPreexistente(d, lib) {
     sp(),
     mkP('La evaluación integral implica la realización de una historia médica completa, sin descuidar ningún antecedente personal ni familiar, hábitos psicobiológicos, y otros.'),
     sp(),
-    mkP('Por otra parte, se deberá incluir un examen físico lo más completo posible, bajo la perspectiva de que para que la situación del adolescente sea correctamente abordada se requiere una evaluación exhaustiva y que pueda sostenerse en el tiempo. La evaluación debe conducir a la formulación de impresiones diagnósticas que permitan orientar el abordaje de la situación y la implementación de un tratamiento acorde y posible en el contexto del paciente.'),
+    mkP(`Por otra parte, se deberá incluir un examen físico lo más completo posible, bajo la perspectiva de que para que la situación ${nn.del} sea correctamente abordada se requiere una evaluación exhaustiva y que pueda sostenerse en el tiempo. La evaluación debe conducir a la formulación de impresiones diagnósticas que permitan orientar el abordaje de la situación y la implementación de un tratamiento acorde y posible en el contexto del paciente.`),
     sp(),
-    mkP(`En virtud de los fundamentos expuestos y atendiendo al interés superior ${g('del adolescente','de la adolescente')} de autos, es que por medio de la presente se viene a solicitar se disponga la Medida de Salud respecto de ${nf} para que sea ${g('acompañado','acompañada')} al Hospital General de la zona donde sea ${g('habido','habida')}, a fin de llevar a cabo una evaluación integral de su salud psicofísica, ordenando su internación y permanencia hasta tanto cuente con el alta tanto médica como social, autorizada por parte de este CDNNyA, con el acompañamiento permanente de una consigna policial que por territorio corresponda.`),
+    mkP(`En virtud de los fundamentos expuestos y atendiendo al interés superior ${nn.del} de autos, es que por medio de la presente se viene a solicitar se disponga la Medida de Salud respecto de ${nf} para que sea ${g('acompañado','acompañada')} al Hospital General de la zona donde sea ${g('habido','habida')}, a fin de llevar a cabo una evaluación integral de su salud psicofísica, ordenando su internación y permanencia hasta tanto cuente con el alta tanto médica como social, autorizada por parte de este CDNNyA, con el acompañamiento permanente de una consigna policial que por territorio corresponda.`),
     sp(),
     mkP([U('INFORMATIVA.')], AlignmentType.LEFT, 8),
     sp(),
     mkP('En miras a desplegar las acciones de resguardo urgentes, solicitamos a S.S se libren los siguientes oficios a los efectores que a continuación se detallan:'),
     sp(),
-    mkP(`1. Apersonamiento Territorial y Auxilio para el Traslado Sanitario: Atento a que ${g('el adolescente','la adolescente')} se encuentra en situación de calle en esta Ciudad y se rehúsa de manera categórica a recibir atención médica, se solicita libre oficio urgente con habilitación de días y horas al Ministerio de Salud de la Ciudad de Buenos Aires (SAME Psiquiátrico) y a la Policía de la Ciudad de Buenos Aires (División Infancia y Adolescencia). Ello a los fines de ordenar que, en forma coordinada con el Equipo Territorial Especializado (ETENNYA) de este Consejo que se apersonará en el lugar donde se encuentre ${g('el joven','la joven')} para brindar auxilio y coadyuvar en la contención, traslado y acompañamiento seguro ${g('del adolescente','de la adolescente')} hacia el Hospital que por zona corresponda.`),
+    mkP(`1. Apersonamiento Territorial y Auxilio para el Traslado Sanitario: Atento a que ${nn.el} se encuentra en situación de calle en esta Ciudad y se rehúsa de manera categórica a recibir atención médica, se solicita libre oficio urgente con habilitación de días y horas al Ministerio de Salud de la Ciudad de Buenos Aires (SAME Psiquiátrico) y a la Policía de la Ciudad de Buenos Aires (División Infancia y Adolescencia). Ello a los fines de ordenar que, en forma coordinada con el Equipo Territorial Especializado (ETENNYA) de este Consejo que se apersonará en el lugar donde se encuentre ${nn.el} para brindar auxilio y coadyuvar en la contención, traslado y acompañamiento seguro ${nn.del} hacia el Hospital que por zona corresponda.`),
     sp(),
     mkP(`2. Consigna Policial Hospitalaria: Se solicite a la Seccional Policial de la zona que disponga de una consigna policial respecto de ${nc}, que vele por su seguridad y asegure de forma estricta su permanencia en el nosocomio hasta tanto cuente con el alta clínica y social, y sea formalmente ${g('acompañado','acompañada')} por este CDNNyA al dispositivo de egreso que técnicamente se evalúe como el adecuado.`),
     sp(),
-    mkP('3. Prohibición de Retiro Voluntario: Asimismo, se prohíba expresamente que el adolescente se retire del establecimiento hospitalario con familiares y/o referentes afectivos, debiendo el personal del hospital poner en inmediato conocimiento de este Consejo la presencia de cualquier integrante de la familia que se haga presente, a los fines de evitar un egreso sin el consentimiento de los equipos profesionales intervinientes.'),
+    mkP(`3. Prohibición de Retiro Voluntario: Asimismo, se prohíba expresamente que ${nn.el} se retire del establecimiento hospitalario con familiares y/o referentes afectivos, debiendo el personal del hospital poner en inmediato conocimiento de este Consejo la presencia de cualquier integrante de la familia que se haga presente, a los fines de evitar un egreso sin el consentimiento de los equipos profesionales intervinientes.`),
     sp(),
-    mkP('4. Evaluación Interdisciplinaria: Se ordene al Hospital que por zona corresponda a proceder a la atención integral de la salud del adolescente y su evaluación inmediata por un equipo interdisciplinario, dando estricto cumplimiento a la Ley de Salud Mental N° 26.657 y al Art. 42 del CCCN.'),
+    mkP(`4. Evaluación Interdisciplinaria: Se ordene al Hospital que por zona corresponda a proceder a la atención integral de la salud ${nn.del} y su evaluación inmediata por un equipo interdisciplinario, dando estricto cumplimiento a la Ley de Salud Mental N° 26.657 y al Art. 42 del CCCN.`),
     sp(),
     mkP('Solicito ademas, se aclare en la medida solicitada que, previo al alta médica, el hospital tendrá que remitir al Juzgado y a este Consejo las evaluaciones interdisciplinarias solicitadas y copia de los estudios efectuados.'),
     sp(),
@@ -576,7 +587,7 @@ function tplMedidaPreexistente(d, lib) {
     sp(),
     mkP('1- Se tenga por manifestados los hechos nuevos.'),
     mkP('2- Se haga lugar a la Medida Precautoria de Salud solicitada en su total forma y extensión.'),
-    mkP(`3- Se disponga la búsqueda de paradero ${g('del joven','de la joven')} ${nc}.`),
+    mkP(`3- Se disponga la búsqueda de paradero ${nn.del} ${nc}.`),
     mkP(`4- Se libren los oficios de carácter urgente ordenando el auxilio de la fuerza pública y el efector de salud de emergencia (SAME Psiquiátrico y División Infancia y Adolescencia de la Policía de la Ciudad) para efectivizar la medida cautelar una vez ${g('habido','habida')}.`),
     sp(),
     mkP([B('PROVEER DE CONFORMIDAD')], AlignmentType.RIGHT, 4),
@@ -591,6 +602,7 @@ function tplMedidaNueva(d, lib) {
   const nc = nombreCorto(d.nombre);
   const et = edadTexto(d.edad);
   const g = mkG(d.genero);
+  const nn = mkNNyA(d.genero, d.edad);
   return [
     mkP([BU('MEDIDA PRECAUTORIA DE SALUD. -')], AlignmentType.CENTER, 16),
     sp(),
@@ -604,7 +616,7 @@ function tplMedidaNueva(d, lib) {
     sp(),
     mkP([B('II.- OBJETO.')], AlignmentType.LEFT, 8),
     sp(),
-    mkP(`Que en atención a las circunstancias que se narrarán infra en relación a la situación de salud de ${nc}, vengo a solicitar a la judicatura medidas cautelares en los términos del art. 230 inc. b y c, y 232 del C.P.C.C., tuitivas del interés superior ${g('del adolescente','de la adolescente')}, con el objeto de implementar acciones orientadas a la protección de su derecho a la salud de conformidad con lo dispuesto por el art. 42 del CCCN y en cumplimiento de las exigencias establecidas por los arts. 16 y 20 de la Ley Nº 26.657.`),
+    mkP(`Que en atención a las circunstancias que se narrarán infra en relación a la situación de salud de ${nc}, vengo a solicitar a la judicatura medidas cautelares en los términos del art. 230 inc. b y c, y 232 del C.P.C.C., tuitivas del interés superior ${nn.del}, con el objeto de implementar acciones orientadas a la protección de su derecho a la salud de conformidad con lo dispuesto por el art. 42 del CCCN y en cumplimiento de las exigencias establecidas por los arts. 16 y 20 de la Ley Nº 26.657.`),
     sp(),
     mkP([B('III.- HECHOS.')], AlignmentType.LEFT, 8),
     sp(),
@@ -612,15 +624,15 @@ function tplMedidaNueva(d, lib) {
     sp(),
     mkP([B('IV.- Medida de salud. -'), C(' Conf. Art. 232 C.P.C.C.N.')], AlignmentType.LEFT, 8),
     sp(),
-    mkP(`La medida que se solicita se orienta al cumplimiento del interés superior ${g('del joven','de la joven')} para garantizar el pleno goce de sus derechos y la satisfacción de sus necesidades en un contexto donde su voluntad se encuentra gravemente afectada.`),
+    mkP(`La medida que se solicita se orienta al cumplimiento del interés superior ${nn.del} para garantizar el pleno goce de sus derechos y la satisfacción de sus necesidades en un contexto donde su voluntad se encuentra gravemente afectada.`),
     sp(),
     mkP(`Debido al estado de alta vulnerabilidad en el que transita su cotidianidad, la problemática de consumo de sustancias psicoactivas que presentaría, sumado a la aparición de indicadores penales, puede afirmarse, conforme a la Ley Nacional de Salud Mental 26.657, una situación de riesgo cierto e inminente para sí mismo. Se considera necesario que, en forma inmediata y urgente, ${nc} pueda ser ${g('ingresado','ingresada')} a un efector del Sistema de Salud, desde donde pueda llevarse adelante un abordaje integral, en un marco de cuidados y contención profesional, que pueda proponer una línea tratamental que se ajuste a sus necesidades específicas.`),
     sp(),
-    mkP('La evaluación integral implica la realización de una historia médica completa, sin descuidar ningún antecedente personal ni familiar, hábitos psicobiológicos, y otros. Por otra parte, se deberá incluir un examen físico lo más completo posible, bajo la perspectiva de que para que la situación del adolescente sea correctamente abordada se requiere una evaluación exhaustiva y que pueda sostenerse en el tiempo.'),
+    mkP(`La evaluación integral implica la realización de una historia médica completa, sin descuidar ningún antecedente personal ni familiar, hábitos psicobiológicos, y otros. Por otra parte, se deberá incluir un examen físico lo más completo posible, bajo la perspectiva de que para que la situación ${nn.del} sea correctamente abordada se requiere una evaluación exhaustiva y que pueda sostenerse en el tiempo.`),
     sp(),
     mkP('La evaluación debe conducir a la formulación de impresiones diagnósticas que permitan orientar el abordaje de la situación y la implementación de un tratamiento acorde y posible en el contexto del paciente. En todo caso, los médicos deben actuar coordinadamente en el manejo de un paciente que requiera la atención de diversos especialistas, sin perder la perspectiva de que se trata de un individuo particular.'),
     sp(),
-    mkP(`En virtud de los fundamentos expuestos y atendiendo al interés superior ${g('del adolescente','de la adolescente')} de autos, es que por medio de la presente se viene a solicitar se disponga la Medida de Salud respecto de ${nf} para que, una vez sea ${g('habido','habida')}, sea ${g('trasladado','trasladada')} al Hospital que corresponda, para llevar a cabo una evaluación integral de su salud psicofísica, ordenando su internación y permanencia hasta tanto cuente con el alta tanto médica como social, autorizada por parte de este CDNNyA, con el acompañamiento permanente de una consigna policial que por territorio corresponda.`),
+    mkP(`En virtud de los fundamentos expuestos y atendiendo al interés superior ${nn.del} de autos, es que por medio de la presente se viene a solicitar se disponga la Medida de Salud respecto de ${nf} para que, una vez sea ${g('habido','habida')}, sea ${g('trasladado','trasladada')} al Hospital que corresponda, para llevar a cabo una evaluación integral de su salud psicofísica, ordenando su internación y permanencia hasta tanto cuente con el alta tanto médica como social, autorizada por parte de este CDNNyA, con el acompañamiento permanente de una consigna policial que por territorio corresponda.`),
     sp(),
     mkP([B('IV.- INFORMATIVA.')], AlignmentType.LEFT, 8),
     sp(),
@@ -628,16 +640,16 @@ function tplMedidaNueva(d, lib) {
     sp(),
     mkP(`1. Se ordene su búsqueda de paradero: A tal fin, se solicita se libre la búsqueda de paradero de ${nc}. En virtud de lo mismo, se solicita se libren los oficios necesarios a los actores avocados a esta labor, puntualmente: Al Registro Nacional de Información de Personas Menores Extraviadas y a Missing Children; División de Infancia y Adolescencia de la Policía de la Ciudad de Buenos Aires; Policía Federal Argentina; Sistema Federal de Búsqueda de Personas Desaparecidas y Extraviadas (SIFEBU) del Ministerio de Seguridad de la Nación, así como también cualquier otro actor que la judicatura estime corresponder.`),
     sp(),
-    mkP(`2. Seccional Policial de la Zona en la cual se encuentre ${g('internado','internada')} ${g('el adolescente','la adolescente')} al momento de la ejecución de las medidas: a fin de que dispongan consigna policial respecto ${g('del adolescente','de la adolescente')}, que vele por su seguridad y asegure la permanencia ${g('del mismo','de la misma')} en el Hospital de la zona hasta tanto cuente con el alta clínica y social, y sea ${g('acompañado','acompañada')} por el CDNNyA a un dispositivo acorde a su problemática o se efectivice la modalidad de egreso que oportunamente se evalúe como la acertada. Asimismo, se prohíba que ${g('el adolescente','la adolescente')} se retire del hospital con familiares y/o referentes afectivos, debiendo poner en conocimiento del CDNNyA la presencia de cualquier integrante de la familia que se haga presente.`),
+    mkP(`2. Seccional Policial de la Zona en la cual se encuentre ${g('internado','internada')} ${nn.el} al momento de la ejecución de las medidas: a fin de que dispongan consigna policial respecto ${nn.del}, que vele por su seguridad y asegure la permanencia ${g('del mismo','de la misma')} en el Hospital de la zona hasta tanto cuente con el alta clínica y social, y sea ${g('acompañado','acompañada')} por el CDNNyA a un dispositivo acorde a su problemática o se efectivice la modalidad de egreso que oportunamente se evalúe como la acertada. Asimismo, se prohíba que ${nn.el} se retire del hospital con familiares y/o referentes afectivos, debiendo poner en conocimiento del CDNNyA la presencia de cualquier integrante de la familia que se haga presente.`),
     sp(),
-    mkP(`3. Hospital interviniente: a fin de proceder a la atención integral de la salud ${g('del adolescente','de la adolescente')} y su evaluación por un equipo interdisciplinario, debiendo dar cumplimiento con la Ley de Salud Mental 26.657 y conforme lo dispuesto por el art. 42 del CCCN. Dicha evaluación deberá integrar: • Informe clínico integral • Informe toxicológico • Diagnóstico cardiológico • Diagnóstico por imágenes • Informe psicológico y psiquiátrico integral que dé cuenta de si el niño presenta riesgo para sí o para terceros • Amplio informe social. Asimismo, se deberá aclarar en el oficio que, previo a la alta médica, el hospital tendrá que remitir al Juzgado y al Consejo de los Derechos de Niñas, Niños y Adolescentes las evaluaciones interdisciplinarias solicitadas y copia de todos los estudios efectuados. Se prohíba el egreso hospitalario de ${nc} hasta tanto se realice la evaluación completa ${g('del mismo','de la misma')} y así lo disponga el Consejo de los Derechos de Niñas, Niños y Adolescentes y/o el Juzgado interviniente.`),
+    mkP(`3. Hospital interviniente: a fin de proceder a la atención integral de la salud ${nn.del} y su evaluación por un equipo interdisciplinario, debiendo dar cumplimiento con la Ley de Salud Mental 26.657 y conforme lo dispuesto por el art. 42 del CCCN. Dicha evaluación deberá integrar: • Informe clínico integral • Informe toxicológico • Diagnóstico cardiológico • Diagnóstico por imágenes • Informe psicológico y psiquiátrico integral que dé cuenta de si ${nn.nom} presenta riesgo para sí o para terceros • Amplio informe social. Asimismo, se deberá aclarar en el oficio que, previo a la alta médica, el hospital tendrá que remitir al Juzgado y al Consejo de los Derechos de Niñas, Niños y Adolescentes las evaluaciones interdisciplinarias solicitadas y copia de todos los estudios efectuados. Se prohíba el egreso hospitalario de ${nc} hasta tanto se realice la evaluación completa ${g('del mismo','de la misma')} y así lo disponga el Consejo de los Derechos de Niñas, Niños y Adolescentes y/o el Juzgado interviniente.`),
     sp(),
     mkP([B('V.- PETITORIO.')], AlignmentType.LEFT, 8),
     mkP('Por lo expuesto solicito:'),
     sp(),
     mkP('1. Se tenga por presentada la medida en legal tiempo y forma, de conformidad con la legitimación denunciada;'),
     mkP('2. Se haga lugar a las medidas solicitadas en su forma y extensión.'),
-    mkP(`3. Se disponga la búsqueda de paradero conforme lo expuesto en el acápite correspondiente. Se prohíba el egreso hospitalario ${g('del adolescente','de la adolescente')} y se mantenga la permanencia ${g('del mismo','de la misma')} en el efector de salud hasta tanto se culmine con la evaluación integral y así lo disponga el Consejo de los Derechos de Niñas, Niños y Adolescentes y/o la judicatura.`),
+    mkP(`3. Se disponga la búsqueda de paradero conforme lo expuesto en el acápite correspondiente. Se prohíba el egreso hospitalario ${nn.del} y se mantenga la permanencia ${g('del mismo','de la misma')} en el efector de salud hasta tanto se culmine con la evaluación integral y así lo disponga el Consejo de los Derechos de Niñas, Niños y Adolescentes y/o la judicatura.`),
     mkP('4. Se ordene sostener la consigna policial oportunamente asignada hasta tanto se disponga el cese de la medida aquí solicitada.'),
     mkP('5. Tenga V.S. presente lo expuesto, y provea de conformidad, lo que'),
     sp(),
@@ -678,6 +690,7 @@ function tplSAME(d, lib) {
   const {AlignmentType} = lib;
   const nf  = nombreFormal(d.nombre);
   const g   = mkG(d.genero);
+  const nn  = mkNNyA(d.genero, d.edad);
   const dom = d.domicilio    || '[DOMICILIO]';
   const hd  = d.hosp_destino || '[HOSPITAL DESTINO]';
   const hi  = d.hosp_intern  || '[HOSPITAL INTERNACIÓN]';
@@ -692,9 +705,9 @@ function tplSAME(d, lib) {
     sp(),
     mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de los Derechos de Niños, Niñas y Adolescentes, a fin de solicitar colaboración en la efectivización de la medida precautoria de salud dispuesta por el ${d.juzgado} interviniente en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}.`),
     sp(),
-    mkP(`En su parte pertinente, el mencionado oficio que en copia se adjunta, dice: "(...) requiérase al SAME que con carácter de urgente y en el día se constituyan en el domicilio sito en ${dom} y procedan a trasladar ${g('al joven','a la joven')} ${nf}, DNI N° ${d.dni} al ${hd} donde posee historia clínica, convocándose asimismo, a los fines de brindar auxilio y contención, a la División de Infancia y Adolescencia de la Policía de la Ciudad de Buenos Aires. (...). Fdo. Sr. Juez".`),
+    mkP(`En su parte pertinente, el mencionado oficio que en copia se adjunta, dice: "(...) requiérase al SAME que con carácter de urgente y en el día se constituyan en el domicilio sito en ${dom} y procedan a trasladar ${nn.al} ${nf}, DNI N° ${d.dni} al ${hd} donde posee historia clínica, convocándose asimismo, a los fines de brindar auxilio y contención, a la División de Infancia y Adolescencia de la Policía de la Ciudad de Buenos Aires. (...). Fdo. Sr. Juez".`),
     sp(),
-    mkP(`A los fines de llevar a cabo la manda judicial, y dada la referencia que ${g('el joven','la joven')} posee con el ${hi}, los profesionales del ETENNyA junto con personal de la División de Infancia y Adolescencia de la Policía de la Ciudad y los profesionales del Servicio a su cargo, se apersonarán en el domicilio ${g('del joven','de la joven')} el día ${fo} a las ${ho} horas.`),
+    mkP(`A los fines de llevar a cabo la manda judicial, y dada la referencia que ${nn.el} posee con el ${hi}, los profesionales del ETENNyA junto con personal de la División de Infancia y Adolescencia de la Policía de la Ciudad y los profesionales del Servicio a su cargo, se apersonarán en el domicilio ${nn.del} el día ${fo} a las ${ho} horas.`),
     sp(),
     mkP('El presente se libra con fundamento en la Ley de Procedimientos Administrativos y en las Leyes de Protección Integral de Derechos de Niñas, Niños y Adolescentes —Ley CABA N° 114 y Ley Nacional N° 26.061—, normativa que habilita expresamente a este organismo a requerir la intervención de distintos actores y dependencias en función de las atribuciones que le competen como autoridad de aplicación y ejecución de estrategias de restitución de derechos de NNyA.'),
   ];
@@ -705,6 +718,7 @@ function tplDivision(d, lib) {
   const {AlignmentType} = lib;
   const nf  = nombreFormal(d.nombre);
   const g   = mkG(d.genero);
+  const nn  = mkNNyA(d.genero, d.edad);
   const dom = d.domicilio    || '[DOMICILIO]';
   const hd  = d.hosp_destino || '[HOSPITAL DESTINO]';
   const hi  = d.hosp_intern  || '[HOSPITAL INTERNACIÓN]';
@@ -720,9 +734,9 @@ function tplDivision(d, lib) {
     sp(),
     mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de los Derechos de Niños, Niñas y Adolescentes, a fin de solicitar colaboración en la efectivización de la medida precautoria de salud dispuesta por el ${d.juzgado} interviniente en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}.`),
     sp(),
-    mkP(`En su parte pertinente, el mencionado oficio que en copia se adjunta, dice: "(...) requiérase al SAME que con carácter de urgente y en el día se constituyan en el domicilio sito en ${dom} y procedan a trasladar ${g('al joven','a la joven')} ${nf}, DNI N° ${d.dni} al ${hd} donde posee historia clínica, convocándose asimismo, a los fines de brindar auxilio y contención, a la División de Infancia y Adolescencia de la Policía de la Ciudad de Buenos Aires. (...). Fdo. Sr. Juez".`),
+    mkP(`En su parte pertinente, el mencionado oficio que en copia se adjunta, dice: "(...) requiérase al SAME que con carácter de urgente y en el día se constituyan en el domicilio sito en ${dom} y procedan a trasladar ${nn.al} ${nf}, DNI N° ${d.dni} al ${hd} donde posee historia clínica, convocándose asimismo, a los fines de brindar auxilio y contención, a la División de Infancia y Adolescencia de la Policía de la Ciudad de Buenos Aires. (...). Fdo. Sr. Juez".`),
     sp(),
-    mkP(`A los fines de llevar a cabo la manda judicial, y dada la referencia que ${g('el joven','la joven')} posee con el ${hi}, los profesionales del ETENNyA junto con personal de la División a su cargo y los profesionales del Servicio de Atención Médica de Emergencia (SAME), se apersonarán en el domicilio ${g('del joven','de la joven')}, sito en ${dom}, el día ${fo} a las ${ho} horas.`),
+    mkP(`A los fines de llevar a cabo la manda judicial, y dada la referencia que ${nn.el} posee con el ${hi}, los profesionales del ETENNyA junto con personal de la División a su cargo y los profesionales del Servicio de Atención Médica de Emergencia (SAME), se apersonarán en el domicilio ${nn.del}, sito en ${dom}, el día ${fo} a las ${ho} horas.`),
     sp(),
     mkP('El presente se libra con fundamento en la Ley de Procedimientos Administrativos y en las Leyes de Protección Integral de Derechos de Niñas, Niños y Adolescentes —Ley CABA N° 114 y Ley Nacional N° 26.061—, normativa que habilita expresamente a este organismo a requerir la intervención de distintos actores y dependencias en función de las atribuciones que le competen como autoridad de aplicación y ejecución de estrategias de restitución de derechos de NNyA.'),
   ];
@@ -734,6 +748,7 @@ function tplHospital(d, lib) {
   const nf = nombreFormal(d.nombre);
   const nc = nombreCorto(d.nombre);
   const g  = mkG(d.genero);
+  const nn = mkNNyA(d.genero, d.edad);
   const hi = d.hosp_intern || '[HOSPITAL]';
   return [
     mkP([BU('OFICIO ADMINISTRATIVO')], AlignmentType.CENTER, 16),
@@ -743,14 +758,17 @@ function tplHospital(d, lib) {
     sp(),
     mkP([U('S. / D.')], AlignmentType.LEFT, 16),
     sp(),
-    mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de los Derechos de Niños, Niñas y Adolescentes, a fin de solicitar la evaluación ${g('del joven','de la joven')} ${nf}, DNI N° ${d.dni}.`),
+    mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de los Derechos de Niños, Niñas y Adolescentes, a fin de solicitar la evaluación ${nn.del} ${nf}, DNI N° ${d.dni}.`),
     sp(),
-    mkP(`Dicha evaluación deberá integrar: • Informe clínico integral • Informe toxicológico • Diagnóstico cardiológico • Diagnóstico por imágenes • Informe psicológico y psiquiátrico integral que dé cuenta de si ${g('el niño','la niña')} presenta riesgo para sí o para terceros • Amplio informe social, todo ello en virtud de la situación de riesgo al que se encontraría expuest${g('o','a')} ${g('el joven','la joven')} motivo de nuestra intervención.`),
+    mkP(`Dicha evaluación deberá integrar: • Informe clínico integral • Informe toxicológico • Diagnóstico cardiológico • Diagnóstico por imágenes • Informe psicológico y psiquiátrico integral que dé cuenta de si ${nn.el} presenta riesgo para sí o para terceros • Amplio informe social, todo ello en virtud de la situación de riesgo al que se encontraría expuest${g('o','a')} ${nn.el} motivo de nuestra intervención.`),
     sp(),
-    ...(d.tiene_medida ? [
+    ...(d.juzgado ? (d.tiene_medida ? [
       mkP(`Es dable destacar que en la presente situación interviene, además, el ${d.juzgado} interviniente en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}, quienes han resuelto hacer lugar a la petición efectuada por los profesionales del ETENNyA, determinando como medida cautelar la realización de la evaluación interdisciplinaria precedentemente solicitada.`),
       sp(),
-    ] : []),
+    ] : [
+      mkP(`Se hace saber que, en relación a la situación ${nn.del}, entiende el ${d.juzgado} en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}.`),
+      sp(),
+    ]) : []),
     mkP('Requiero que una vez efectuadas las evaluaciones supra solicitadas, los resultados e informes sean remitidos al mail institucional etennya_cdnnya@buenosaires.gob.ar.'),
     sp(),
     mkP('El presente se libra con fundamento en la Ley de Procedimientos Administrativos y en las Leyes de Protección Integral de Derechos de Niñas, Niños y Adolescentes —Ley CABA N° 114 y Ley Nacional N° 26.061—, normativa que habilita expresamente a este Organismo a requerir la intervención de distintos actores y dependencias en función de las atribuciones que le competen como autoridad de aplicación y ejecución de estrategias de restitución de derechos de Niños, Niñas y Adolescentes.'),
@@ -762,12 +780,13 @@ function tplAcomp(d, lib) {
   const {AlignmentType} = lib;
   const nf = nombreFormal(d.nombre);
   const g  = mkG(d.genero);
+  const nn = mkNNyA(d.genero, d.edad);
   const et = edadTexto(d.edad);
   const hi = d.hosp_intern || '[HOSPITAL]';
   return [
-    mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento a fin de solicitar recurso de acompañante hospitalario durante las 24 horas del día mientras dure su internación, para ${g('el joven','la joven')} ${nf}, DNI N° ${d.dni}, ${g('nacido','nacida')} el ${d.fecha_nac}, de ${et} (${d.edad}) años, quien se encuentra en la actualidad en el Servicio de Guardia del ${hi}.`),
+    mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento a fin de solicitar recurso de acompañante hospitalario durante las 24 horas del día mientras dure su internación, para ${nn.el} ${nf}, DNI N° ${d.dni}, ${g('nacido','nacida')} el ${d.fecha_nac}, de ${et} (${d.edad}) años, quien se encuentra en la actualidad en el Servicio de Guardia del ${hi}.`),
     sp(),
-    mkP(`${g('El joven se encuentra afectado','La joven se encuentra afectada')} al consumo problemático de sustancias psicoactivas, sin conciencia de enfermedad, en situación de calle y sin adulto en condiciones de garantizar sus cuidados, encontrándose los profesionales intervinientes evaluando su inclusión en el Protocolo de Actuación.`),
+    mkP(`${(nn.el.charAt(0).toUpperCase() + nn.el.slice(1))} se encuentra ${g('afectado','afectada')} al consumo problemático de sustancias psicoactivas, sin conciencia de enfermedad, en situación de calle y sin adulto en condiciones de garantizar sus cuidados, encontrándose los profesionales intervinientes evaluando su inclusión en el Protocolo de Actuación.`),
     sp(),
     mkP(`Cuenta, además, con intervención del ${d.juzgado}, autos "${d.caratula}", expediente N° ${d.expediente}, el cual ha determinado la medida cautelar solicitada la que en copia se adjunta.`),
   ];
@@ -778,6 +797,7 @@ function tplComisaria(d, lib) {
   const {AlignmentType} = lib;
   const nf  = nombreFormal(d.nombre);
   const g   = mkG(d.genero);
+  const nn  = mkNNyA(d.genero, d.edad);
   const com = d.comisaria    || '[COMISARÍA VECINAL]';
   const hi  = d.hosp_intern  || '[HOSPITAL]';
   const dom = d.domicilio    || '[DOMICILIO]';
@@ -789,9 +809,9 @@ function tplComisaria(d, lib) {
     sp(),
     mkP([U('S. / D.')], AlignmentType.LEFT, 16),
     sp(),
-    mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de los Derechos de Niños, Niñas y Adolescentes, a fin de comunicar la internación ${g('del joven','de la joven')} ${nf}, DNI N° ${d.dni}, en el ${hi}, en el marco de la medida precautoria de salud dispuesta por el ${d.juzgado} en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}.`),
+    mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de los Derechos de Niños, Niñas y Adolescentes, a fin de comunicar la internación ${nn.del} ${nf}, DNI N° ${d.dni}, en el ${hi}, en el marco de la medida precautoria de salud dispuesta por el ${d.juzgado} en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}.`),
     sp(),
-    mkP(`En tal sentido, se solicita a esa dependencia que tome conocimiento de la situación ${g('del joven','de la joven')} y, en caso de que se requiera intervención policial para garantizar la efectivización de la medida judicial, se preste la colaboración necesaria.`),
+    mkP(`En tal sentido, se solicita a esa dependencia que tome conocimiento de la situación ${nn.del} y, en caso de que se requiera intervención policial para garantizar la efectivización de la medida judicial, se preste la colaboración necesaria.`),
     sp(),
     mkP('El presente se libra con fundamento en la Ley de Procedimientos Administrativos y en las Leyes de Protección Integral de Derechos de Niñas, Niños y Adolescentes —Ley CABA N° 114 y Ley Nacional N° 26.061—, normativa que habilita expresamente a este organismo a requerir la intervención de distintos actores y dependencias en función de las atribuciones que le competen como autoridad de aplicación y ejecución de estrategias de restitución de derechos de NNyA.'),
   ];
