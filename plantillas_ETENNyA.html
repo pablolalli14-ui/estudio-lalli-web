@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de Escritos — ETENNyA</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/js/tom-select.complete.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@7.8.2/build/index.js"></script>
+<style>
+  :root { --navy:#1a2744; --gold:#c9a84c; --cream:#f5f0e8; }
+  body { font-family:'Outfit',sans-serif; background:var(--cream); }
+  h1,h2,h3 { font-family:'Playfair Display',serif; }
+
+  .ts-wrapper.single .ts-control { border:2px solid #d1c9bb; border-radius:0.5rem; padding:0.6rem 0.85rem; font-size:0.95rem; background:#fff; min-height:2.8rem; }
+  .ts-wrapper.single.focus .ts-control { border-color:var(--navy); box-shadow:0 0 0 3px rgba(26,39,68,.12); }
+  .ts-dropdown { border:2px solid var(--navy); border-radius:0.5rem; font-size:0.9rem; z-index:99999 !important; background-color:#fff !important; opacity:1 !important; box-shadow:0 8px 24px rgba(0,0,0,.18); }
+  .ts-dropdown, .ts-dropdown .ts-dropdown-content { background-color:#fff !important; }
+  .ts-dropdown .ts-dropdown-content .option { background-color:#fff; }
+  .ts-dropdown .ts-dropdown-content .option.active { background:var(--navy) !important; color:#fff; }
+  .ts-dropdown .ts-dropdown-content .option:hover { background:#e8e2d8 !important; }
+
+  .campo-auto  { background:#eef2f9; border:1.5px solid #b8c5e0; }
+  .campo-manual{ background:#fff;    border:1.5px solid #d1c9bb; }
+  .campo-auto:focus, .campo-manual:focus { outline:none; border-color:var(--navy); box-shadow:0 0 0 3px rgba(26,39,68,.1); }
+
+  .badge-auto   { background:#dde6f7; color:#1a2744; font-size:.65rem; font-weight:600; padding:.1rem .4rem; border-radius:.25rem; text-transform:uppercase; letter-spacing:.04em; }
+  .badge-manual { background:#fef3cd; color:#7a5c00; font-size:.65rem; font-weight:600; padding:.1rem .4rem; border-radius:.25rem; text-transform:uppercase; letter-spacing:.04em; }
+
+  .doc-check { accent-color:var(--navy); width:1.1rem; height:1.1rem; cursor:pointer; flex-shrink:0; }
+
+  .cat-header { font-size:.7rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--navy); padding:.3rem .6rem; background:#dde6f7; border-radius:.4rem; display:inline-block; margin-bottom:.6rem; }
+  .cat-block  { border-left:3px solid var(--navy); padding-left:1rem; margin-bottom:1.4rem; }
+
+  .badge-default { background:#d4edda; color:#155724; font-size:.65rem; font-weight:700; padding:.1rem .5rem; border-radius:.25rem; margin-left:.4rem; }
+
+  .campo-requerido input, .campo-requerido select, .campo-requerido textarea { border-color:var(--gold) !important; background:#fffbf0 !important; }
+  .campo-requerido label { color:#7a5c00 !important; font-weight:700 !important; }
+  .campo-dim { opacity:.35; pointer-events:none; }
+  .paquete-btn { border:2px solid var(--navy); border-radius:.6rem; padding:.35rem .85rem; font-size:.8rem; font-weight:600; color:var(--navy); background:#fff; cursor:pointer; transition:background .15s,color .15s; }
+  .paquete-btn:hover { background:var(--navy); color:#fff; }
+</style>
+</head>
+<body class="min-h-screen py-8 px-4">
+
+<!-- HEADER -->
+<div class="max-w-4xl mx-auto mb-8">
+  <div class="rounded-2xl p-6 text-white" style="background:var(--navy)">
+    <h1 class="text-2xl font-semibold">Generador de Escritos</h1>
+    <p class="text-sm mt-1 opacity-75">ETENNyA · Consejo de los Derechos de Niñas, Niños y Adolescentes</p>
+  </div>
+</div>
+
+<div class="max-w-4xl mx-auto space-y-6">
+
+  <!-- PASO 1 -->
+  <div class="bg-white rounded-2xl shadow-sm p-6">
+    <div class="flex items-center gap-2 mb-4">
+      <span class="w-7 h-7 rounded-full text-white text-sm font-bold flex items-center justify-center" style="background:var(--navy)">1</span>
+      <h2 class="text-lg font-semibold" style="color:var(--navy)">Seleccionar caso</h2>
+    </div>
+    <select id="caso-select" placeholder="Buscar por apellido, carátula o expediente..."></select>
+  </div>
+
+  <!-- PASO 2 -->
+  <div class="bg-white rounded-2xl shadow-sm p-6">
+    <div class="flex items-center gap-2 mb-5">
+      <span class="w-7 h-7 rounded-full text-white text-sm font-bold flex items-center justify-center" style="background:var(--navy)">2</span>
+      <h2 class="text-lg font-semibold" style="color:var(--navy)">Datos del caso</h2>
+    </div>
+
+    <!-- Auto -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+      <div>
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Nombre del joven <span class="badge-auto">Auto</span></label>
+        <input id="f-nombre" class="campo-auto w-full rounded-lg px-3 py-2 text-sm" type="text" placeholder="Se completa al seleccionar caso">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">DNI <span class="badge-auto">Auto</span></label>
+        <input id="f-dni" class="campo-auto w-full rounded-lg px-3 py-2 text-sm" type="text">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Juzgado <span class="badge-auto">Auto</span></label>
+        <input id="f-juzgado" class="campo-auto w-full rounded-lg px-3 py-2 text-sm" type="text">
+        <input id="f-juzgado-nro" type="hidden">
+        <input id="f-genero" type="hidden" value="M">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Expediente N° <span class="badge-auto">Auto</span></label>
+        <input id="f-expediente" class="campo-auto w-full rounded-lg px-3 py-2 text-sm" type="text">
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Carátula <span class="badge-auto">Auto</span></label>
+        <input id="f-caratula" class="campo-auto w-full rounded-lg px-3 py-2 text-sm" type="text">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Fecha de nacimiento <span class="badge-auto">Auto</span></label>
+        <input id="f-fecha-nac" class="campo-auto w-full rounded-lg px-3 py-2 text-sm" type="text">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Edad <span class="badge-auto">Auto</span></label>
+        <input id="f-edad" class="campo-auto w-full rounded-lg px-3 py-2 text-sm" type="text">
+      </div>
+    </div>
+
+    <hr class="border-gray-200 my-5">
+    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-4">Completar según documentos a generar</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Para SAME / División Infancia -->
+      <div id="wrap-domicilio">
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Domicilio del operativo <span class="badge-manual">Manual</span></label>
+        <input id="f-domicilio" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" type="text" placeholder="Dirección para traslado (SAME / División)">
+      </div>
+      <div id="wrap-hosp-destino">
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Hospital destino del traslado <span class="badge-manual">Manual</span></label>
+        <select id="f-hosp-destino" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" onchange="toggleOtro('f-hosp-destino','f-hosp-destino-otro')">
+          <option value="">— Para Oficio SAME y División Infancia —</option>
+          <option>Hospital General de Agudos «Dr. Cosme Argerich»</option>
+          <option>Hospital General de Niños «Pedro de Elizalde»</option>
+          <option>Hospital General de Agudos «Dr. José María Ramos Mejía»</option>
+          <option>Hospital General de Agudos «Dr. José Penna»</option>
+          <option>Hospital Infanto Juvenil «Dra. Carolina Tobar García»</option>
+          <option>Hospital General de Agudos «Dra. Cecilia Grierson»</option>
+          <option>Hospital de Emergencias Psiquiátricas Torcuato de Alvear</option>
+          <option>Hospital General de Agudos «Dr. Juan A. Fernández»</option>
+          <option>Hospital General de Agudos «Dr. Carlos G. Durand»</option>
+          <option>Hospital General de Agudos «Dr. Ignacio Pirovano»</option>
+          <option>Hospital de Pediatría «Prof. Dr. Juan P. Garrahan»</option>
+          <option>Hospital Neuropsiquiátrico «Dr. José T. Borda»</option>
+          <option>Hospital Neuropsiquiátrico «Dr. Braulio Moyano»</option>
+          <option>Hospital General de Agudos «Dr. Enrique Tornú»</option>
+          <option>Hospital General de Agudos «Dr. Abel Zubizarreta»</option>
+          <option>Hospital de Infecciosas «Dr. Francisco J. Muñiz»</option>
+          <option value="__otro__">Otro (especificar)…</option>
+        </select>
+        <input id="f-hosp-destino-otro" class="campo-manual w-full rounded-lg px-3 py-2 text-sm mt-2" type="text" placeholder="Nombre completo del hospital" style="display:none">
+      </div>
+      <div id="wrap-fecha-op">
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Fecha del operativo <span class="badge-manual">Manual</span></label>
+        <input id="f-fecha-op" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" type="text" placeholder="Ej: 27 de mayo del corriente">
+      </div>
+      <div id="wrap-hora-op">
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Hora del operativo <span class="badge-manual">Manual</span></label>
+        <input id="f-hora-op" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" type="text" placeholder="Ej: 9.30">
+      </div>
+      <!-- Para Hospital / Acompañante / Nota de Ejecución -->
+      <div id="wrap-hosp-intern">
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Hospital de internación actual <span class="badge-manual">Manual</span></label>
+        <select id="f-hosp-intern" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" onchange="toggleOtro('f-hosp-intern','f-hosp-intern-otro'); autoComisaria();">
+          <option value="">— Para Oficio Hospital, Acompañante, Nota Ejecución —</option>
+          <option>Hospital General de Agudos «Dr. Cosme Argerich»</option>
+          <option>Hospital General de Niños «Pedro de Elizalde»</option>
+          <option>Hospital General de Agudos «Dr. José María Ramos Mejía»</option>
+          <option>Hospital General de Agudos «Dr. José Penna»</option>
+          <option>Hospital Infanto Juvenil «Dra. Carolina Tobar García»</option>
+          <option>Hospital General de Agudos «Dra. Cecilia Grierson»</option>
+          <option>Hospital de Emergencias Psiquiátricas Torcuato de Alvear</option>
+          <option>Hospital General de Agudos «Dr. Juan A. Fernández»</option>
+          <option>Hospital General de Agudos «Dr. Carlos G. Durand»</option>
+          <option>Hospital General de Agudos «Dr. Ignacio Pirovano»</option>
+          <option>Hospital de Pediatría «Prof. Dr. Juan P. Garrahan»</option>
+          <option>Hospital Neuropsiquiátrico «Dr. José T. Borda»</option>
+          <option>Hospital Neuropsiquiátrico «Dr. Braulio Moyano»</option>
+          <option>Hospital General de Agudos «Dr. Enrique Tornú»</option>
+          <option>Hospital General de Agudos «Dr. Abel Zubizarreta»</option>
+          <option>Hospital de Infecciosas «Dr. Francisco J. Muñiz»</option>
+          <option value="__otro__">Otro (especificar)…</option>
+        </select>
+        <input id="f-hosp-intern-otro" class="campo-manual w-full rounded-lg px-3 py-2 text-sm mt-2" type="text" placeholder="Nombre completo del hospital" style="display:none">
+      </div>
+      <div id="wrap-comisaria">
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Comisaría vecinal <span class="badge-auto">Auto</span></label>
+        <input id="f-comisaria" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" type="text" placeholder="Se completa al elegir hospital (editable)">
+      </div>
+      <div class="md:col-span-2">
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50 cursor-pointer select-none">
+          <input type="checkbox" id="chk-tiene-medida" class="doc-check">
+          <span class="text-sm text-gray-700">Existe <strong>medida judicial de salud</strong> emitida por el juzgado interviniente</span>
+        </label>
+      </div>
+      <!-- Para Nota de Ejecución -->
+      <div id="wrap-hosp-inicial">
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Hospital inicial (si hubo traslado) <span class="badge-manual">Manual</span></label>
+        <input id="f-hosp-inicial" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" type="text" placeholder="Solo si el joven fue transferido luego (Nota Ejecución)">
+      </div>
+      <div id="wrap-fecha-ejec">
+        <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">Fecha de ejecución de la medida <span class="badge-manual">Manual</span></label>
+        <input id="f-fecha-ejec" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" type="text" placeholder="Ej: 05/05/26 (para Nota de Ejecución)">
+      </div>
+    </div>
+
+    <!-- Hechos para Medidas Precautorias -->
+    <div class="mt-4" id="wrap-hechos">
+      <label class="block text-xs font-semibold text-gray-500 mb-1 flex items-center gap-1">
+        Relato de hechos <span class="badge-manual">Manual</span>
+        <span class="text-gray-400 font-normal">— para Medidas Precautorias</span>
+      </label>
+      <textarea id="f-hechos" class="campo-manual w-full rounded-lg px-3 py-2 text-sm" rows="7" placeholder="Relatar los hechos que dan lugar a la solicitud de medida precautoria de salud...&#10;&#10;Cada párrafo separado con una línea en blanco se generará como párrafo independiente en el documento."></textarea>
+    </div>
+  </div>
+
+  <!-- PASO 3 -->
+  <div class="bg-white rounded-2xl shadow-sm p-6">
+    <div class="flex items-center gap-2 mb-5">
+      <span class="w-7 h-7 rounded-full text-white text-sm font-bold flex items-center justify-center" style="background:var(--navy)">3</span>
+      <h2 class="text-lg font-semibold" style="color:var(--navy)">Elegir documentos</h2>
+    </div>
+
+    <!-- Paquetes rápidos -->
+    <div class="mb-5">
+      <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Cargar paquete</p>
+      <div class="flex flex-wrap gap-2">
+        <button type="button" class="paquete-btn" onclick="cargarPaquete('internacion')">Internación activa</button>
+      </div>
+    </div>
+
+    <!-- Escritos Judiciales -->
+    <div class="cat-block">
+      <span class="cat-header">Escritos Judiciales</span>
+      <div class="space-y-2">
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 cursor-pointer">
+          <input type="checkbox" class="doc-check" id="chk-medida-pre" checked>
+          <span class="text-sm font-medium text-gray-800">
+            <strong>Medida Precautoria de Salud</strong> — Expediente pre-existente (Dodero)
+            <span class="badge-default">Por defecto</span>
+          </span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 cursor-pointer">
+          <input type="checkbox" class="doc-check" id="chk-medida-nueva">
+          <span class="text-sm font-medium text-gray-800">
+            <strong>Medida Precautoria de Salud</strong> — Expediente nuevo (Oates Coll)
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Notas -->
+    <div class="cat-block">
+      <span class="cat-header">Notas</span>
+      <div class="space-y-2">
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 cursor-pointer">
+          <input type="checkbox" class="doc-check" id="chk-nota-ejec">
+          <span class="text-sm font-medium text-gray-800">
+            <strong>Nota de Ejecución de Medida de Salud</strong> (Dodero)
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Oficios Administrativos -->
+    <div class="cat-block">
+      <span class="cat-header">Oficios Administrativos</span>
+      <div class="space-y-2">
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 cursor-pointer">
+          <input type="checkbox" class="doc-check" id="chk-same">
+          <span class="text-sm font-medium text-gray-800">Oficio al <strong>SAME</strong></span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 cursor-pointer">
+          <input type="checkbox" class="doc-check" id="chk-div">
+          <span class="text-sm font-medium text-gray-800">Oficio a la <strong>División de Infancia y Adolescencia</strong></span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 cursor-pointer">
+          <input type="checkbox" class="doc-check" id="chk-hosp">
+          <span class="text-sm font-medium text-gray-800">Oficio a <strong>Hospital</strong> por ejecución de medida</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 cursor-pointer">
+          <input type="checkbox" class="doc-check" id="chk-acomp">
+          <span class="text-sm font-medium text-gray-800"><strong>Pedido de Acompañante</strong> hospitalario</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 cursor-pointer">
+          <input type="checkbox" class="doc-check" id="chk-comisaria">
+          <span class="text-sm font-medium text-gray-800">Oficio a <strong>Comisaría Vecinal</strong></span>
+        </label>
+      </div>
+    </div>
+
+    <button id="btn-generar" onclick="generarDocumentos()"
+      class="w-full py-3 px-6 rounded-xl text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-95"
+      style="background:var(--navy)">
+      Generar documentos Word ↓
+    </button>
+    <div id="msg-generar" class="mt-3 text-sm text-center hidden"></div>
+  </div>
+
+</div><!-- /max-w -->
+
+<script>
+// ── MAPEO HOSPITAL → COMISARÍA ────────────────────────────────────────────
+const HOSP_COMISARIA = {
+  'Hospital General de Agudos «Dr. Cosme Argerich»':         'Comisaría Vecinal 4C',
+  'Hospital General de Niños «Pedro de Elizalde»':           'Comisaría Vecinal 4D',
+  'Hospital Infanto Juvenil «Dra. Carolina Tobar García»':   'Comisaría Vecinal 4D',
+  'Hospital de Emergencias Psiquiátricas Torcuato de Alvear':'Comisaría Vecinal 15A',
+  'Hospital General de Agudos «Dr. Juan A. Fernández»':      'Comisaría Vecinal 14C',
+  'Hospital General de Agudos «Dr. Carlos G. Durand»':       'Comisaría Vecinal 6A',
+  'Hospital General de Agudos «Dr. José María Ramos Mejía»': 'Comisaría Vecinal 3A',
+};
+
+// Campos requeridos por checkbox (IDs de los wrappers)
+const REQS = {
+  'chk-same':      ['wrap-domicilio','wrap-hosp-destino','wrap-fecha-op','wrap-hora-op'],
+  'chk-div':       ['wrap-domicilio','wrap-hosp-destino','wrap-fecha-op','wrap-hora-op'],
+  'chk-comisaria': ['wrap-hosp-intern','wrap-comisaria'],
+  'chk-hosp':      ['wrap-hosp-intern'],
+  'chk-acomp':     ['wrap-hosp-intern'],
+  'chk-nota-ejec': ['wrap-hosp-intern','wrap-hosp-inicial','wrap-fecha-ejec'],
+  'chk-medida-pre':['wrap-hechos'],
+  'chk-medida-nueva':['wrap-hechos'],
+};
+
+function actualizarCamposReq() {
+  const activos = new Set();
+  Object.entries(REQS).forEach(([chkId, wrapIds]) => {
+    const el = document.getElementById(chkId);
+    if (el && el.checked) wrapIds.forEach(w => activos.add(w));
+  });
+  const todos = new Set(Object.values(REQS).flat());
+  todos.forEach(wId => {
+    const w = document.getElementById(wId);
+    if (!w) return;
+    w.classList.toggle('campo-requerido', activos.has(wId));
+  });
+}
+
+function cargarPaquete(nombre) {
+  const paquetes = {
+    internacion: ['chk-hosp','chk-acomp','chk-comisaria'],
+  };
+  const ids = paquetes[nombre] || [];
+  // Desmarcar todo primero, luego marcar los del paquete
+  ['chk-medida-pre','chk-medida-nueva','chk-nota-ejec','chk-same','chk-div','chk-hosp','chk-acomp','chk-comisaria'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.checked = ids.includes(id);
+  });
+  actualizarCamposReq();
+}
+
+// ── DATOS ──────────────────────────────────────────────────────────────────
+const CASOS = [{"label":"ALVAREZ, Marcelo — ALVAREZ, MARCELO ALEJANDRO S/MEDIDAS PRECAUTORIAS — Expte. 13813/2023","nombre":"ALVAREZ, Marcelo","dni":"49245737","fecha_nac":"14 de enero de 2009","edad":"17","juzgado":"JUZGADO CIVIL 88 - SECRETARIA Nº 51","juzgado_nro":"88","expediente":"13813/2023","caratula":"ALVAREZ, MARCELO ALEJANDRO S/MEDIDAS PRECAUTORIAS"},{"label":"AVALOS RODRIGUEZ, Ulises Jeremías — AVALOS RODRIGUEZ, ULISES JEREMIAS S/MEDIDAS PRECAUTORIA… — Expte. 73432/2024","nombre":"AVALOS RODRIGUEZ, Ulises Jeremías","dni":"48873075","fecha_nac":"4 de agosto de 2008","edad":"17","juzgado":"JUZGADO CIVIL 56 - SECRETARIA Nº 86","juzgado_nro":"56","expediente":"73432/2024","caratula":"AVALOS RODRIGUEZ, ULISES JEREMIAS S/MEDIDAS PRECAUTORIAS"},{"label":"CASTRO, Esmeralda Bella — CASTRO, ESMERALDA BELLA LUNA S/CONTROL DE LEGALIDAD — Expte. 99762/2021","nombre":"CASTRO, Esmeralda Bella","dni":"49435711","fecha_nac":"27 de mayo de 2009","edad":"17","juzgado":"JUZGADO CIVIL 82- SECRETARIA N°16","juzgado_nro":"82","expediente":"99762/2021","caratula":"CASTRO, ESMERALDA BELLA LUNA S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"CASTRO, Mateo Facundo — CASTRO, MATEO FACUNDO S/CONTROL DE LEGALIDAD — Expte. 82040/2021","nombre":"CASTRO, Mateo Facundo","dni":"49089912","fecha_nac":"31 de enero de 2009","edad":"17","juzgado":"JUZGADO CIVIL 82- SECRETARIA N°16","juzgado_nro":"82","expediente":"82040/2021","caratula":"CASTRO, MATEO FACUNDO S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"COMAN, Karen — karen — Expte. 67618/2022","nombre":"COMAN, Karen","dni":"49530567","fecha_nac":"10 de abril de 2009","edad":"17","juzgado":"JUZGADO CIVIL 7 - SECRETARIA Nº 14","juzgado_nro":"7","expediente":"67618/2022","caratula":"karen"},{"label":"DOMINGUEZ PEREZ, Kyara Luna — DOMINGUEZ PEREZ, KYARA LUNA S/MEDIDAS PRECAUTORIAS — Expte. CIV 57878/2004","nombre":"DOMINGUEZ PEREZ, Kyara Luna","dni":"48312466","fecha_nac":"26 de mayo de 2008","edad":"18","juzgado":"JUZGADO CIVIL 87","juzgado_nro":"87","expediente":"CIV 57878/2004","caratula":"DOMINGUEZ PEREZ, KYARA LUNA S/MEDIDAS PRECAUTORIAS"},{"label":"DURANTE TORRILLA, Thiago Nicolas — TORRILLA DURANTE S/EVALUACION ART. 42 — Expte. 21886/2023","nombre":"DURANTE TORRILLA , Thiago Nicolas","dni":"48524008","fecha_nac":"11 de abril de 2008","edad":"18","juzgado":"JUZGADO CIVIL 23 - SECRETARIA Nº 46","juzgado_nro":"23","expediente":"21886/2023","caratula":"TORRILLA DURANTE, THIAGO NICOLAS S/EVALUACION ART. 42 CCCN"},{"label":"DURANTE TORRILLA, Thiago Nicolas — DURANTE TORRILLA S/MEDIDAS PRECAUTORIAS — Expte. 21886/2023","nombre":"DURANTE TORRILLA , Thiago Nicolas","dni":"48524008","fecha_nac":"11 de abril de 2008","edad":"18","juzgado":"JUZGADO CIVIL 23 - SECRETARIA Nº 46","juzgado_nro":"23","expediente":"21886/2023","caratula":"DURANTE TORRILLA, THIAGO NICOLAS S/MEDIDAS PRECAUTORIAS"},{"label":"FERNANDEZ, Daniel — FERNANDEZ, DANIEL s/MEDIDAS PRECAUTORIAS — Expte. 38815/2025","nombre":"FERNANDEZ, Daniel","dni":"53416100","fecha_nac":"7 de agosto de 2008","edad":"17","juzgado":"JUZGADO CIVIL 4 - SECRETARIA Nº 7","juzgado_nro":"4","expediente":"38815/2025","caratula":"FERNANDEZ, DANIEL s/MEDIDAS PRECAUTORIAS"},{"label":"GALEANO NUÑEZ, Jonathan de Jesús — GALEANO NUÑEZ S/CONTROL DE LEGALIDAD — Expte. 88844/2022","nombre":"GALEANO NUÑEZ, Jonathan de Jesús","dni":"95189934","fecha_nac":"18 de mayo de 2010","edad":"16","juzgado":"JUZGADO CIVIL 56 - SECRETARIA Nº 86","juzgado_nro":"56","expediente":"88844/2022","caratula":"GALEANO NUÑEZ, JONATHAN DE JESUS s/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"GARCETE CARDOZO, Brian Emanuel — GARCETE CARDOZO S/MEDIDAS PRECAUTORIAS — Expte. 8447/2025","nombre":"GARCETE CARDOZO, Brian Emanuel","dni":"49003420","fecha_nac":"14 de diciembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 83","juzgado_nro":"83","expediente":"8447/2025","caratula":"GARCETE CARDOZO, BRIAN EMANUEL S/MEDIDAS PRECAUTORIAS"},{"label":"GAUNA, Ignacio Nahuel — GAUNA S/CONTROL DE LEGALIDAD — Expte. 83568/2023","nombre":"GAUNA, Ignacio Nahuel","dni":"49364101","fecha_nac":"21 de febrero de 2009","edad":"17","juzgado":"JUZGADO CIVIL 81 - SECRETARIA Nº 13","juzgado_nro":"81","expediente":"83568/2023","caratula":"GAUNA, IGNACIO NAHUEL S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"GIMÉNEZ, Tiziano Emanuel — GIMENEZ S/EVALUACION ART. 42 CCCN — Expte. 67165/2023","nombre":"GIMÉNEZ, Tiziano Emanuel","dni":"50297012","fecha_nac":"19 de marzo de 2008","edad":"18","juzgado":"JUZGADO CIVIL 56 - SECRETARIA Nº 86","juzgado_nro":"56","expediente":"67165/2023","caratula":"GIMENEZ, TIZIANO EMANUEL S/EVALUACION ART. 42 CCCN"},{"label":"GOMEZ, Aron Javier — GOMEZ MORA VALENTINA S/ MEDIDAS — Expte. Expte. n° CCC","nombre":"GOMEZ, Aron Javier","dni":"48980884","fecha_nac":"31 de agosto de 2008","edad":"17","juzgado":"JUZGADO NACIONAL DE MENORES NRO. 2 Secretaría n° 6","juzgado_nro":"2","expediente":"Expte. n° CCC","caratula":"GOMEZ MORA VALENTINA S/ MEDIDAS"},{"label":"GOMEZ, Aron Javier — PRECAUTORIAS — Expte. 74190/2023/1 47998/2024","nombre":"GOMEZ, Aron Javier","dni":"48980884","fecha_nac":"31 de agosto de 2008","edad":"17","juzgado":"JUZGADO CIVIL 26 - GOMEZ MORA VALENTINA S/ MEDIDAS PRECAUTORIAS","juzgado_nro":"26","expediente":"74190/2023/1 47998/2024","caratula":"PRECAUTORIAS."},{"label":"GONZÁLEZ, Braiton Leonel — GONZALEZ S/EVALUACION ART. 42 CCCN — Expte. 76540/2024","nombre":"GONZÁLEZ, Braiton Leonel","dni":"49988716","fecha_nac":"29 de noviembre de 2009","edad":"16","juzgado":"JUZGADO CIVIL 83","juzgado_nro":"83","expediente":"76540/2024","caratula":"GONZALEZ, BRAITON LEONEL S/EVALUACION ART. 42 CCCN"},{"label":"GRANCE, Dante Ramiro — GRANCE S/MEDIDAS PRECAUTORIAS — Expte. 52948/2024","nombre":"GRANCE, Dante Ramiro","dni":"48990757","fecha_nac":"24 de agosto de 2008","edad":"17","juzgado":"JUZGADO CIVIL 83 - SECRETARIA Nº 18","juzgado_nro":"83","expediente":"52948/2024","caratula":"GRANCE, RAMIRO DANTE S/MEDIDAS PRECAUTORIAS"},{"label":"GUTIERREZ, Dylan Alexis — GUTIERREZ S/CONTROL DE LEGALIDAD — Expte. 79422/2016","nombre":"GUTIERREZ, Dylan Alexis","dni":"49093618","fecha_nac":"9 de septiembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 38 - SECRETARIA Nº 68","juzgado_nro":"38","expediente":"79422/2016","caratula":"GUTIERREZ, DYLAN ALEXIS Y OTRO S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"GÓMEZ, Ramiro Miguel Ángel — GOMEZ RAMIRO S/EVALUACION ART. 42 — Expte. 43513/2024","nombre":"GÓMEZ, Ramiro Miguel Ángel","dni":"49968803","fecha_nac":"22 de diciembre de 2009","edad":"16","juzgado":"JUZGADO CIVIL 88- SECRETARIA N°51","juzgado_nro":"88","expediente":"43513/2024","caratula":"GOMEZ RAMIRO, MIGUEL ANGEL S/EVALUACION ART. 42 CCCN"},{"label":"GÓMEZ, Ramiro Miguel Ángel — GOMEZ S/MEDIDAS PRECAUTORIAS — Expte. 55137/2024","nombre":"GÓMEZ, Ramiro Miguel Ángel","dni":"49968803","fecha_nac":"22 de diciembre de 2009","edad":"16","juzgado":"JUZGADO CIVIL 88- SECRETARIA N°51","juzgado_nro":"88","expediente":"55137/2024","caratula":"GOMEZ, RAMIRO MIGUEL ANGEL S/MEDIDAS PRECAUTORIAS"},{"label":"JIMENEZ, Dylan Luciano — JIMENEZ S/MEDIDAS PRECAUTORIAS — Expte. 1193/2025","nombre":"JIMENEZ, Dylan Luciano","dni":"48873601","fecha_nac":"18 de junio de 2008","edad":"17","juzgado":"JUZGADO CIVIL 26","juzgado_nro":"26","expediente":"1193/2025","caratula":"JIMENEZ, DYLAN LUCIANO S/MEDIDAS PRECAUTORIAS"},{"label":"KANEMANN, Kevin — KANEMANN S/MEDIDAS PRECAUTORIAS — Expte. 59394/2024","nombre":"KANEMANN, Kevin","dni":"19.132.507","fecha_nac":"15 de julio de 2009","edad":"16","juzgado":"JUZGADO CIVIL 38","juzgado_nro":"38","expediente":"59394/2024","caratula":"KANEMANN, KEVIN S/MEDIDAS PRECAUTORIAS"},{"label":"LEDESMA, Milagros — LEDESMA S/MEDIDAS PRECAUTORIAS — Expte. 9352/2025","nombre":"LEDESMA, Milagros","dni":"49316769","fecha_nac":"17 de enero de 2009","edad":"17","juzgado":"JUZGADO CIVIL 23","juzgado_nro":"23","expediente":"9352/2025","caratula":"LEDESMA, MILAGROS S/MEDIDAS PRECAUTORIAS"},{"label":"LEDESMA, Natanael Jonas — LEDESMA S/EVALUACION ART. 42 CCCN — Expte. 20921/2024","nombre":"LEDESMA, Natanael Jonas","dni":"48797934","fecha_nac":"4 de agosto de 2008","edad":"17","juzgado":"JUZGADO CIVIL 56 - SECRETARIA Nº 86","juzgado_nro":"56","expediente":"20921/2024","caratula":"LEDESMA, NATANAEL JONAS S/EVALUACION ART. 42 CCCN"},{"label":"LEITES, Kevin Nahuel — LEITES S/MEDIDAS PRECAUTORIAS — Expte. 69374/2024","nombre":"LEITES, Kevin Nahuel","dni":"51.140.254","fecha_nac":"3 de febrero de 2011","edad":"15","juzgado":"JUZGADO CIVIL 4","juzgado_nro":"4","expediente":"69374/2024","caratula":"LEITES, KEVIN NAHUEL S/MEDIDAS PRECAUTORIAS"},{"label":"MALDONADO, Ian Sebastian — MALDONADO S/MEDIDAS PRECAUTORIAS — Expte. 48629/2024","nombre":"MALDONADO, Ian Sebastian","dni":"51262625","fecha_nac":"12 de agosto de 2011","edad":"14","juzgado":"JUZGADO CIVIL 81 - SECRETARIA Nº 13","juzgado_nro":"81","expediente":"48629/2024","caratula":"MALDONADO, IAN SEBASTIAN S/MEDIDAS PRECAUTORIAS"},{"label":"MARCOS, Lautaro — MARCOS S/CONTROL DE LEGALIDAD — Expte. 54493/2022","nombre":"MARCOS, Lautaro","dni":"50414296","fecha_nac":"4 de junio de 2010","edad":"15","juzgado":"JUZGADO CIVIL 85 - SECRETARIA Nº 23","juzgado_nro":"85","expediente":"54493/2022","caratula":"MARCOS, LAUTARO S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"MARCOS, Lautaro — MARCOS S/EVALUACION ART. 42 CCCN — Expte. 53516/2023","nombre":"MARCOS, Lautaro","dni":"50414296","fecha_nac":"4 de junio de 2010","edad":"15","juzgado":"JUZGADO CIVIL 85 - SECRETARIA Nº 23","juzgado_nro":"85","expediente":"53516/2023","caratula":"MARCOS, LAUTARO S/EVALUACION ART. 42 CCCN"},{"label":"MARCOS, Lautaro — MARCOS S/EVALUACION ART. 42 CCCN — Expte. 15239/2024","nombre":"MARCOS, Lautaro","dni":"50414296","fecha_nac":"4 de junio de 2010","edad":"15","juzgado":"JUZGADO CIVIL 85 - SECRETARIA Nº 23","juzgado_nro":"85","expediente":"15239/2024","caratula":"MARCOS, LAUTARO S/EVALUACION ART. 42 CCCN"},{"label":"MONTES, Benjamín Emanuel — MONTES S/MEDIDAS PRECAUTORIAS — Expte. 26191/2024","nombre":"MONTES, Benjamín Emanuel","dni":"49824695","fecha_nac":"3 de octubre de 2009","edad":"16","juzgado":"JUZGADO CIVIL 8 - SECRETARIA Nº 15","juzgado_nro":"8","expediente":"26191/2024","caratula":"MONTES, BENJAMIN EMANUEL S/MEDIDAS PRECAUTORIAS"},{"label":"MORINIGO, Ariel Sergio — MORINIGO S/EVALUACION ART. 42 CCCN — Expte. 61435/2023","nombre":"MORINIGO, Ariel Sergio","dni":"48.999.472","fecha_nac":"14 de octubre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 56 - SECRETARIA Nº 86","juzgado_nro":"56","expediente":"61435/2023","caratula":"MORINIGO, SERGIO ARIEL S/EVALUACION ART. 42 CCCN"},{"label":"MORINIGO, Ariel Sergio — MORINIGO S/CONTROL DE LEGALIDAD — Expte. 79594/2023","nombre":"MORINIGO, Ariel Sergio","dni":"48.999.472","fecha_nac":"14 de octubre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 56 - SECRETARIA Nº 86","juzgado_nro":"56","expediente":"79594/2023","caratula":"MORINIGO, ARIEL SERGIO S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"MOYA, Jonatan Joaquín — MOYA s/MEDIDAS PRECAUTORIAS — Expte. 24142/2025","nombre":"MOYA, Jonatan Joaquín","dni":"49550485","fecha_nac":"30 de noviembre de 2009","edad":"16","juzgado":"JUZGADO CIVIL 102","juzgado_nro":"102","expediente":"24142/2025","caratula":"MOYA, JONATAN JOAQUIN s/MEDIDAS PRECAUTORIAS"},{"label":"NOGUERA, Yoel Sebastián — NOGUERA s/EVALUACION ART. 42 CCCN — Expte. 14531/2025","nombre":"NOGUERA, Yoel Sebastián","dni":"50417434","fecha_nac":"24 de julio de 2010","edad":"15","juzgado":"JUZGADO CIVIL 8 - SECRETARIA Nº 15","juzgado_nro":"8","expediente":"14531/2025","caratula":"NOGUERA, YOEL SEBASTIAN s/EVALUACION ART. 42 CCCN"},{"label":"PALACIOS CORREA, Franco Agustín — PALACIOS CORREA S/MEDIDAS PRECAUTORIAS — Expte. 101924/2023","nombre":"PALACIOS CORREA, Franco Agustín","dni":"49357433","fecha_nac":"13 de abril de 2009","edad":"17","juzgado":"JUZGADO CIVIL 86","juzgado_nro":"86","expediente":"101924/2023","caratula":"PALACIOS CORREA, FRANCO AGUSTIN S/MEDIDAS PRECAUTORIAS"},{"label":"PALACIOS CORREA, Franco Agustín — PALACIOS CORREA S/EVALUACION ART. 42 — Expte. 44086/2024","nombre":"PALACIOS CORREA, Franco Agustín","dni":"49357433","fecha_nac":"13 de abril de 2009","edad":"17","juzgado":"JUZGADO CIVIL 86","juzgado_nro":"86","expediente":"44086/2024","caratula":"PALACIOS CORREA, FRANCO S/EVALUACION ART. 42 CCCN"},{"label":"PALACIOS CORREA, Franco Agustín — PALACIOS CORREA S/EVALUACION ART. 42 — Expte. 57785/2024","nombre":"PALACIOS CORREA, Franco Agustín","dni":"49357433","fecha_nac":"13 de abril de 2009","edad":"17","juzgado":"JUZGADO CIVIL 86","juzgado_nro":"86","expediente":"57785/2024","caratula":"PALACIOS CORREA, FRANCO S/EVALUACION ART. 42 CCCN"},{"label":"PEREYRA, Cristian Elian — PEREYRA — Expte. 1106/2025 (1)","nombre":"PEREYRA, Cristian Elian","dni":"49002512","fecha_nac":"6 de noviembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 10","juzgado_nro":"10","expediente":"1106/2025","caratula":"MORINIGO, SERGIO ARIEL S/EVALUACION ART. 42 CCCN"},{"label":"PEREYRA, Cristian Elian — PEREYRA — Expte. 1106/2025 (2)","nombre":"PEREYRA, Cristian Elian","dni":"49002512","fecha_nac":"6 de noviembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 10","juzgado_nro":"10","expediente":"1106/2025","caratula":"MORINIGO, ARIEL SERGIO S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"POGONZA, Nahuel Alejandro — POGONZA s/MEDIDAS PRECAUTORIAS — Expte. 39959/2025","nombre":"POGONZA, Nahuel Alejandro","dni":"49249307","fecha_nac":"5 de enero de 2009","edad":"17","juzgado":"JUZGADO CIVIL 12 - SECRETARIA Nº 24","juzgado_nro":"12","expediente":"39959/2025","caratula":"POGONZA, NAHUEL ALEJANDRO s/MEDIDAS PRECAUTORIAS"},{"label":"QUINTEROS, Brandon Damián — PUMA FLORES S/MEDIDAS PRECAUTORIAS — Expte. 48691/2024","nombre":"QUINTEROS, Brandon Damián","dni":"48800019","fecha_nac":"25 de junio de 2008","edad":"17","juzgado":"JUZGADO CIVIL 106- SECRETARIA N°47","juzgado_nro":"106","expediente":"48691/2024","caratula":"PUMA FLORES, FLORENCIA MICAELA S/MEDIDAS PRECAUTORIAS"},{"label":"RECALDE, Magalí Evangelina — RECALDE S/MEDIDAS PRECAUTORIAS — Expte. 1727/2025","nombre":"RECALDE, Magalí Evangelina","dni":"49093403","fecha_nac":"21 de diciembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 56","juzgado_nro":"56","expediente":"1727/2025","caratula":"RECALDE, MAGALI EVANGELINA S/MEDIDAS PRECAUTORIAS"},{"label":"RECALDE, Magalí Evangelina — RECALDE S/CONTROL DE LEGALIDAD — Expte. 51083/2020","nombre":"RECALDE, Magalí Evangelina","dni":"49093403","fecha_nac":"21 de diciembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 56","juzgado_nro":"56","expediente":"51083/2020","caratula":"RECALDE, MAGALI EVANGELINA Y OTRO S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"REDONDO, Samir Erik Ezequiel — REDONDO S/MEDIDAS PRECAUTORIAS — Expte. 33393/2026","nombre":"REDONDO, Samir Erik Ezequiel","dni":"49593811","fecha_nac":"26 de agosto de 2009","edad":"16","juzgado":"JUZGADO CIVIL 84","juzgado_nro":"84","expediente":"33393/2026","caratula":"REDONDO, SAMIR ERIK EZEQUIEL S/MEDIDAS PRECAUTORIAS"},{"label":"SALATINO, Gonzalo Oscar — SALATINO S/MEDIDAS PRECAUTORIAS — Expte. 1769/2025","nombre":"SALATINO, Gonzalo Oscar","dni":"48854573","fecha_nac":"10 de junio de 2008","edad":"17","juzgado":"JUZGADO CIVIL 10","juzgado_nro":"10","expediente":"1769/2025","caratula":"SALATINO, GONZALO OSCAR S/MEDIDAS PRECAUTORIAS"},{"label":"SALCEDO, Fabricio José — SALCEDO S/EVALUACION ART. 42 CCCN — Expte. 05325/2024","nombre":"SALCEDO, Fabricio José","dni":"48901365","fecha_nac":"9 de noviembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 106 - SECRETARIA Nº 47","juzgado_nro":"106","expediente":"05325/2024","caratula":"SALCEDO, FABRICIO JOSE S/EVALUACION ART. 42 CCCN"},{"label":"SAMANIEGO GONZALEZ, Jorge Daniel — SAMANIEGO GONZALEZ s/MEDIDAS PRECAUTORIAS — Expte. 71009/2024","nombre":"SAMANIEGO GONZALEZ, Jorge Daniel","dni":"95904601","fecha_nac":"21 de septiembre de 2008","edad":"17","juzgado":"JUZGADO CIVIL 4","juzgado_nro":"4","expediente":"71009/2024","caratula":"SAMANIEGO GONZALEZ, JORGE DANIEL s/MEDIDAS PRECAUTORIAS"},{"label":"SANCHEZ, Benjamín Thomas — SANCHEZ S/MEDIDAS PRECAUTORIAS — Expte. 927/2025","nombre":"SANCHEZ, Benjamín Thomas","dni":"51400942","fecha_nac":"6 de junio de 2010","edad":"15","juzgado":"JUZGADO CIVIL 56","juzgado_nro":"56","expediente":"927/2025","caratula":"SANCHEZ, BENJAMIN THOMAS S/MEDIDAS PRECAUTORIAS"},{"label":"SANCHEZ, Roman Santiago — SANCHEZ ROMAN s/MEDIDAS PRECAUTORIAS — Expte. 34178/2025","nombre":"SANCHEZ, Roman Santiago","dni":"48805745","fecha_nac":"30 de abril de 2008","edad":"18","juzgado":"JUZGADO CIVIL 83 - SECRETARIA Nº 18","juzgado_nro":"83","expediente":"34178/2025","caratula":"SANCHEZ ROMAN, SANTIAGO s/MEDIDAS PRECAUTORIAS"},{"label":"SANCHEZ, Santino Sebastián — SANCHEZ S/CONTROL DE INTERNACION — Expte. 105065/2024","nombre":"SANCHEZ, Santino Sebastián","dni":"50074780","fecha_nac":"25 de junio de 2009","edad":"16","juzgado":"JUZGADO CIVIL 56","juzgado_nro":"56","expediente":"105065/2024","caratula":"SANCHEZ, SANTINO S/CONTROL DE INTERNACION - LEY 26.657"},{"label":"SEGOVIA, Thiago Eliel — SEGOVIA S/DILIGENCIAS PREPARATORIAS — Expte. 101092/2024","nombre":"SEGOVIA, Thiago Eliel","dni":"49175237","fecha_nac":"26 de febrero de 2009","edad":"17","juzgado":"JUZGADO CIVIL 102","juzgado_nro":"102","expediente":"101092/2024","caratula":"SEGOVIA, THIAGO ELLIEL S/DILIGENCIAS PREPARATORIAS"},{"label":"SILVA, Tomas Andrés — SILVA S/CONTROL DE LEGALIDAD — Expte. 51581/2023","nombre":"SILVA, Tomas Andrés","dni":"48.849.704","fecha_nac":"23 de julio de 2008","edad":"17","juzgado":"JUZGADO CIVIL 25 - SECRETARIA Nº 49","juzgado_nro":"25","expediente":"51581/2023","caratula":"SILVA, TOMAS ANDRES S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"TUPIA FERNANDEZ, Santino — TUPIA FERNANDEZ S/CONTROL DE LEGALIDAD — Expte. 03666/2020","nombre":"TUPIA FERNANDEZ, Santino","dni":"52954747","fecha_nac":"17 de enero de 2013","edad":"13","juzgado":"JUZGADO CIVIL 102 - SECRETARIA Nº 38","juzgado_nro":"102","expediente":"03666/2020","caratula":"TUPIA FERNANDEZ, SANTINO ARIEL Y OTRO S/CONTROL DE LEGALIDAD - LEY 26.061"},{"label":"TUPIA FERNANDEZ, Santino — TUPIA FERNANDEZ S/EVALUACION ART. 42 CCCN — Expte. 76877/2023","nombre":"TUPIA FERNANDEZ, Santino","dni":"52954747","fecha_nac":"17 de enero de 2013","edad":"13","juzgado":"JUZGADO CIVIL 102 - SECRETARIA Nº 38","juzgado_nro":"102","expediente":"76877/2023","caratula":"TUPIA FERNANDEZ, SANTINO ARIEL S/EVALUACION ART. 42 CCCN"},{"label":"UNCOS, Kevin Benjamín — UNCOS S/MEDIDAS PRECAUTORIAS — Expte. 18239/2025","nombre":"UNCOS, Kevin Benjamín","dni":"50436913","fecha_nac":"30 de agosto de 2010","edad":"15","juzgado":"JUZGADO CIVIL 8","juzgado_nro":"8","expediente":"18239/2025","caratula":"UNCOS, KEVIN BENJAMIN S/MEDIDAS PRECAUTORIAS"},{"label":"UNCOS, Kevin Benjamín — INCIDENTE Nº 1 — Expte. 18239/2025/1","nombre":"UNCOS, Kevin Benjamín","dni":"50436913","fecha_nac":"30 de agosto de 2010","edad":"15","juzgado":"JUZGADO CIVIL 8","juzgado_nro":"8","expediente":"18239/2025/1","caratula":"INCIDENTE Nº 1 - ACTOR: UNCOS, KEVIN BENJAMIN S/INCIDENTE FAMILIA"},{"label":"URBANO, Aaron Nicolas Dario — URBANO s/EVALUACION ART. 42 CCCN — Expte. 57497/2025","nombre":"URBANO, Aaron Nicolas Dario","dni":"48877473","fecha_nac":"6 de julio de 2008","edad":"17","juzgado":"JUZGADO DE FAMILIA DE TURNO C","juzgado_nro":"","expediente":"57497/2025","caratula":"URBANO, AARON NICOLAS DARIO s/EVALUACION ART. 42 CCCN"},{"label":"VALVERDE TRUJILLO, Pedro David — VALVERDE TRUJILLO S/MEDIDAS PRECAUTORIAS — Expte. 6641/2024","nombre":"VALVERDE TRUJILLO, Pedro David","dni":"50704133","fecha_nac":"7 de diciembre de 2010","edad":"15","juzgado":"JUZGADO CIVIL 83 - SECRETARIA Nº 18","juzgado_nro":"83","expediente":"6641/2024","caratula":"VALVERDE TRUJILLO, PEDRO DAVID S/MEDIDAS PRECAUTORIAS"},{"label":"VELIZ, Thiago Manuel — VELIZ S/MEDIDAS PRECAUTORIAS — Expte. 1224/2025","nombre":"VELIZ, Thiago Manuel","dni":"49.368.524","fecha_nac":"21 de abril de 2008","edad":"18","juzgado":"JUZGADO CIVIL 82 - SECRETARIA Nº 16","juzgado_nro":"82","expediente":"1224/2025","caratula":"VELIZ, THIAGO MANUEL S/MEDIDAS PRECAUTORIAS"},{"label":"VIDELA, Dylan David — Expte. 18270/2025","nombre":"VIDELA, Dylan David","dni":"51327306","fecha_nac":"21 de junio de 2009","edad":"16","juzgado":"Juzgado Nacional en lo Civil N° 87","juzgado_nro":"87","expediente":"18270/2025","caratula":""},{"label":"VILLANUEVA, Lucas Eugenio — VILLANUEVA S/EVALUACION ART. 42 CCCN — Expte. 07229/2023","nombre":"VILLANUEVA, Lucas Eugenio","dni":"48640090","fecha_nac":"11 de abril de 2008","edad":"18","juzgado":"JUZGADO CIVIL 85 - SECRETARIA Nº 23","juzgado_nro":"85","expediente":"07229/2023","caratula":"VILLANUEVA, LUCAS EUGENIO S/EVALUACION ART. 42 CCCN"},{"label":"YARDIN MARASCO, Valentín Nicolás — YARDIN MARASCO S/MEDIDAS PRECAUTORIAS — Expte. 1771/2025","nombre":"YARDIN MARASCO, Valentín Nicolás","dni":"49379539","fecha_nac":"5 de marzo de 2009","edad":"17","juzgado":"JUZGADO CIVIL 8 - SECRETARIA Nº 15","juzgado_nro":"8","expediente":"1771/2025","caratula":"YARDIN MARASCO, VALENTIN NICOLAS S/MEDIDAS PRECAUTORIAS"}];
+
+// ── HOSPITALES ───────────────────────────────────────────────────────────
+function toggleOtro(selId, inpId) {
+  document.getElementById(inpId).style.display =
+    document.getElementById(selId).value === '__otro__' ? 'block' : 'none';
+}
+function autoComisaria() {
+  const hosp = document.getElementById('f-hosp-intern').value;
+  const com  = HOSP_COMISARIA[hosp] || '';
+  document.getElementById('f-comisaria').value = com;
+}
+function vHosp(selId, inpId) {
+  const val = document.getElementById(selId).value;
+  if (!val || val === '__otro__') return (document.getElementById(inpId).value || '').trim();
+  return val;
+}
+
+// DNIs de adolescentes femeninas
+const GENEROS_F = new Set(["49435711","49530567","48312466","49316769","49093403"]);
+function getGenero(dni) { return GENEROS_F.has(String(dni).replace(/[.\s-]/g,'')) ? 'F' : 'M'; }
+
+// ── HELPERS ──────────────────────────────────────────────────────────────
+function nombreFormal(s) {
+  const p = s.split(',');
+  if (p.length < 2) return s;
+  const aps = p[0].trim().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+  return p[1].trim() + ' ' + aps;
+}
+function nombreCorto(s) {
+  const p = s.split(',');
+  return p.length > 1 ? p[1].trim() : s;
+}
+function fmtDNI(s) {
+  const d = s.replace(/[.\s]/g, '');
+  if (d.length === 8) return `${d.slice(0,2)}.${d.slice(2,5)}.${d.slice(5)}`;
+  if (d.length === 7) return `${d.slice(0,1)}.${d.slice(1,4)}.${d.slice(4)}`;
+  return s;
+}
+const EDADES = {'10':'diez','11':'once','12':'doce','13':'trece','14':'catorce','15':'quince','16':'dieciséis','17':'diecisiete','18':'dieciocho','19':'diecinueve','20':'veinte','21':'veintiún'};
+function edadTexto(n) { return EDADES[String(n)] || String(n); }
+function v(id) { return (document.getElementById(id).value || '').trim(); }
+function mkG(genero) { return (m, f) => genero === 'F' ? f : m; }
+function mkNNyA(genero, edad) {
+  const esF = genero === 'F';
+  const nom = parseInt(edad) >= 14 ? 'adolescente' : (esF ? 'niña' : 'niño');
+  return {
+    el:  (esF ? 'la ' : 'el ') + nom,
+    del: (esF ? 'de la ' : 'del ') + nom,
+    al:  (esF ? 'a la ' : 'al ') + nom,
+    nom,
+  };
+}
+
+// Conectar checkboxes al resaltado dinámico
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.doc-check').forEach(chk => {
+    chk.addEventListener('change', actualizarCamposReq);
+  });
+  actualizarCamposReq();
+});
+
+// ── TOM SELECT ────────────────────────────────────────────────────────────
+const ts = new TomSelect('#caso-select', {
+  options: CASOS.map((c,i) => ({ value: String(i), text: c.label })),
+  maxOptions: 80,
+  dropdownParent: 'body',
+  placeholder: 'Buscar por apellido, carátula o expediente...',
+  onChange(val) {
+    if (val === '') return;
+    const c = CASOS[parseInt(val)];
+    document.getElementById('f-nombre').value     = c.nombre;
+    document.getElementById('f-dni').value         = fmtDNI(c.dni);
+    document.getElementById('f-juzgado').value     = c.juzgado;
+    document.getElementById('f-juzgado-nro').value = c.juzgado_nro;
+    document.getElementById('f-expediente').value  = c.expediente;
+    document.getElementById('f-caratula').value    = c.caratula;
+    document.getElementById('f-fecha-nac').value   = c.fecha_nac;
+    document.getElementById('f-edad').value        = c.edad;
+    document.getElementById('f-genero').value      = getGenero(c.dni);
+  }
+});
+
+// ── GENERADOR PRINCIPAL ───────────────────────────────────────────────────
+async function generarDocumentos() {
+  const { Document, Packer, Paragraph, TextRun, AlignmentType, UnderlineType } = window.docx;
+  const msg = document.getElementById('msg-generar');
+  const btn = document.getElementById('btn-generar');
+
+  const d = {
+    nombre:       v('f-nombre'),
+    dni:          v('f-dni'),
+    fecha_nac:    v('f-fecha-nac'),
+    edad:         v('f-edad'),
+    juzgado:      v('f-juzgado'),
+    juzgado_nro:  v('f-juzgado-nro'),
+    expediente:   v('f-expediente'),
+    caratula:     v('f-caratula'),
+    genero:       v('f-genero') || 'M',
+    domicilio:    v('f-domicilio'),
+    hosp_destino: vHosp('f-hosp-destino','f-hosp-destino-otro'),
+    hosp_intern:  vHosp('f-hosp-intern','f-hosp-intern-otro'),
+    hosp_inicial: v('f-hosp-inicial'),
+    fecha_op:     v('f-fecha-op'),
+    hora_op:      v('f-hora-op'),
+    fecha_ejec:   v('f-fecha-ejec'),
+    hechos:       document.getElementById('f-hechos').value.trim(),
+    comisaria:    v('f-comisaria'),
+    tiene_medida: document.getElementById('chk-tiene-medida').checked,
+  };
+
+  if (!d.nombre) {
+    showMsg('⚠ Primero seleccioná un caso.', 'red');
+    return;
+  }
+
+  const checks = [
+    [document.getElementById('chk-medida-pre').checked,  tplMedidaPreexistente, 'Medida_PreExistente'],
+    [document.getElementById('chk-medida-nueva').checked, tplMedidaNueva,       'Medida_Nueva'],
+    [document.getElementById('chk-nota-ejec').checked,   tplNotaEjecucion,      'Nota_Ejecucion'],
+    [document.getElementById('chk-same').checked,        tplSAME,               'Oficio_SAME'],
+    [document.getElementById('chk-div').checked,         tplDivision,           'Oficio_Division_Infancia'],
+    [document.getElementById('chk-hosp').checked,        tplHospital,           'Oficio_Hospital'],
+    [document.getElementById('chk-acomp').checked,       tplAcomp,              'Pedido_Acompanante'],
+    [document.getElementById('chk-comisaria').checked,   tplComisaria,          'Oficio_Comisaria'],
+  ];
+
+  const sel = checks.filter(c => c[0]);
+  if (!sel.length) { showMsg('⚠ Seleccioná al menos un documento.', 'red'); return; }
+
+  btn.disabled = true; btn.textContent = 'Generando...';
+  msg.classList.add('hidden');
+
+  const apellido = d.nombre.split(',')[0].trim().replace(/\s+/g,'_');
+
+  for (const [, tplFn, nombre] of sel) {
+    const children = tplFn(d, { Document, Paragraph, TextRun, AlignmentType, UnderlineType });
+    const doc = new Document({
+      sections:[{ properties:{ page:{ margin:{ top:1701, right:1701, bottom:1701, left:1701 } } }, children }]
+    });
+    const blob = await Packer.toBlob(doc);
+    const url  = URL.createObjectURL(blob);
+    const a    = Object.assign(document.createElement('a'), { href:url, download:`${nombre}_${apellido}.docx` });
+    a.click(); URL.revokeObjectURL(url);
+    await new Promise(r => setTimeout(r, 400));
+  }
+
+  btn.disabled = false; btn.textContent = 'Generar documentos Word ↓';
+  showMsg(`✓ ${sel.length} documento(s) generado(s).`, 'green');
+}
+
+function showMsg(txt, color) {
+  const el = document.getElementById('msg-generar');
+  el.textContent = txt;
+  el.className = `mt-3 text-sm text-center ${color === 'red' ? 'text-red-600' : 'text-green-700'}`;
+  el.classList.remove('hidden');
+}
+
+// ── HELPERS DOCX ─────────────────────────────────────────────────────────
+function mkP(runs, align, afterPt) {
+  const { Paragraph, TextRun, AlignmentType } = window.docx;
+  const spacing = { after: (afterPt ?? 8) * 20, line: 360 };
+  if (typeof runs === 'string') runs = [{ text: runs }];
+  return new Paragraph({
+    children: runs.map(r => new TextRun({ font:'Times New Roman', size:24, ...r })),
+    alignment: align ?? AlignmentType.JUSTIFIED,
+    spacing
+  });
+}
+function C(txt, extra) { return { text: txt, ...(extra||{}) }; }
+function B(txt)  { return C(txt, { bold:true }); }
+function U(txt)  { return C(txt, { underline:{} }); }
+function BU(txt) { return C(txt, { bold:true, underline:{} }); }
+function sp()    { const {AlignmentType} = window.docx; return mkP([C('')], AlignmentType.LEFT, 2); }
+
+function textToParas(text) {
+  if (!text) return [mkP('[COMPLETAR HECHOS]')];
+  const paras = [];
+  for (const line of text.split('\n')) {
+    paras.push(line.trim() ? mkP(line.trim()) : sp());
+  }
+  return paras;
+}
+
+// ── DODERO presenter text ─────────────────────────────────────────────────
+function doderoCaption(d) {
+  const nro = d.juzgado_nro || d.juzgado;
+  return [
+    B('MARIA EUGENIA DODERO'),
+    C(`, abogada inscripta en el T°103, F° 62 CPACF, integrante de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de Derechos de Niños, Niñas y Adolescentes, con el patrocinio de la Dra. Yamila Pamela Vas Torres, T° 104 F° 456 CPACF, con domicilio electrónico en el CUIL 23-29595832-4 y procesal en Avenida Martin Garcia 464, en los autos caratulados `),
+    BU(`"${d.caratula}"`),
+    C(`, Expediente judicial N° `),
+    B(`${d.expediente}`),
+    C(`, que tramitan por ante el Juzgado Nacional de Primera Instancia en lo Civil N° ${nro}, a V.S. como mejor proceda digo:`),
+  ];
+}
+
+// ── TEMPLATE: MEDIDA PRECAUTORIA — EXPEDIENTE PRE-EXISTENTE (Dodero) ─────
+function tplMedidaPreexistente(d, lib) {
+  const {AlignmentType} = lib;
+  const nf = nombreFormal(d.nombre);
+  const nc = nombreCorto(d.nombre);
+  const g = mkG(d.genero);
+  const nn = mkNNyA(d.genero, d.edad);
+  return [
+    mkP([BU('INFORMA EFECTIVIZACION DE MEDIDA CAUTELAR. SOLICITA NUEVA BUSQUEDA DE PARADERO Y MEDIDA DE SALUD PRECAUTORIA.-')], AlignmentType.CENTER, 16),
+    sp(),
+    mkP([B('SR. JUEZ:')], AlignmentType.LEFT, 8),
+    sp(),
+    mkP(doderoCaption(d)),
+    sp(),
+    ...textToParas(d.hechos),
+    sp(),
+    mkP([U('MEDIDA DE SALUD. Conf. Art. 232 C.P.C.C.N.')], AlignmentType.LEFT, 8),
+    sp(),
+    mkP(`La medida que se solicita se orienta al cumplimiento del interés superior ${nn.del} para garantizar el pleno goce de sus derechos y la satisfacción de sus necesidades en un contexto donde su voluntad se encuentra gravemente afectada.`),
+    sp(),
+    mkP('Debido al estado de alta vulnerabilidad en el que transita su cotidianidad, la problemática de consumo de sustancias psicoactivas que presentaría, puede afirmarse, conforme a la Ley Nacional de Salud Mental 26.657, una situación de riesgo cierto e inminente para sí mismo.'),
+    sp(),
+    mkP(`Se considera necesario que, en forma inmediata y urgente, ${nc} pueda ser ${g('ingresado','ingresada')} y permanecer en el Hospital General de la zona donde sea ${g('habido','habida')}, desde donde pueda llevarse adelante un abordaje integral, en un marco de cuidados y contención profesional, que pueda proponer una línea tratamental que se ajuste a sus necesidades específicas.`),
+    sp(),
+    mkP('La evaluación integral implica la realización de una historia médica completa, sin descuidar ningún antecedente personal ni familiar, hábitos psicobiológicos, y otros.'),
+    sp(),
+    mkP(`Por otra parte, se deberá incluir un examen físico lo más completo posible, bajo la perspectiva de que para que la situación ${nn.del} sea correctamente abordada se requiere una evaluación exhaustiva y que pueda sostenerse en el tiempo. La evaluación debe conducir a la formulación de impresiones diagnósticas que permitan orientar el abordaje de la situación y la implementación de un tratamiento acorde y posible en el contexto del paciente.`),
+    sp(),
+    mkP(`En virtud de los fundamentos expuestos y atendiendo al interés superior ${nn.del} de autos, es que por medio de la presente se viene a solicitar se disponga la Medida de Salud respecto de ${nf} para que sea ${g('acompañado','acompañada')} al Hospital General de la zona donde sea ${g('habido','habida')}, a fin de llevar a cabo una evaluación integral de su salud psicofísica, ordenando su internación y permanencia hasta tanto cuente con el alta tanto médica como social, autorizada por parte de este CDNNyA, con el acompañamiento permanente de una consigna policial que por territorio corresponda.`),
+    sp(),
+    mkP([U('INFORMATIVA.')], AlignmentType.LEFT, 8),
+    sp(),
+    mkP('En miras a desplegar las acciones de resguardo urgentes, solicitamos a S.S se libren los siguientes oficios a los efectores que a continuación se detallan:'),
+    sp(),
+    mkP(`1. Apersonamiento Territorial y Auxilio para el Traslado Sanitario: Atento a que ${nn.el} se encuentra en situación de calle en esta Ciudad y se rehúsa de manera categórica a recibir atención médica, se solicita libre oficio urgente con habilitación de días y horas al Ministerio de Salud de la Ciudad de Buenos Aires (SAME Psiquiátrico) y a la Policía de la Ciudad de Buenos Aires (División Infancia y Adolescencia). Ello a los fines de ordenar que, en forma coordinada con el Equipo Territorial Especializado (ETENNYA) de este Consejo que se apersonará en el lugar donde se encuentre ${nn.el} para brindar auxilio y coadyuvar en la contención, traslado y acompañamiento seguro ${nn.del} hacia el Hospital que por zona corresponda.`),
+    sp(),
+    mkP(`2. Consigna Policial Hospitalaria: Se solicite a la Seccional Policial de la zona que disponga de una consigna policial respecto de ${nc}, que vele por su seguridad y asegure de forma estricta su permanencia en el nosocomio hasta tanto cuente con el alta clínica y social, y sea formalmente ${g('acompañado','acompañada')} por este CDNNyA al dispositivo de egreso que técnicamente se evalúe como el adecuado.`),
+    sp(),
+    mkP(`3. Prohibición de Retiro Voluntario: Asimismo, se prohíba expresamente que ${nn.el} se retire del establecimiento hospitalario con familiares y/o referentes afectivos, debiendo el personal del hospital poner en inmediato conocimiento de este Consejo la presencia de cualquier integrante de la familia que se haga presente, a los fines de evitar un egreso sin el consentimiento de los equipos profesionales intervinientes.`),
+    sp(),
+    mkP(`4. Evaluación Interdisciplinaria: Se ordene al Hospital que por zona corresponda a proceder a la atención integral de la salud ${nn.del} y su evaluación inmediata por un equipo interdisciplinario, dando estricto cumplimiento a la Ley de Salud Mental N° 26.657 y al Art. 42 del CCCN.`),
+    sp(),
+    mkP('Solicito ademas, se aclare en la medida solicitada que, previo al alta médica, el hospital tendrá que remitir al Juzgado y a este Consejo las evaluaciones interdisciplinarias solicitadas y copia de los estudios efectuados.'),
+    sp(),
+    mkP([U('PETITORIO.')], AlignmentType.LEFT, 8),
+    mkP('Por lo expuesto, solicito a S.S.:'),
+    sp(),
+    mkP('1- Se tenga por manifestados los hechos nuevos.'),
+    mkP('2- Se haga lugar a la Medida Precautoria de Salud solicitada en su total forma y extensión.'),
+    mkP(`3- Se disponga la búsqueda de paradero ${nn.del} ${nc}.`),
+    mkP(`4- Se libren los oficios de carácter urgente ordenando el auxilio de la fuerza pública y el efector de salud de emergencia (SAME Psiquiátrico y División Infancia y Adolescencia de la Policía de la Ciudad) para efectivizar la medida cautelar una vez ${g('habido','habida')}.`),
+    sp(),
+    mkP([B('PROVEER DE CONFORMIDAD')], AlignmentType.RIGHT, 4),
+    mkP([B('SERA JUSTICIA')], AlignmentType.RIGHT, 8),
+  ];
+}
+
+// ── TEMPLATE: MEDIDA PRECAUTORIA — EXPEDIENTE NUEVO (Oates Coll) ──────────
+function tplMedidaNueva(d, lib) {
+  const {AlignmentType} = lib;
+  const nf = nombreFormal(d.nombre);
+  const nc = nombreCorto(d.nombre);
+  const et = edadTexto(d.edad);
+  const g = mkG(d.genero);
+  const nn = mkNNyA(d.genero, d.edad);
+  return [
+    mkP([BU('MEDIDA PRECAUTORIA DE SALUD. -')], AlignmentType.CENTER, 16),
+    sp(),
+    mkP([C('Señor Juez:')], AlignmentType.LEFT, 16),
+    sp(),
+    mkP('Iván Matías Oates Coll, abogado, inscripto al T° 150 F° 594 CPACF, en mi carácter de Director Operativo de Paradores y Programas Especiales de Seguimiento, dependiente de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de los Derechos de Niñas, Niños y Adolescentes, con domicilio electrónico CUIT 23-41354400-9, con el patrocinio letrado de la Dra. Yamila Pamela Vas Torres (T°104 F°456 CPACF), domicilio procesal en el CUIL 23-29595832-4, del Consejo de los Derechos de Niñas, Niños y Adolescentes, sito en Av. Martín García 464/90, Piso 1º de esta Ciudad, ante usted me presento y manifiesto:'),
+    sp(),
+    mkP([B('I.- LEGITIMACIÓN.')], AlignmentType.LEFT, 8),
+    sp(),
+    mkP(`Que el Consejo de los Derechos de Niñas, Niños y Adolescentes resulta competente para intervenir en relación a la situación que afecta los derechos de ${nf}, DNI N° ${d.dni}, ${g('nacido','nacida')} el ${d.fecha_nac}, de ${et} (${d.edad}) años atento a lo dispuesto por la Ley 114 de la Ciudad Autónoma de Buenos Aires, Ley Nacional 26.061 y Art. 20 de la Constitución de la Ciudad de Buenos Aires en lo que respecta a "garantizar el derecho a la salud integral", arts. 3, 4, 6, 24, 25, 33 y c.c. de la Convención sobre los Derechos del Niño, y art. 75 inc 22 y 23 de la C.N.`),
+    sp(),
+    mkP([B('II.- OBJETO.')], AlignmentType.LEFT, 8),
+    sp(),
+    mkP(`Que en atención a las circunstancias que se narrarán infra en relación a la situación de salud de ${nc}, vengo a solicitar a la judicatura medidas cautelares en los términos del art. 230 inc. b y c, y 232 del C.P.C.C., tuitivas del interés superior ${nn.del}, con el objeto de implementar acciones orientadas a la protección de su derecho a la salud de conformidad con lo dispuesto por el art. 42 del CCCN y en cumplimiento de las exigencias establecidas por los arts. 16 y 20 de la Ley Nº 26.657.`),
+    sp(),
+    mkP([B('III.- HECHOS.')], AlignmentType.LEFT, 8),
+    sp(),
+    ...textToParas(d.hechos),
+    sp(),
+    mkP([B('IV.- Medida de salud. -'), C(' Conf. Art. 232 C.P.C.C.N.')], AlignmentType.LEFT, 8),
+    sp(),
+    mkP(`La medida que se solicita se orienta al cumplimiento del interés superior ${nn.del} para garantizar el pleno goce de sus derechos y la satisfacción de sus necesidades en un contexto donde su voluntad se encuentra gravemente afectada.`),
+    sp(),
+    mkP(`Debido al estado de alta vulnerabilidad en el que transita su cotidianidad, la problemática de consumo de sustancias psicoactivas que presentaría, sumado a la aparición de indicadores penales, puede afirmarse, conforme a la Ley Nacional de Salud Mental 26.657, una situación de riesgo cierto e inminente para sí mismo. Se considera necesario que, en forma inmediata y urgente, ${nc} pueda ser ${g('ingresado','ingresada')} a un efector del Sistema de Salud, desde donde pueda llevarse adelante un abordaje integral, en un marco de cuidados y contención profesional, que pueda proponer una línea tratamental que se ajuste a sus necesidades específicas.`),
+    sp(),
+    mkP(`La evaluación integral implica la realización de una historia médica completa, sin descuidar ningún antecedente personal ni familiar, hábitos psicobiológicos, y otros. Por otra parte, se deberá incluir un examen físico lo más completo posible, bajo la perspectiva de que para que la situación ${nn.del} sea correctamente abordada se requiere una evaluación exhaustiva y que pueda sostenerse en el tiempo.`),
+    sp(),
+    mkP('La evaluación debe conducir a la formulación de impresiones diagnósticas que permitan orientar el abordaje de la situación y la implementación de un tratamiento acorde y posible en el contexto del paciente. En todo caso, los médicos deben actuar coordinadamente en el manejo de un paciente que requiera la atención de diversos especialistas, sin perder la perspectiva de que se trata de un individuo particular.'),
+    sp(),
+    mkP(`En virtud de los fundamentos expuestos y atendiendo al interés superior ${nn.del} de autos, es que por medio de la presente se viene a solicitar se disponga la Medida de Salud respecto de ${nf} para que, una vez sea ${g('habido','habida')}, sea ${g('trasladado','trasladada')} al Hospital que corresponda, para llevar a cabo una evaluación integral de su salud psicofísica, ordenando su internación y permanencia hasta tanto cuente con el alta tanto médica como social, autorizada por parte de este CDNNyA, con el acompañamiento permanente de una consigna policial que por territorio corresponda.`),
+    sp(),
+    mkP([B('IV.- INFORMATIVA.')], AlignmentType.LEFT, 8),
+    sp(),
+    mkP('En miras a desplegar las acciones y medidas aquí detalladas solicitamos a la judicatura se libren oficios a los diferentes efectores que a continuación se detallan a fin de que se dé cumplimiento a lo solicitado por este Organismo en los términos expresados:'),
+    sp(),
+    mkP(`1. Se ordene su búsqueda de paradero: A tal fin, se solicita se libre la búsqueda de paradero de ${nc}. En virtud de lo mismo, se solicita se libren los oficios necesarios a los actores avocados a esta labor, puntualmente: Al Registro Nacional de Información de Personas Menores Extraviadas y a Missing Children; División de Infancia y Adolescencia de la Policía de la Ciudad de Buenos Aires; Policía Federal Argentina; Sistema Federal de Búsqueda de Personas Desaparecidas y Extraviadas (SIFEBU) del Ministerio de Seguridad de la Nación, así como también cualquier otro actor que la judicatura estime corresponder.`),
+    sp(),
+    mkP(`2. Seccional Policial de la Zona en la cual se encuentre ${g('internado','internada')} ${nn.el} al momento de la ejecución de las medidas: a fin de que dispongan consigna policial respecto ${nn.del}, que vele por su seguridad y asegure la permanencia ${g('del mismo','de la misma')} en el Hospital de la zona hasta tanto cuente con el alta clínica y social, y sea ${g('acompañado','acompañada')} por el CDNNyA a un dispositivo acorde a su problemática o se efectivice la modalidad de egreso que oportunamente se evalúe como la acertada. Asimismo, se prohíba que ${nn.el} se retire del hospital con familiares y/o referentes afectivos, debiendo poner en conocimiento del CDNNyA la presencia de cualquier integrante de la familia que se haga presente.`),
+    sp(),
+    mkP(`3. Hospital interviniente: a fin de proceder a la atención integral de la salud ${nn.del} y su evaluación por un equipo interdisciplinario, debiendo dar cumplimiento con la Ley de Salud Mental 26.657 y conforme lo dispuesto por el art. 42 del CCCN. Dicha evaluación deberá integrar: • Informe clínico integral • Informe toxicológico • Diagnóstico cardiológico • Diagnóstico por imágenes • Informe psicológico y psiquiátrico integral que dé cuenta de si ${nn.nom} presenta riesgo para sí o para terceros • Amplio informe social. Asimismo, se deberá aclarar en el oficio que, previo a la alta médica, el hospital tendrá que remitir al Juzgado y al Consejo de los Derechos de Niñas, Niños y Adolescentes las evaluaciones interdisciplinarias solicitadas y copia de todos los estudios efectuados. Se prohíba el egreso hospitalario de ${nc} hasta tanto se realice la evaluación completa ${g('del mismo','de la misma')} y así lo disponga el Consejo de los Derechos de Niñas, Niños y Adolescentes y/o el Juzgado interviniente.`),
+    sp(),
+    mkP([B('V.- PETITORIO.')], AlignmentType.LEFT, 8),
+    mkP('Por lo expuesto solicito:'),
+    sp(),
+    mkP('1. Se tenga por presentada la medida en legal tiempo y forma, de conformidad con la legitimación denunciada;'),
+    mkP('2. Se haga lugar a las medidas solicitadas en su forma y extensión.'),
+    mkP(`3. Se disponga la búsqueda de paradero conforme lo expuesto en el acápite correspondiente. Se prohíba el egreso hospitalario ${nn.del} y se mantenga la permanencia ${g('del mismo','de la misma')} en el efector de salud hasta tanto se culmine con la evaluación integral y así lo disponga el Consejo de los Derechos de Niñas, Niños y Adolescentes y/o la judicatura.`),
+    mkP('4. Se ordene sostener la consigna policial oportunamente asignada hasta tanto se disponga el cese de la medida aquí solicitada.'),
+    mkP('5. Tenga V.S. presente lo expuesto, y provea de conformidad, lo que'),
+    sp(),
+    mkP([B('SERA JUSTICIA')], AlignmentType.CENTER, 8),
+  ];
+}
+
+// ── TEMPLATE: NOTA DE EJECUCIÓN DE MEDIDA DE SALUD (Dodero) ─────────────
+function tplNotaEjecucion(d, lib) {
+  const {AlignmentType} = lib;
+  const nf = nombreFormal(d.nombre);
+  const g = mkG(d.genero);
+  const fechaEjec = d.fecha_ejec || '[FECHA DE EJECUCIÓN]';
+  const hi  = d.hosp_intern || '[HOSPITAL DE INTERNACIÓN]';
+  const hi0 = d.hosp_inicial;
+
+  const movimiento = hi0
+    ? `quien ingresó primeramente al ${hi0}, para luego ser ${g('trasladado','trasladada')} al ${hi}, en donde se encuentra ${g('internado','internada')} en la actualidad.`
+    : `quien fue ${g('trasladado','trasladada')} al ${hi}, en donde se encuentra ${g('internado','internada')} en la actualidad.`;
+
+  return [
+    mkP([BU('INFORMA.')], AlignmentType.LEFT, 8),
+    sp(),
+    mkP([C('Señor Juez:')], AlignmentType.LEFT, 8),
+    sp(),
+    mkP(doderoCaption(d)),
+    sp(),
+    mkP(`Es objeto de esta pieza anoticiar a la judicatura que, en fecha ${fechaEjec}, tuvo lugar la ejecución de la Medida de Salud Precautoria dictada en autos en favor de ${nf}, ${movimiento}`),
+    sp(),
+    mkP('Tenga V.S. presente lo expuesto y provea de conformidad, lo que'),
+    sp(),
+    mkP([U('SERA JUSTICIA')], AlignmentType.RIGHT, 8),
+  ];
+}
+
+// ── TEMPLATE: OFICIO AL SAME ──────────────────────────────────────────────
+function tplSAME(d, lib) {
+  const {AlignmentType} = lib;
+  const nf  = nombreFormal(d.nombre);
+  const g   = mkG(d.genero);
+  const nn  = mkNNyA(d.genero, d.edad);
+  const dom = d.domicilio    || '[DOMICILIO]';
+  const hd  = d.hosp_destino || '[HOSPITAL DESTINO]';
+  const hi  = d.hosp_intern  || '[HOSPITAL INTERNACIÓN]';
+  const fo  = d.fecha_op     || '[FECHA OPERATIVO]';
+  const ho  = d.hora_op      || '[HORA]';
+  return [
+    mkP([BU('OFICIO ADMINISTRATIVO')], AlignmentType.CENTER, 16),
+    sp(),
+    mkP([C('Servicio de Atención Médica en Emergencia (SAME)')], AlignmentType.LEFT),
+    sp(),
+    mkP([U('S. / D.')], AlignmentType.LEFT, 16),
+    sp(),
+    mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de los Derechos de Niños, Niñas y Adolescentes, a fin de solicitar colaboración en la efectivización de la medida precautoria de salud dispuesta por el ${d.juzgado} interviniente en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}.`),
+    sp(),
+    mkP(`En su parte pertinente, el mencionado oficio que en copia se adjunta, dice: "(...) requiérase al SAME que con carácter de urgente y en el día se constituyan en el domicilio sito en ${dom} y procedan a trasladar ${nn.al} ${nf}, DNI N° ${d.dni} al ${hd} donde posee historia clínica, convocándose asimismo, a los fines de brindar auxilio y contención, a la División de Infancia y Adolescencia de la Policía de la Ciudad de Buenos Aires. (...). Fdo. Sr. Juez".`),
+    sp(),
+    mkP(`A los fines de llevar a cabo la manda judicial, y dada la referencia que ${nn.el} posee con el ${hi}, los profesionales del ETENNyA junto con personal de la División de Infancia y Adolescencia de la Policía de la Ciudad y los profesionales del Servicio a su cargo, se apersonarán en el domicilio ${nn.del} el día ${fo} a las ${ho} horas.`),
+    sp(),
+    mkP('El presente se libra con fundamento en la Ley de Procedimientos Administrativos y en las Leyes de Protección Integral de Derechos de Niñas, Niños y Adolescentes —Ley CABA N° 114 y Ley Nacional N° 26.061—, normativa que habilita expresamente a este organismo a requerir la intervención de distintos actores y dependencias en función de las atribuciones que le competen como autoridad de aplicación y ejecución de estrategias de restitución de derechos de NNyA.'),
+  ];
+}
+
+// ── TEMPLATE: OFICIO A DIVISIÓN DE INFANCIA ───────────────────────────────
+function tplDivision(d, lib) {
+  const {AlignmentType} = lib;
+  const nf  = nombreFormal(d.nombre);
+  const g   = mkG(d.genero);
+  const nn  = mkNNyA(d.genero, d.edad);
+  const dom = d.domicilio    || '[DOMICILIO]';
+  const hd  = d.hosp_destino || '[HOSPITAL DESTINO]';
+  const hi  = d.hosp_intern  || '[HOSPITAL INTERNACIÓN]';
+  const fo  = d.fecha_op     || '[FECHA OPERATIVO]';
+  const ho  = d.hora_op      || '[HORA]';
+  return [
+    mkP([BU('OFICIO ADMINISTRATIVO')], AlignmentType.CENTER, 16),
+    sp(),
+    mkP([C('División de Infancia y Adolescencia.')], AlignmentType.LEFT),
+    mkP([C('Policía de la Ciudad de Buenos Aires.')], AlignmentType.LEFT),
+    sp(),
+    mkP([U('S. / D.')], AlignmentType.LEFT, 16),
+    sp(),
+    mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de los Derechos de Niños, Niñas y Adolescentes, a fin de solicitar colaboración en la efectivización de la medida precautoria de salud dispuesta por el ${d.juzgado} interviniente en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}.`),
+    sp(),
+    mkP(`En su parte pertinente, el mencionado oficio que en copia se adjunta, dice: "(...) requiérase al SAME que con carácter de urgente y en el día se constituyan en el domicilio sito en ${dom} y procedan a trasladar ${nn.al} ${nf}, DNI N° ${d.dni} al ${hd} donde posee historia clínica, convocándose asimismo, a los fines de brindar auxilio y contención, a la División de Infancia y Adolescencia de la Policía de la Ciudad de Buenos Aires. (...). Fdo. Sr. Juez".`),
+    sp(),
+    mkP(`A los fines de llevar a cabo la manda judicial, y dada la referencia que ${nn.el} posee con el ${hi}, los profesionales del ETENNyA junto con personal de la División a su cargo y los profesionales del Servicio de Atención Médica de Emergencia (SAME), se apersonarán en el domicilio ${nn.del}, sito en ${dom}, el día ${fo} a las ${ho} horas.`),
+    sp(),
+    mkP('El presente se libra con fundamento en la Ley de Procedimientos Administrativos y en las Leyes de Protección Integral de Derechos de Niñas, Niños y Adolescentes —Ley CABA N° 114 y Ley Nacional N° 26.061—, normativa que habilita expresamente a este organismo a requerir la intervención de distintos actores y dependencias en función de las atribuciones que le competen como autoridad de aplicación y ejecución de estrategias de restitución de derechos de NNyA.'),
+  ];
+}
+
+// ── TEMPLATE: OFICIO A HOSPITAL (EJECUCIÓN DE MEDIDA) ────────────────────
+function tplHospital(d, lib) {
+  const {AlignmentType} = lib;
+  const nf = nombreFormal(d.nombre);
+  const nc = nombreCorto(d.nombre);
+  const g  = mkG(d.genero);
+  const nn = mkNNyA(d.genero, d.edad);
+  const hi = d.hosp_intern || '[HOSPITAL]';
+  return [
+    mkP([BU('OFICIO ADMINISTRATIVO')], AlignmentType.CENTER, 16),
+    sp(),
+    mkP([C('Al Sr. Director / Sra. Directora Médica')], AlignmentType.LEFT),
+    mkP([B(`${hi}`)], AlignmentType.LEFT),
+    sp(),
+    mkP([U('S. / D.')], AlignmentType.LEFT, 16),
+    sp(),
+    mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de los Derechos de Niños, Niñas y Adolescentes, a fin de solicitar la evaluación ${nn.del} ${nf}, DNI N° ${d.dni}.`),
+    sp(),
+    mkP(`Dicha evaluación deberá integrar: • Informe clínico integral • Informe toxicológico • Diagnóstico cardiológico • Diagnóstico por imágenes • Informe psicológico y psiquiátrico integral que dé cuenta de si ${nn.el} presenta riesgo para sí o para terceros • Amplio informe social, todo ello en virtud de la situación de riesgo al que se encontraría expuest${g('o','a')} ${nn.el} motivo de nuestra intervención.`),
+    sp(),
+    ...(d.juzgado ? (d.tiene_medida ? [
+      mkP(`Es dable destacar que en la presente situación interviene, además, el ${d.juzgado} interviniente en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}, quienes han resuelto hacer lugar a la petición efectuada por los profesionales del ETENNyA, determinando como medida cautelar la realización de la evaluación interdisciplinaria precedentemente solicitada.`),
+      sp(),
+    ] : [
+      mkP(`Se hace saber que, en relación a la situación ${nn.del}, entiende el ${d.juzgado} en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}.`),
+      sp(),
+    ]) : []),
+    mkP('Requiero que una vez efectuadas las evaluaciones supra solicitadas, los resultados e informes sean remitidos al mail institucional etennya_cdnnya@buenosaires.gob.ar.'),
+    sp(),
+    mkP('El presente se libra con fundamento en la Ley de Procedimientos Administrativos y en las Leyes de Protección Integral de Derechos de Niñas, Niños y Adolescentes —Ley CABA N° 114 y Ley Nacional N° 26.061—, normativa que habilita expresamente a este Organismo a requerir la intervención de distintos actores y dependencias en función de las atribuciones que le competen como autoridad de aplicación y ejecución de estrategias de restitución de derechos de Niños, Niñas y Adolescentes.'),
+  ];
+}
+
+// ── TEMPLATE: PEDIDO DE ACOMPAÑANTE ──────────────────────────────────────
+function tplAcomp(d, lib) {
+  const {AlignmentType} = lib;
+  const nf = nombreFormal(d.nombre);
+  const g  = mkG(d.genero);
+  const nn = mkNNyA(d.genero, d.edad);
+  const et = edadTexto(d.edad);
+  const hi = d.hosp_intern || '[HOSPITAL]';
+  return [
+    mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento a fin de solicitar recurso de acompañante hospitalario durante las 24 horas del día mientras dure su internación, para ${nn.el} ${nf}, DNI N° ${d.dni}, ${g('nacido','nacida')} el ${d.fecha_nac}, de ${et} (${d.edad}) años, quien se encuentra en la actualidad en el Servicio de Guardia del ${hi}.`),
+    sp(),
+    mkP(`Cuenta, además, con intervención del ${d.juzgado}, autos "${d.caratula}", expediente N° ${d.expediente}, el cual ha determinado la medida cautelar solicitada la que en copia se adjunta.`),
+  ];
+}
+
+// ── TEMPLATE: OFICIO A COMISARÍA VECINAL ─────────────────────────────────
+function tplComisaria(d, lib) {
+  const {AlignmentType} = lib;
+  const nf  = nombreFormal(d.nombre);
+  const g   = mkG(d.genero);
+  const nn  = mkNNyA(d.genero, d.edad);
+  const com = d.comisaria    || '[COMISARÍA VECINAL]';
+  const hi  = d.hosp_intern  || '[HOSPITAL]';
+  const dom = d.domicilio    || '[DOMICILIO]';
+  return [
+    mkP([BU('OFICIO ADMINISTRATIVO')], AlignmentType.CENTER, 16),
+    sp(),
+    mkP([C(`Al Sr. Jefe de Servicio`)], AlignmentType.LEFT),
+    mkP([C(`${com}`)], AlignmentType.LEFT),
+    mkP([C('Policía de la Ciudad de Buenos Aires.')], AlignmentType.LEFT),
+    sp(),
+    mkP([U('S. / D.')], AlignmentType.LEFT, 16),
+    sp(),
+    mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de los Derechos de Niños, Niñas y Adolescentes, a fin de solicitar se disponga de una consigna policial urgente en favor ${nn.del} ${nf}, DNI N° ${d.dni}, quien se encuentra en proceso de internación en el ${hi}, en el marco de la medida precautoria de salud dispuesta por el ${d.juzgado} en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}.`),
+    sp(),
+    mkP(`La presencia de la consigna policial solicitada responde a la necesidad de resguardar ${nn.al} ${nf}, asegurando su permanencia en el nosocomio hasta tanto cuente con el alta clínica y social, conforme se desprende del ejercicio de su función desde la faz proteccional de los derechos fundamentales ${nn.del}.`),
+    sp(),
+    mkP('El presente se libra con fundamento en la Ley de Procedimientos Administrativos y en las Leyes de Protección Integral de Derechos de Niñas, Niños y Adolescentes —Ley CABA N° 114 y Ley Nacional N° 26.061—, normativa que habilita expresamente a este organismo a requerir la intervención de distintos actores y dependencias en función de las atribuciones que le competen como autoridad de aplicación y ejecución de estrategias de restitución de derechos de NNyA.'),
+  ];
+}
+</script>
+</body>
+</html>
