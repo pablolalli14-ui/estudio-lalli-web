@@ -786,8 +786,6 @@ function tplAcomp(d, lib) {
   return [
     mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento a fin de solicitar recurso de acompañante hospitalario durante las 24 horas del día mientras dure su internación, para ${nn.el} ${nf}, DNI N° ${d.dni}, ${g('nacido','nacida')} el ${d.fecha_nac}, de ${et} (${d.edad}) años, quien se encuentra en la actualidad en el Servicio de Guardia del ${hi}.`),
     sp(),
-    mkP(`${(nn.el.charAt(0).toUpperCase() + nn.el.slice(1))} se encuentra ${g('afectado','afectada')} al consumo problemático de sustancias psicoactivas, sin conciencia de enfermedad, en situación de calle y sin adulto en condiciones de garantizar sus cuidados, encontrándose los profesionales intervinientes evaluando su inclusión en el Protocolo de Actuación.`),
-    sp(),
     mkP(`Cuenta, además, con intervención del ${d.juzgado}, autos "${d.caratula}", expediente N° ${d.expediente}, el cual ha determinado la medida cautelar solicitada la que en copia se adjunta.`),
   ];
 }
@@ -804,14 +802,15 @@ function tplComisaria(d, lib) {
   return [
     mkP([BU('OFICIO ADMINISTRATIVO')], AlignmentType.CENTER, 16),
     sp(),
-    mkP([C(`${com}.`)], AlignmentType.LEFT),
+    mkP([C(`Al Sr. Jefe de Servicio`)], AlignmentType.LEFT),
+    mkP([C(`${com}`)], AlignmentType.LEFT),
     mkP([C('Policía de la Ciudad de Buenos Aires.')], AlignmentType.LEFT),
     sp(),
     mkP([U('S. / D.')], AlignmentType.LEFT, 16),
     sp(),
-    mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de los Derechos de Niños, Niñas y Adolescentes, a fin de comunicar la internación ${nn.del} ${nf}, DNI N° ${d.dni}, en el ${hi}, en el marco de la medida precautoria de salud dispuesta por el ${d.juzgado} en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}.`),
+    mkP(`Tengo el agrado de dirigirme a Uds. en mi carácter de abogado integrante del Equipo Territorial Especializado en Niños, Niñas y Adolescentes en Situación de Vulnerabilidad Social Crítica (ETENNyA) de la Dirección Operativa de Paradores y Programas Especiales de Seguimiento de la Dirección General de Políticas, Programas y Atención en la Urgencia del Consejo de los Derechos de Niños, Niñas y Adolescentes, a fin de solicitar se disponga de una consigna policial urgente en favor ${nn.del} ${nf}, DNI N° ${d.dni}, quien se encuentra en proceso de internación en el ${hi}, en el marco de la medida precautoria de salud dispuesta por el ${d.juzgado} en los autos caratulados "${d.caratula}", Expediente judicial N° ${d.expediente}.`),
     sp(),
-    mkP(`En tal sentido, se solicita a esa dependencia que tome conocimiento de la situación ${nn.del} y, en caso de que se requiera intervención policial para garantizar la efectivización de la medida judicial, se preste la colaboración necesaria.`),
+    mkP(`La presencia de la consigna policial solicitada responde a la necesidad de resguardar ${nn.al} ${nf}, asegurando su permanencia en el nosocomio hasta tanto cuente con el alta clínica y social, conforme se desprende del ejercicio de su función desde la faz proteccional de los derechos fundamentales ${nn.del}.`),
     sp(),
     mkP('El presente se libra con fundamento en la Ley de Procedimientos Administrativos y en las Leyes de Protección Integral de Derechos de Niñas, Niños y Adolescentes —Ley CABA N° 114 y Ley Nacional N° 26.061—, normativa que habilita expresamente a este organismo a requerir la intervención de distintos actores y dependencias en función de las atribuciones que le competen como autoridad de aplicación y ejecución de estrategias de restitución de derechos de NNyA.'),
   ];
