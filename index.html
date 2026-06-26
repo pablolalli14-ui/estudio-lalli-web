@@ -211,6 +211,62 @@
       transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1);
     }
     .fade-in.visible { opacity: 1; }
+
+    /* ── FAQ Accordion ── */
+    .faq-cat-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #D4A843;
+      padding-bottom: 0.65rem;
+      margin-bottom: 0;
+      border-bottom: 1px solid rgba(212,168,67,0.18);
+    }
+    .faq-item {
+      border-bottom: 1px solid rgba(212,168,67,0.09);
+    }
+    .faq-trigger {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      padding: 1.1rem 0;
+      text-align: left;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: rgba(232,232,232,0.85);
+      transition: color 0.2s ease;
+    }
+    .faq-trigger:hover { color: #E8CC7A; }
+    .faq-trigger[aria-expanded="true"] { color: #E8CC7A; }
+    .faq-chevron {
+      flex-shrink: 0;
+      width: 1.1rem;
+      height: 1.1rem;
+      color: rgba(212,168,67,0.45);
+      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), color 0.2s ease;
+    }
+    .faq-trigger[aria-expanded="true"] .faq-chevron {
+      transform: rotate(180deg);
+      color: #D4A843;
+    }
+    .faq-panel {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    .faq-answer {
+      padding-bottom: 1.1rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.875rem;
+      line-height: 1.75;
+      color: rgba(244,239,230,0.48);
+    }
   </style>
 </head>
 <body class="bg-texture">
@@ -562,6 +618,164 @@
   </section>
 
   <!-- ════════════════════════════════════════
+       FAQ
+  ════════════════════════════════════════ -->
+  <section id="faq" class="py-24 px-5 bg-navy-950">
+    <div class="max-w-3xl mx-auto">
+
+      <div class="fade-up text-center mb-14">
+        <p class="text-gold-400 text-xs font-body font-medium tracking-widest uppercase mb-4">Preguntas frecuentes</p>
+        <h2 class="font-display font-bold tracking-tighter text-cream" style="font-size: clamp(1.9rem, 4vw, 3rem)">Respuestas claras<br/>a dudas comunes</h2>
+      </div>
+
+      <!-- Familia -->
+      <div class="fade-up mb-10">
+        <p class="faq-cat-label mb-0">Familia</p>
+        <div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-f1">
+              <span>¿Cuánto corresponde de cuota alimentaria según la cantidad de hijos?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+            </button>
+            <div class="faq-panel" id="faq-f1" role="region">
+              <p class="faq-answer">No existe un porcentaje ni un monto fijo que se aplique siempre. La cuota se determina en función de los ingresos del alimentante y las necesidades del hijo, analizando cada situación en particular.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-f2">
+              <span>¿Cuánto tarda un divorcio?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+            </button>
+            <div class="faq-panel" id="faq-f2" role="region">
+              <p class="faq-answer">Un divorcio puede tardar entre 4 meses y 1 año, según el nivel de conflictividad que se presente, el juzgado en el que tramite, entre otros factores. El divorcio "express" es un nombre que el marketing decidió darle a un proceso que, aunque más simple que antes, sigue siendo judicial y muchas veces burocrático.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-f3">
+              <span>¿Puedo divorciarme aunque la otra persona no quiera?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+            </button>
+            <div class="faq-panel" id="faq-f3" role="region">
+              <p class="faq-answer">Sí. En Argentina existen dos modalidades vigentes para divorciarse: por presentación conjunta y por presentación unilateral. Si tu ex no quiere divorciarse, vos podés, y no tenés que dar motivos. Tu voluntad alcanza.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-f4">
+              <span>¿Qué pasa si el padre o la madre no paga la cuota alimentaria?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+            </button>
+            <div class="faq-panel" id="faq-f4" role="region">
+              <p class="faq-answer">Si el alimentante no paga, o bien hay que iniciar el expediente judicial reclamando la cuota, o —si ya lo hiciste— denunciar el incumplimiento de la cuota pactada. Hay múltiples opciones para hacerla cumplir.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-f5">
+              <span>¿Necesito mi propio abogado o puede ser uno solo para los dos?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+            </button>
+            <div class="faq-panel" id="faq-f5" role="region">
+              <p class="faq-answer">Mi recomendación personal es que siempre cada parte tenga su propio abogado, para evitar cuestiones éticas y potenciales conflictos de intereses.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Penal -->
+      <div class="fade-up mb-10">
+        <p class="faq-cat-label mb-0">Penal</p>
+        <div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-p1">
+              <span>¿Qué hago si detienen a un familiar?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+            </button>
+            <div class="faq-panel" id="faq-p1" role="region">
+              <p class="faq-answer">Actuá rápido: las primeras horas son decisivas. Contactá a un abogado de inmediato para conocer la situación procesal, la fiscalía interviniente y las posibilidades de excarcelación.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-p2">
+              <span>¿Cuánto tiempo pueden tener a una persona detenida?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+            </button>
+            <div class="faq-panel" id="faq-p2" role="region">
+              <p class="faq-answer">Hay plazos legales estrictos que deben respetarse. Dependiendo de la instancia procesal, pueden ser horas, días o meses. Si se exceden o no se cumplen las garantías, existen vías para reclamar.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-p3">
+              <span>¿Qué es una IPP?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+            </button>
+            <div class="faq-panel" id="faq-p3" role="region">
+              <p class="faq-answer">Es la Investigación Penal Preparatoria: la etapa donde la fiscalía reúne pruebas para determinar si hay delito y quién es responsable.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-p4">
+              <span>¿Se puede pedir la excarcelación?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+            </button>
+            <div class="faq-panel" id="faq-p4" role="region">
+              <p class="faq-answer">Sí, según el delito y las circunstancias. Es uno de los primeros pasos que evaluamos en una defensa.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Honorarios y consulta -->
+      <div class="fade-up">
+        <p class="faq-cat-label mb-0">Honorarios y consulta</p>
+        <div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-h1">
+              <span>¿Cuánto cuesta la consulta?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+            </button>
+            <div class="faq-panel" id="faq-h1" role="region">
+              <p class="faq-answer">Al día de hoy la consulta tiene un valor de $50.000, salvo las cuestiones de derecho laboral, que son gratuitas. Se abona al momento de la reserva. Trabajamos en modalidad virtual y presencial.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-h2">
+              <span>¿Cómo se acuerdan los honorarios?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+            </button>
+            <div class="faq-panel" id="faq-h2" role="region">
+              <p class="faq-answer">Los honorarios se definen en la primera consulta, o tras la evaluación pormenorizada del expediente del que se trate, pero siempre dentro de un rango claro desde el primer momento. Por escrito.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-h3">
+              <span>¿Se puede pagar en cuotas?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+            </button>
+            <div class="faq-panel" id="faq-h3" role="region">
+              <p class="faq-answer">Trabajamos con cuotas, con y sin interés, en función del monto pactado y la cantidad de cuotas.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
        CONTACTO
   ════════════════════════════════════════ -->
   <section id="contacto" class="py-24 px-5 bg-navy-950">
@@ -695,6 +909,16 @@
       });
     }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
     document.querySelectorAll('.fade-up, .fade-in').forEach(el => observer.observe(el));
+
+    // ── FAQ Accordion ──
+    document.querySelectorAll('.faq-trigger').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        const panel = document.getElementById(btn.getAttribute('aria-controls'));
+        btn.setAttribute('aria-expanded', !expanded);
+        panel.style.maxHeight = expanded ? '0' : panel.scrollHeight + 'px';
+      });
+    });
 
     // ── Card spotlight cursor effect ──
     document.querySelectorAll('[data-spotlight]').forEach(card => {
