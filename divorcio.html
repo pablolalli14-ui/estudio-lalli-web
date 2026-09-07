@@ -40,17 +40,67 @@
     gtag('js', new Date());
     gtag('config', 'G-J12SDZEF9B');
     gtag('config', 'AW-17938773454');
-    // Etiquetas de conversión por área — ID/Label de Google Ads
-    // Nota: Sucesiones todavía no tiene acción propia en Google Ads, cae en 'familia'.
-    var CONV = {
+    // ── Conversiones por área ──────────────────────────────────────────────
+    // Reescrito 09-2026. Antes esto elegía la etiqueta por utm_campaign y caía en
+    // 'familia' por defecto: Alimentos, Divorcio, Régimen y Sucesiones contaban todos
+    // como Familia. Ahora decide por la RUTA de la página, que es lo que efectivamente
+    // distingue el área y no se pierde si el UTM se cae.
+    //
+    // Dos acciones por área:
+    //   visita   → llegada a la landing. En Google Ads va como SECUNDARIA (observación).
+    //   whatsapp → clic en cualquier CTA de WhatsApp. PRIMARIA: es la que gobierna la puja.
+    //
+    // PENDIENTE: crear las acciones en Google Ads y pegar acá su Label. Mientras el valor
+    // sea null se usa LEGACY, así que nada deja de medirse durante la transición.
+    var LEGACY = {
       familia: 'AW-17938773454/VkroCNX54LAcEM7r7-lC',
       penal:   'AW-17938773454/rvIZCPy0tbIcEM7r7-lC'
     };
+    var CONV = {
+      alimentos: { visita: null, whatsapp: null, legacy: LEGACY.familia },
+      divorcio:  { visita: null, whatsapp: null, legacy: LEGACY.familia },
+      regimen:   { visita: null, whatsapp: null, legacy: LEGACY.familia },
+      sucesiones:{ visita: null, whatsapp: null, legacy: LEGACY.familia },
+      penal:     { visita: null, whatsapp: null, legacy: LEGACY.penal },
+      home:      { visita: null, whatsapp: null, legacy: LEGACY.familia }
+    };
+    function areaActual() {
+      var p = (window.location.pathname || '').toLowerCase();
+      if (p.indexOf('alimentos') !== -1) return 'alimentos';
+      if (p.indexOf('divorcio') !== -1) return 'divorcio';
+      if (p.indexOf('regimen') !== -1) return 'regimen';
+      if (p.indexOf('sucesiones') !== -1) return 'sucesiones';
+      if (p.indexOf('penal') !== -1) return 'penal';
+      return 'home';
+    }
+    function enviarConversion(evento, etiqueta) {
+      var area = areaActual();
+      var cfg = CONV[area] || CONV.home;
+      // El fallback a LEGACY es SOLO para 'whatsapp': preserva lo que ya se venía midiendo
+      // mientras no estén cargadas las etiquetas nuevas. 'visita' NUNCA cae en legacy —
+      // si lo hiciera, cada carga de página entraría como conversión en la acción que hoy
+      // gobierna la puja, inflándola con tráfico que no pidió nada.
+      var sendTo = cfg[evento] || (evento === 'whatsapp' ? cfg.legacy : null);
+      if (!sendTo) return;
+      gtag('event', 'conversion', {
+        send_to: sendTo, event_category: 'lead', event_label: etiqueta || area
+      });
+    }
+    // Clic en WhatsApp — la conversión que importa.
     function trackConversion(type) {
-      var campaign = new URLSearchParams(window.location.search).get('utm_campaign') || '';
-      var sendTo = campaign === 'penal' ? CONV.penal : CONV.familia;
-      gtag('event', 'conversion', { send_to: sendTo, event_category: 'lead', event_label: type });
+      enviarConversion('whatsapp', type);
       gtag('event', type, { event_category: 'lead' });
+    }
+    // Llegada a la landing — solo observación, para leer el embudo.
+    function trackVisita() {
+      var area = areaActual();
+      enviarConversion('visita', 'visita_' + area);
+      gtag('event', 'visita_landing', { event_category: 'lead', event_label: area });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', trackVisita);
+    } else {
+      trackVisita();
     }
   </script>
 
@@ -410,7 +460,7 @@
       </div>
       <div class="flex flex-col gap-2 text-sm font-body">
         <p class="text-cream/30 text-xs font-medium uppercase tracking-wider mb-1">Contacto</p>
-        <a href="https://wa.me/5491165165861" onclick="trackConversion('whatsapp_divorcio_footer')" class="text-cream/50 hover:text-gold-400 transition-colors duration-200">+54 9 11 6516-5861</a>
+        <a href="https://wa.me/5491165165861?text=Hola%2C%20quisiera%20consultar%20sobre%20mi%20divorcio." onclick="trackConversion('whatsapp_divorcio_footer')" class="text-cream/50 hover:text-gold-400 transition-colors duration-200">+54 9 11 6516-5861</a>
         <a href="https://www.instagram.com/pablo.j.lalli/" target="_blank" rel="noopener" class="text-cream/50 hover:text-gold-400 transition-colors duration-200">@pablo.j.lalli</a>
         <p class="text-cream/40">Av. Eva Perón 6640</p>
         <p class="text-cream/30">Florencio Varela, Buenos Aires</p>
