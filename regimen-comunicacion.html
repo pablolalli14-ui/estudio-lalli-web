@@ -209,15 +209,26 @@
       regimen:    'Hola, los contacto por el anuncio de régimen de comunicación',
       sucesiones: 'Hola, los contacto por el anuncio de sucesiones en Florencio Varela',
       penal:      'Hola, los contacto por el anuncio penal en Florencio Varela',
-      home:       'Hola, los contacto por el anuncio en Florencio Varela'
+      home:       'Hola, los contacto por el anuncio en Florencio Varela',
+      reclaman:   'Hola, me reclaman alimentos y los contacto por el anuncio',
+      acuerdo:    'Hola, quiero pagar la cuota y ver a mis hijos, los contacto por el anuncio'
     };
+    // Las dos landings del lado demandado caen dentro del area 'alimentos' para la
+    // conversion -- eso es deliberado, el corte por lado se lee por ad group en Ads --
+    // pero necesitan su propio texto de WhatsApp. La clave sale de la ruta.
+    function claveWa() {
+      var p = (window.location.pathname || '').toLowerCase();
+      if (p.indexOf('me-reclaman') !== -1) return 'reclaman';
+      if (p.indexOf('acuerdo-alimentos') !== -1) return 'acuerdo';
+      return areaActual();
+    }
     if (new URLSearchParams(window.location.search).get('wa') === '1') {
       trackConversion('whatsapp_ads_directo');
       // El salto espera 700 ms: gtag manda el hit por sendBeacon y sobrevive a
       // la navegación, pero si la red está lenta esto le da aire antes de irse.
       setTimeout(function () {
         window.location.replace('https://wa.me/5491165165861?text=' +
-          encodeURIComponent(TEXTO_WA[areaActual()] || TEXTO_WA.home));
+          encodeURIComponent(TEXTO_WA[claveWa()] || TEXTO_WA.home));
       }, 700);
     }
   </script>
