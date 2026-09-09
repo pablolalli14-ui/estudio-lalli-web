@@ -197,6 +197,29 @@
     } else {
       trackVisita();
     }
+
+    // ── WhatsApp directo desde el anuncio (?wa=1) ──────────────────────────
+    // El sitelink del anuncio apunta a esta misma landing con ?wa=1: la
+    // conversión se registra acá y recién después saltamos al chat. Un toque
+    // para el usuario, medición intacta, y el destino del anuncio sigue siendo
+    // dominio propio (Google rechaza sitelinks que apuntan a wa.me directo).
+    var TEXTO_WA = {
+      alimentos:  'Hola, los contacto por el anuncio de alimentos en Florencio Varela',
+      divorcio:   'Hola, los contacto por el anuncio de divorcios en Florencio Varela',
+      regimen:    'Hola, los contacto por el anuncio de régimen de comunicación',
+      sucesiones: 'Hola, los contacto por el anuncio de sucesiones en Florencio Varela',
+      penal:      'Hola, los contacto por el anuncio penal en Florencio Varela',
+      home:       'Hola, los contacto por el anuncio en Florencio Varela'
+    };
+    if (new URLSearchParams(window.location.search).get('wa') === '1') {
+      trackConversion('whatsapp_ads_directo');
+      // El salto espera 700 ms: gtag manda el hit por sendBeacon y sobrevive a
+      // la navegación, pero si la red está lenta esto le da aire antes de irse.
+      setTimeout(function () {
+        window.location.replace('https://wa.me/5491165165861?text=' +
+          encodeURIComponent(TEXTO_WA[areaActual()] || TEXTO_WA.home));
+      }, 700);
+    }
   </script>
 
   <style>
