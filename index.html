@@ -376,7 +376,10 @@
   <!-- ════════════════════════════════════════
        MARQUEE STRIP
   ════════════════════════════════════════ -->
-  <div class="pt-[69px] overflow-hidden border-b border-gold-500/8 bg-navy-950/50">
+  <!-- El padding sale de la altura REAL de la barra, medida abajo. Estaba fijo en
+       69px y con la tipografia nueva la barra crecio: la franja quedaba tapada
+       y el texto se veia cortado por la mitad. -->
+  <div class="overflow-hidden border-b border-gold-500/8 bg-navy-950/50" style="padding-top: var(--nav-h, 80px)">
     <div class="py-2.5">
       <div class="marquee-track select-none">
         <div class="flex items-center gap-8 px-8 whitespace-nowrap">
@@ -818,6 +821,25 @@
         card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
       });
     });
+  </script>
+
+  <script>
+    // La barra de navegacion es fixed, asi que no ocupa lugar: lo que va abajo
+    // tiene que reservarselo a mano. Cualquier numero escrito aca queda viejo
+    // apenas cambia la tipografia o el tamano de la marca, que es exactamente
+    // lo que paso. Se mide y listo.
+    (function () {
+      var barra = document.querySelector('nav.fixed');
+      if (!barra) return;
+      function medir() {
+        document.documentElement.style.setProperty('--nav-h', barra.offsetHeight + 'px');
+      }
+      medir();
+      window.addEventListener('resize', medir);
+      // Las fuentes de Google llegan despues del primer pintado y cambian la
+      // altura: sin esta segunda medicion el desfasaje vuelve.
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(medir);
+    })();
   </script>
 </body>
 </html>
