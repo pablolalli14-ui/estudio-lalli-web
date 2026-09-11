@@ -1,0 +1,55 @@
+{
+  "slug": "alimentos",
+  "area": "alimentos",
+
+  "titulo": "Abogado de Cuota Alimentaria en Florencio Varela | Lalli & Asoc",
+  "descripcion": "Reclamo de cuota alimentaria, aumento e incumplimiento en Florencio Varela y zona sur del GBA. Pensión alimenticia para tus hijos. Honorarios fijos.",
+
+  "h1": "Abogado de Alimentos en Florencio Varela",
+  "bajada": "Reclamamos la cuota alimentaria para tus hijos, gestionamos el aumento y actuamos ante el incumplimiento del otro progenitor.",
+
+  "sintesis": [
+    "Reclamo y aumento de cuota",
+    "Ejecución por incumplimiento",
+    "Honorarios fijos, sin sorpresas"
+  ],
+
+  "servicios_titulo": "Qué resolvemos en alimentos",
+  "servicios": [
+    { "titulo": "Reclamo de cuota alimentaria",
+      "texto": "Iniciamos el reclamo judicial para que el otro progenitor cumpla con la cuota alimentaria de tus hijos." },
+    { "titulo": "Incumplimiento de la cuota",
+      "texto": "Si la cuota no se paga, ejecutamos la deuda y pedimos el embargo de haberes o bienes del deudor." },
+    { "titulo": "Aumento de cuota alimentaria",
+      "texto": "Pedimos el aumento cuando cambian los gastos del hijo o los ingresos de quien paga la cuota." },
+    { "titulo": "Pensión entre cónyuges",
+      "texto": "También asesoramos en pedidos de alimentos entre cónyuges durante la separación, mientras se resuelve el divorcio." }
+  ],
+
+  "proceso": [
+    { "titulo": "Consulta inicial",
+      "texto": "Nos contás la situación: quién debe pagar, desde cuándo y qué pasó con los pagos. Evaluamos las posibilidades reales del reclamo." },
+    { "titulo": "Estrategia y presupuesto",
+      "texto": "Armamos la estrategia (reclamo, ejecución o aumento) y te presentamos los honorarios por escrito antes de empezar." },
+    { "titulo": "Representación activa",
+      "texto": "Iniciamos el trámite judicial y te mantenemos informado hasta que la cuota se cumpla." }
+  ],
+
+  "faq": [
+    { "pregunta": "¿Qué pasa si no me pagan la cuota alimentaria?",
+      "respuesta": "Podemos ejecutar la deuda judicialmente y pedir el embargo de sueldo o bienes del deudor." },
+    { "pregunta": "¿Cuándo puedo pedir un aumento de cuota?",
+      "respuesta": "Cuando aumentan los gastos del hijo o mejoran los ingresos de quien paga la cuota." },
+    { "pregunta": "¿La cuota alimentaria tiene un monto fijo por ley?",
+      "respuesta": "No, se calcula según las necesidades del hijo y los ingresos de ambos progenitores." }
+  ],
+
+  "cierre_titulo": "¿Te deben la cuota alimentaria?",
+  "cierre_texto": "Escribinos por WhatsApp y contanos tu situación. Te respondemos con honestidad y a la brevedad.",
+
+  "wa_texto": "Hola, quisiera consultar sobre una cuota alimentaria.",
+  "wa_texto_ads": "Hola, quisiera consultar por una cuota alimentaria",
+
+  "conversion_visita": "AW-17938773454/1AnqCMm9ovIcEM7r7-lC",
+  "conversion_whatsapp": "AW-17938773454/80xzCLrsofIcEM7r7-lC"
+}
