@@ -25,7 +25,10 @@ const fs = require('fs');
 const path = require('path');
 
 const RAIZ = __dirname;
-const DOMINIO = 'https://estudio-lalli-web.vercel.app';
+const { emitirTheme, emitirConversiones } = require('./_plantilla/emitir.js');
+
+const leerJson = f => JSON.parse(fs.readFileSync(path.join(RAIZ, f), 'utf8'));
+const SITIO = leerJson('sitio.json');
 
 // ── Reglas que no se negocian (workflows/paso5_anuncios.md) ────────────────
 // La consulta cuesta 1 JUS. Que una landing diga "gratis" en cualquier
@@ -128,15 +131,18 @@ function escaparJson(t) {
 
 function renderizar(plantilla, spec) {
   const derivados = Object.assign({}, spec, {
+    sitio: SITIO,
     titulo_esc:   escaparHtml(spec.titulo),
     wa_texto_url: encodeURIComponent(spec.wa_texto)
   });
 
   const sinResolver = [];
-  const html = plantilla.replace(/\{\{([a-z0-9._]+)(\|json)?\}\}/g, (todo, ruta, json) => {
+  const html = plantilla.replace(/\{\{([a-z0-9._]+)(\|json|\|html)?\}\}/g, (todo, ruta, filtro) => {
     const v = valorDe(derivados, ruta);
     if (v == null) { sinResolver.push(ruta); return todo; }
-    return json ? escaparJson(v) : String(v);
+    if (filtro === '|json') return escaparJson(v);
+    if (filtro === '|html') return escaparHtml(v);
+    return String(v);
   });
 
   if (sinResolver.length) {
@@ -148,41 +154,47 @@ function renderizar(plantilla, spec) {
 // ── Enganches: medición y sitemap ──────────────────────────────────────────
 
 function engancharMedicion(spec, dry) {
-  const p = path.join(RAIZ, 'conversiones.js');
-  let s = fs.readFileSync(p, 'utf8');
-  const hechos = [];
+  // Se parchea medicion.json, no conversiones.js: meter mano en el JS por
+  // coincidencia de texto se rompe el día que alguien reordena el archivo.
+  // El JS se regenera entero desde el JSON, así que no puede desincronizarse.
+  const p = path.join(RAIZ, 'medicion.json');
+  const med = JSON.parse(fs.readFileSync(p, 'utf8'));
 
-  if (new RegExp('^\\s*' + spec.area + '\\s*:', 'm').test(s.split('var TEXTO_WA')[0])) {
-    hechos.push(gris('  ya estaba  CONV.' + spec.area));
-  } else {
-    const visita   = spec.conversion_visita   ? "'" + spec.conversion_visita   + "'" : 'null';
-    const whatsapp = spec.conversion_whatsapp ? "'" + spec.conversion_whatsapp + "'" : 'null';
-    const linea = '    ' + spec.area + ': { visita: ' + visita + ', whatsapp: ' + whatsapp +
-                  ', legacy: LEGACY.familia },\n';
-    const ancla = '    home:      { visita: null';
-    if (s.indexOf(ancla) === -1) morir('no encuentro dónde insertar en CONV de conversiones.js');
-    s = s.replace(ancla, linea + ancla);
-    hechos.push(verde('  agregado   CONV.' + spec.area));
+  if (med.areas.some(a => a.area === spec.area)) {
+    return [gris('  ya estaba  medicion.json · ' + spec.area)];
   }
 
-  const bloqueWa = s.slice(s.indexOf('var TEXTO_WA'));
-  if (new RegExp('^\\s*' + spec.area + '\\s*:', 'm').test(bloqueWa)) {
-    hechos.push(gris('  ya estaba  TEXTO_WA.' + spec.area));
-  } else {
-    const ancla = "    home:       'Hola";
-    if (s.indexOf(ancla) === -1) morir('no encuentro dónde insertar en TEXTO_WA de conversiones.js');
-    s = s.replace(ancla, '    ' + spec.area + ': ' + JSON.stringify(spec.wa_texto_ads) + ',\n' + ancla);
-    hechos.push(verde('  agregado   TEXTO_WA.' + spec.area));
-  }
+  med.areas.push({
+    area:     spec.area,
+    ruta:     spec.area,
+    legacy:   spec.legacy || 'familia',
+    visita:   spec.conversion_visita   || null,
+    whatsapp: spec.conversion_whatsapp || null,
+    texto_wa: spec.wa_texto_ads
+  });
 
-  if (!dry) fs.writeFileSync(p, s);
-  return hechos;
+  if (!dry) fs.writeFileSync(p, JSON.stringify(med, null, 2) + '\n');
+  return [verde('  agregado   medicion.json · ' + spec.area)];
+}
+
+function emitirCompartidos(dry) {
+  const med = leerJson('medicion.json');
+  const salidas = [
+    ['theme.js',        emitirTheme(SITIO)],
+    ['conversiones.js', emitirConversiones(SITIO, med)]
+  ];
+  return salidas.map(([nombre, contenido]) => {
+    const destino = path.join(RAIZ, nombre);
+    const igual = fs.existsSync(destino) && fs.readFileSync(destino, 'utf8') === contenido;
+    if (!dry && !igual) fs.writeFileSync(destino, contenido);
+    return (igual ? gris('  sin cambios ') : verde('  generado   ')) + nombre;
+  });
 }
 
 function engancharSitemap(spec, dry) {
   const p = path.join(RAIZ, 'sitemap.xml');
   let s = fs.readFileSync(p, 'utf8');
-  const loc = DOMINIO + '/' + spec.slug;
+  const loc = SITIO.dominio + '/' + spec.slug;
 
   if (s.indexOf('<loc>' + loc + '</loc>') !== -1) {
     return [gris('  ya estaba  sitemap.xml')];
@@ -200,6 +212,13 @@ function main() {
   const args = process.argv.slice(2);
   const dry  = args.indexOf('--dry') !== -1;
   const slug = args.filter(a => a[0] !== '-')[0];
+
+  if (args.indexOf('--sitio') !== -1) {
+    console.log('');
+    emitirCompartidos(dry).forEach(l => console.log(l));
+    console.log('');
+    return;
+  }
 
   if (!slug) {
     const fichas = fs.readdirSync(path.join(RAIZ, 'areas'))
@@ -234,6 +253,7 @@ function main() {
 
   engancharMedicion(spec, dry).forEach(l => console.log(l));
   engancharSitemap(spec, dry).forEach(l => console.log(l));
+  emitirCompartidos(dry).forEach(l => console.log(l));
 
   if (dry) console.log(gris('\n  --dry: no se escribió nada.'));
   console.log('');

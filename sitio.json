@@ -1,0 +1,31 @@
+{
+  "_comentario": "Todo lo que es del SITIO y no de un área. Para levantar el kit en otra cuenta, este archivo y areas/ es casi todo lo que hay que tocar.",
+
+  "dominio": "https://estudio-lalli-web.vercel.app",
+
+  "marca": "Estudio Jurídico Lalli & Asoc.",
+  "marca_larga": "Estudio Jurídico Lalli & Asociados",
+  "titular": "Pablo Jesús Lalli",
+  "colegio": "Colegio de Abogados del Departamento Judicial de Quilmes",
+  "direccion": "Av. Eva Perón 6640",
+  "localidad": "Florencio Varela, Buenos Aires",
+  "email": "pablo.lalli.14@gmail.com",
+  "instagram": "pablo.j.lalli",
+
+  "whatsapp": "5491165165861",
+  "telefono_visible": "+54 9 11 6516-5861",
+
+  "ga4_id": "G-J12SDZEF9B",
+  "ads_id": "AW-17938773454",
+
+  "paleta": {
+    "pine": { "950": "#0A1813", "900": "#10241D", "800": "#17332A", "700": "#234A3D", "600": "#2F6150" },
+    "clay": { "300": "#EDB08A", "400": "#D98A5F", "500": "#C06F45", "600": "#9E5836" },
+    "cream": "#F2EDE3",
+    "wa": "#25D366"
+  },
+  "tipografias": {
+    "display": ["Fraunces", "Georgia", "serif"],
+    "body": ["Public Sans", "system-ui", "sans-serif"]
+  }
+}

@@ -59,6 +59,37 @@ s, n_track = re.subn(r'whatsapp_' + re.escape(spec['area']) + r'_', 'whatsapp_{{
 s, n_url   = re.subn(r'(https://estudio-lalli-web\.vercel\.app)/' + re.escape(spec['slug']) + r'(?=["\s])',
                      r'\1/{{slug}}', s)
 
+# ── Datos del sitio ────────────────────────────────────────────────────────
+# Lo que no es del area sino del estudio: dominio, telefono, IDs de medicion,
+# datos de matricula. Es lo que hay que cambiar para levantar el kit en otra
+# cuenta, asi que sale a sitio.json en vez de quedar escrito en la maqueta.
+sitio = json.load(io.open('sitio.json', encoding='utf-8'))
+del_sitio = [
+    ('dominio', sitio['dominio']),
+    ('whatsapp', sitio['whatsapp']),
+    ('ga4_id', sitio['ga4_id']),
+    ('ads_id', sitio['ads_id']),
+    ('email', sitio['email']),
+    ('titular', sitio['titular']),
+    ('colegio', sitio['colegio']),
+    ('direccion', sitio['direccion']),
+    ('localidad', sitio['localidad']),
+    ('instagram', sitio['instagram']),
+    ('telefono_visible', sitio['telefono_visible']),
+    ('marca_larga_esc', sitio['marca_larga'].replace('&', '&amp;')),
+    ('marca_larga', sitio['marca_larga']),
+    ('marca_esc', sitio['marca'].replace('&', '&amp;')),
+    ('marca', sitio['marca']),
+]
+del_sitio.sort(key=lambda kv: len(kv[1]), reverse=True)
+sin_usar = []
+for clave, valor in del_sitio:
+    if s.count(valor) == 0:
+        sin_usar.append(clave)
+    s = s.replace(valor, '{{sitio.' + clave.replace('_esc', '') + ('|html}}' if clave.endswith('_esc') else '}}'))
+if sin_usar:
+    print('  ojo  no aparecen en la maqueta: ' + ', '.join(sin_usar))
+
 if faltantes:
     print('NO SE PUDO DERIVAR:')
     for f in faltantes: print('  ' + f)

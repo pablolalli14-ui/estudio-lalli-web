@@ -1,9 +1,8 @@
 /**
- * Paleta del Estudio Lalli — ÚNICA FUENTE DE VERDAD del color.
+ * Paleta del sitio — GENERADO, no editar a mano.
  *
- * Antes esto vivía copiado dentro de cada uno de los 10 HTML: cambiar un color
- * eran 10 ediciones y la garantía de que alguna quedara vieja. Ahora se toca
- * acá y listo.
+ * Sale de sitio.json. Para cambiar un color se toca ese archivo y se corre
+ * `node generar.js --sitio`.
  *
  * Este archivo hace dos cosas:
  *   1. arma el `tailwind.config`, para las clases (bg-navy-900, text-gold-400…)
@@ -13,43 +12,32 @@
  * Va en el <head>, síncrono y DESPUÉS del CDN de Tailwind. Sin `defer` ni
  * `async`: el parser tiene que frenarse acá para que el <style> exista antes
  * del primer pintado, o se ve un parpadeo sin color.
- *
- * ── Paleta «Pino y arcilla» (09-2026) ───────────────────────────────────────
- * Reemplaza al azul marino + oro, que era el uniforme del rubro. El motivo
- * concreto no es estético: el CTA de toda la landing es el verde de WhatsApp
- * (#25D366) y no se puede cambiar sin perder reconocimiento. Contra el oro ese
- * verde peleaba y leía como un botón pegado encima. Con el fondo en familia
- * verde, el CTA queda dentro del sistema y gana foco por brillo, no por choque.
  */
 (function () {
   'use strict';
 
   var PALETA = {
-    // Verde pino. Sostiene la seriedad sin la frialdad institucional del azul.
     pine: {
-      950: '#0A1813',
-      900: '#10241D',
-      800: '#17332A',
-      700: '#234A3D',
-      600: '#2F6150'
+          "600": "#2F6150",
+          "700": "#234A3D",
+          "800": "#17332A",
+          "900": "#10241D",
+          "950": "#0A1813"
     },
-    // Arcilla tibia. Es el calor que el oro simulaba.
     clay: {
-      300: '#EDB08A',
-      400: '#D98A5F',
-      500: '#C06F45',
-      600: '#9E5836'
+          "300": "#EDB08A",
+          "400": "#D98A5F",
+          "500": "#C06F45",
+          "600": "#9E5836"
     },
-    cream: '#F2EDE3',
-    // Verde de WhatsApp. Fijo, no se toca: es reconocimiento de marca.
-    wa: '#25D366'
+    cream: "#F2EDE3",
+    wa: "#25D366"
   };
 
-  // ── Tailwind ───────────────────────────────────────────────────────────────
-  // Las claves siguen llamándose `navy` y `gold` porque hay ~1.500 usos de esas
-  // clases repartidos en los 10 HTML y renombrarlas sería tocar todo el markup
-  // para no cambiar nada visible. Los alias `pine` y `clay` son los nombres
-  // buenos: usarlos en lo nuevo.
+  // Las claves de Tailwind siguen llamándose `navy` y `gold` porque hay cientos
+  // de usos de esas clases repartidos en el markup y renombrarlas sería tocar
+  // todo para no cambiar nada visible. `pine` y `clay` son los nombres buenos:
+  // usarlos en lo nuevo.
   if (typeof tailwind !== 'undefined') {
     tailwind.config = {
       theme: {
@@ -63,8 +51,8 @@
             wa: PALETA.wa
           },
           fontFamily: {
-            display: ['Fraunces', 'Georgia', 'serif'],
-            body: ['Public Sans', 'system-ui', 'sans-serif']
+            display: ["Fraunces","Georgia","serif"],
+            body: ["Public Sans","system-ui","sans-serif"]
           },
           letterSpacing: { tightest: '-0.04em', tighter: '-0.03em' }
         }
@@ -72,7 +60,6 @@
     };
   }
 
-  // ── Custom properties ──────────────────────────────────────────────────────
   // De cada color salen dos variables: el hex, y la terna RGB suelta para poder
   // escribir `rgb(var(--clay-400-rgb) / 0.28)` donde antes había un rgba() con
   // los números escritos a mano.
@@ -99,7 +86,7 @@
   agregar('wa', PALETA.wa);
 
   var estilo = document.createElement('style');
-  estilo.setAttribute('data-theme', 'lalli');
+  estilo.setAttribute('data-theme', 'sitio');
   estilo.textContent = ':root {\n  ' + reglas.join('\n  ') + '\n}';
   document.head.appendChild(estilo);
 })();

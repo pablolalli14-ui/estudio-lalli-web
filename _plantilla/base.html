@@ -7,31 +7,31 @@
   <meta name="description" content="{{descripcion}}" />
 
   <!-- SEO: canonical + Open Graph + datos estructurados -->
-  <link rel="canonical" href="https://estudio-lalli-web.vercel.app/{{slug}}" />
+  <link rel="canonical" href="{{sitio.dominio}}/{{slug}}" />
 
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Estudio Jurídico Lalli &amp; Asoc." />
+  <meta property="og:site_name" content="{{sitio.marca|html}}" />
   <meta property="og:locale" content="es_AR" />
   <meta property="og:title" content="{{titulo_esc}}" />
   <meta property="og:description" content="{{descripcion}}" />
-  <meta property="og:url" content="https://estudio-lalli-web.vercel.app/{{slug}}" />
-  <meta property="og:image" content="https://estudio-lalli-web.vercel.app/foto-perfil.jpg" />
-  <meta property="og:image:alt" content="Estudio Jurídico Lalli &amp; Asoc." />
+  <meta property="og:url" content="{{sitio.dominio}}/{{slug}}" />
+  <meta property="og:image" content="{{sitio.dominio}}/foto-perfil.jpg" />
+  <meta property="og:image:alt" content="{{sitio.marca|html}}" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{titulo_esc}}" />
   <meta name="twitter:description" content="{{descripcion}}" />
-  <meta name="twitter:image" content="https://estudio-lalli-web.vercel.app/foto-perfil.jpg" />
+  <meta name="twitter:image" content="{{sitio.dominio}}/foto-perfil.jpg" />
 
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "LegalService",
-  "name": "Estudio Jurídico Lalli & Asoc.",
+  "name": "{{sitio.marca|json}}",
   "description": "{{descripcion|json}}",
-  "url": "https://estudio-lalli-web.vercel.app/{{slug|json}}",
-  "image": "https://estudio-lalli-web.vercel.app/foto-perfil.jpg",
-  "telephone": "+5491165165861",
+  "url": "{{sitio.dominio|json}}/{{slug|json}}",
+  "image": "{{sitio.dominio|json}}/foto-perfil.jpg",
+  "telephone": "+{{sitio.whatsapp|json}}",
   "priceRange": "$$",
   "address": {
     "@type": "PostalAddress",
@@ -62,7 +62,7 @@
     }
   ],
   "sameAs": [
-    "https://www.instagram.com/pablo.j.lalli"
+    "https://www.instagram.com/{{sitio.instagram|json}}"
   ]
 }
   </script>
@@ -111,13 +111,13 @@
   <script src="/theme.js"></script>
 
   <!-- Google Analytics 4 + Google Ads Conversion Tracking -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J12SDZEF9B"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{sitio.ga4_id}}"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
-    gtag('config', 'G-J12SDZEF9B');
-    gtag('config', 'AW-17938773454');
+    gtag('config', '{{sitio.ga4_id}}');
+    gtag('config', '{{sitio.ads_id}}');
   </script>
   <script src="/conversiones.js"></script>
 
@@ -255,7 +255,7 @@
           <a href="/#contacto" class="text-cream/65 hover:text-cream text-sm font-body transition-colors duration-200">Contacto</a>
         </nav>
         <a
-          href="https://wa.me/5491165165861?text={{wa_texto_url}}"
+          href="https://wa.me/{{sitio.whatsapp}}?text={{wa_texto_url}}"
           onclick="trackConversion('whatsapp_{{area}}_nav')"
           class="btn-wa flex items-center gap-2 px-4 py-2.5 rounded-full text-white font-body text-sm font-semibold">
           <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -295,7 +295,7 @@
 
           <div class="flex flex-col sm:flex-row gap-3">
             <a
-              href="https://wa.me/5491165165861?text={{wa_texto_url}}"
+              href="https://wa.me/{{sitio.whatsapp}}?text={{wa_texto_url}}"
               onclick="trackConversion('whatsapp_{{area}}_hero')"
               class="btn-wa flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl text-white font-body font-semibold text-base">
               <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -454,7 +454,7 @@
         <h2 class="font-display text-2xl md:text-3xl font-semibold text-cream mb-3">{{cierre_titulo}}</h2>
         <p class="text-cream/60 font-body text-sm leading-relaxed mb-8 max-w-[40ch]">{{cierre_texto}}</p>
         <a
-          href="https://wa.me/5491165165861?text={{wa_texto_url}}"
+          href="https://wa.me/{{sitio.whatsapp}}?text={{wa_texto_url}}"
           onclick="trackConversion('whatsapp_{{area}}_cta')"
           class="btn-wa w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-white font-body font-semibold">
           <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -473,14 +473,14 @@
       <div>
         <p class="font-display text-xl font-bold tracking-tighter text-cream mb-1">Lalli <span class="text-gold-400">&</span> Asociados</p>
         <p class="text-cream/50 font-body text-sm">Especialistas en derecho penal, familia y sucesiones</p>
-        <p class="text-cream/45 font-body text-xs mt-1">Florencio Varela, Buenos Aires, Argentina</p>
+        <p class="text-cream/45 font-body text-xs mt-1">{{sitio.localidad}}, Argentina</p>
       </div>
       <div class="flex flex-col gap-2 text-sm font-body">
         <p class="text-cream/50 text-xs font-medium uppercase tracking-wider mb-1">Contacto</p>
-        <a href="https://wa.me/5491165165861?text={{wa_texto_url}}" onclick="trackConversion('whatsapp_{{area}}_footer')" class="text-cream/70 hover:text-gold-400 transition-colors duration-200">+54 9 11 6516-5861</a>
-        <a href="https://www.instagram.com/pablo.j.lalli/" target="_blank" rel="noopener" class="text-cream/70 hover:text-gold-400 transition-colors duration-200">@pablo.j.lalli</a>
-        <p class="text-cream/60">Av. Eva Perón 6640</p>
-        <p class="text-cream/50">Florencio Varela, Buenos Aires</p>
+        <a href="https://wa.me/{{sitio.whatsapp}}?text={{wa_texto_url}}" onclick="trackConversion('whatsapp_{{area}}_footer')" class="text-cream/70 hover:text-gold-400 transition-colors duration-200">{{sitio.telefono_visible}}</a>
+        <a href="https://www.instagram.com/{{sitio.instagram}}/" target="_blank" rel="noopener" class="text-cream/70 hover:text-gold-400 transition-colors duration-200">@{{sitio.instagram}}</a>
+        <p class="text-cream/60">{{sitio.direccion}}</p>
+        <p class="text-cream/50">{{sitio.localidad}}</p>
       </div>
       <div class="flex flex-col gap-2 text-sm font-body">
         <p class="text-cream/50 text-xs font-medium uppercase tracking-wider mb-1">Áreas</p>
@@ -490,14 +490,14 @@
       </div>
     </div>
     <div class="max-w-7xl mx-auto mt-10 pt-6 border-t border-gold-500/8">
-      <p class="text-cream/70 font-body text-xs text-center">© 2026 <strong>Estudio Jurídico Lalli &amp; Asociados</strong>. Todos los derechos reservados. <a href="/privacidad" class="text-cream/70 hover:text-gold-400 underline underline-offset-2 transition-colors duration-200">Política de privacidad</a> &middot; <a href="/terminos" class="text-cream/70 hover:text-gold-400 underline underline-offset-2 transition-colors duration-200">Condiciones de servicio</a>.</p>
-      <p class="text-cream/50 font-body text-xs text-center mt-2">Este sitio web es operado por <strong>Pablo Jesús Lalli</strong>, abogado matriculado en el Colegio de Abogados del Departamento Judicial de Quilmes. Av. Eva Perón 6640, Florencio Varela, Buenos Aires, Argentina. Contacto: pablo.lalli.14@gmail.com</p>
+      <p class="text-cream/70 font-body text-xs text-center">© 2026 <strong>{{sitio.marca_larga|html}}</strong>. Todos los derechos reservados. <a href="/privacidad" class="text-cream/70 hover:text-gold-400 underline underline-offset-2 transition-colors duration-200">Política de privacidad</a> &middot; <a href="/terminos" class="text-cream/70 hover:text-gold-400 underline underline-offset-2 transition-colors duration-200">Condiciones de servicio</a>.</p>
+      <p class="text-cream/50 font-body text-xs text-center mt-2">Este sitio web es operado por <strong>{{sitio.titular}}</strong>, abogado matriculado en el {{sitio.colegio}}. {{sitio.direccion}}, {{sitio.localidad}}, Argentina. Contacto: {{sitio.email}}</p>
     </div>
   </footer>
 
   <!-- Sticky WhatsApp (mobile only) -->
   <a
-    href="https://wa.me/5491165165861?text={{wa_texto_url}}"
+    href="https://wa.me/{{sitio.whatsapp}}?text={{wa_texto_url}}"
     onclick="trackConversion('whatsapp_{{area}}_sticky')"
     class="sticky-wa btn-wa p-4 rounded-full text-white md:hidden"
     aria-label="Consultar por WhatsApp">

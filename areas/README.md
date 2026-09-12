@@ -13,10 +13,37 @@ node generar.js                    # lista las fichas disponibles
 | Archivo | Qué le hace |
 |---|---|
 | `<slug>.html` | lo escribe entero desde `_plantilla/base.html` |
-| `conversiones.js` | agrega la entrada del área en `CONV` y en `TEXTO_WA` |
+| `medicion.json` | agrega el área con sus etiquetas y su texto de WhatsApp |
 | `sitemap.xml` | agrega la URL |
+| `theme.js` | lo regenera desde `sitio.json` |
+| `conversiones.js` | lo regenera desde `sitio.json` + `medicion.json` |
 
 Correrlo dos veces no duplica nada: antes de insertar chequea si ya está.
+
+`node generar.js --sitio` regenera solo los dos archivos compartidos, sin tocar
+ninguna landing. Es lo que hay que correr después de cambiar un color o una
+etiqueta de conversión.
+
+## Los tres archivos de datos
+
+| Archivo | Qué manda |
+|---|---|
+| `sitio.json` | dominio, marca, WhatsApp, IDs de GA4 y Ads, paleta, tipografías |
+| `medicion.json` | qué etiqueta de conversión usa cada área y con qué texto saluda |
+| `areas/<slug>.json` | el contenido de una landing |
+
+**`theme.js` y `conversiones.js` no se editan a mano: se generan.** Llevan el
+aviso en la cabecera. Si los tocás, el próximo `generar.js` te pisa el cambio.
+
+## Levantar el kit en otra cuenta
+
+Copiá el repo y cambiá `sitio.json` —dominio, marca, WhatsApp, los dos IDs de
+medición, la paleta— y las fichas de `areas/`. Corré `node generar.js --sitio`
+y después cada área. No queda ningún dato del estudio original escrito adentro
+del código.
+
+Lo único que sigue a mano es el logo del encabezado, que está partido en dos
+para poder pintar el `&` con el color de acento.
 
 ## Sumar un área
 

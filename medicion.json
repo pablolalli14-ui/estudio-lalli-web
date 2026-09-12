@@ -1,0 +1,66 @@
+{
+  "_comentario": "Fuente de verdad de la medición. conversiones.js se GENERA desde acá: no editarlo a mano. El orden de 'areas' importa, porque areaActual() devuelve la primera ruta que coincide.",
+  "legacy": {
+    "familia": "AW-17938773454/VkroCNX54LAcEM7r7-lC",
+    "penal": "AW-17938773454/rvIZCPy0tbIcEM7r7-lC"
+  },
+  "areas": [
+    {
+      "area": "alimentos",
+      "ruta": "alimentos",
+      "legacy": "familia",
+      "visita": "AW-17938773454/1AnqCMm9ovIcEM7r7-lC",
+      "whatsapp": "AW-17938773454/80xzCLrsofIcEM7r7-lC",
+      "texto_wa": "Hola, quisiera consultar por una cuota alimentaria"
+    },
+    {
+      "area": "divorcio",
+      "ruta": "divorcio",
+      "legacy": "familia",
+      "visita": null,
+      "whatsapp": null,
+      "texto_wa": "Hola, los contacto por el anuncio de divorcios en Florencio Varela"
+    },
+    {
+      "area": "regimen",
+      "ruta": "regimen",
+      "legacy": "familia",
+      "visita": null,
+      "whatsapp": null,
+      "texto_wa": "Hola, los contacto por el anuncio de régimen de comunicación"
+    },
+    {
+      "area": "sucesiones",
+      "ruta": "sucesiones",
+      "legacy": "familia",
+      "visita": null,
+      "whatsapp": null,
+      "texto_wa": "Hola, los contacto por el anuncio de sucesiones en Florencio Varela"
+    },
+    {
+      "area": "penal",
+      "ruta": "penal",
+      "legacy": "penal",
+      "visita": null,
+      "whatsapp": null,
+      "texto_wa": "Hola, los contacto por el anuncio penal en Florencio Varela"
+    }
+  ],
+  "home": {
+    "legacy": "familia",
+    "texto_wa": "Hola, los contacto por el anuncio en Florencio Varela"
+  },
+  "_textos_por_ruta": "Landings que comparten área con otra pero necesitan su propio saludo. Se evalúan ANTES que las áreas.",
+  "textos_por_ruta": [
+    {
+      "contiene": "me-reclaman",
+      "clave": "reclaman",
+      "texto": "Hola, me reclaman alimentos y los contacto por el anuncio"
+    },
+    {
+      "contiene": "acuerdo-alimentos",
+      "clave": "acuerdo",
+      "texto": "Hola, quiero pagar la cuota y ver a mis hijos, los contacto por el anuncio"
+    }
+  ]
+}
