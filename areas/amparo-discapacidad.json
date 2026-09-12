@@ -11,9 +11,9 @@
   "bajada": "¿Tu obra social o prepaga cortó terapias, transporte, acompañante o integración escolar? Iniciamos el amparo judicial y, si hay urgencia, pedimos una cautelar para restablecer la prestación.",
 
   "sintesis": [
-    "Primera consulta sin cargo",
+    "Primera consulta sin cargo, presencial o virtual",
     "Cautelar si hay corte de prestaciones esenciales",
-    "Estudio en Quilmes, atendemos zona sur"
+    "Litigamos en el Departamento Judicial de Quilmes"
   ],
 
   "servicios_titulo": "Qué reclamamos",
@@ -41,9 +41,9 @@
     { "pregunta": "¿Qué hago si me cortaron las terapias o el transporte?",
       "respuesta": "Si hay interrupción de prestaciones esenciales, evaluamos pedir una medida cautelar para restablecer la cobertura mientras se tramita el amparo de fondo." },
     { "pregunta": "¿Sirve si mi obra social es IOMA?",
-      "respuesta": "Sí. Los amparos contra IOMA de Quilmes, Berazategui y Florencio Varela tramitan en el Departamento Judicial de Quilmes, donde está el estudio." },
-    { "pregunta": "¿Cuánto cuesta la consulta?",
-      "respuesta": "La primera consulta para amparos de salud por discapacidad no tiene cargo." }
+      "respuesta": "Sí. Los amparos contra IOMA de Quilmes, Berazategui y Florencio Varela tramitan en el Departamento Judicial de Quilmes, donde Pablo está matriculado." },
+    { "pregunta": "¿Cuánto cuesta la consulta y tiene que ser presencial?",
+      "respuesta": "La primera consulta para amparos de salud por discapacidad no tiene cargo. Puede ser presencial en el estudio de Florencio Varela o por videollamada." }
   ],
 
   "cierre_titulo": "¿Le cortaron una prestación por discapacidad?",
