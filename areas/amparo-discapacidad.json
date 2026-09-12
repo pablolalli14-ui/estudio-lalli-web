@@ -1,0 +1,57 @@
+{
+  "slug": "amparo-discapacidad",
+  "area": "discapacidad",
+  "legacy": "familia",
+  "excepcion_consulta_sin_cargo": true,
+
+  "titulo": "Amparo de Salud por Discapacidad en Quilmes | Lalli & Asoc",
+  "descripcion": "Amparo judicial por corte de terapias, transporte o acompañante por discapacidad. Quilmes, Berazategui y Florencio Varela. Primera consulta sin cargo.",
+
+  "h1": "Amparo de Salud por Discapacidad",
+  "bajada": "¿Tu obra social o prepaga cortó terapias, transporte, acompañante o integración escolar? Iniciamos el amparo judicial y, si hay urgencia, pedimos una cautelar para restablecer la prestación.",
+
+  "sintesis": [
+    "Primera consulta sin cargo",
+    "Cautelar si hay corte de prestaciones esenciales",
+    "Estudio en Quilmes, atendemos zona sur"
+  ],
+
+  "servicios_titulo": "Qué reclamamos",
+  "servicios": [
+    { "titulo": "Terapias y rehabilitación",
+      "texto": "Fonoaudiología, psicología, terapia ocupacional, kinesiología y otras. Exigimos las sesiones que indica el plan terapéutico, no un cupo arbitrario." },
+    { "titulo": "Acompañante e integración escolar",
+      "texto": "Acompañante terapéutico, maestra integradora y apoyos para la escuela." },
+    { "titulo": "Transporte",
+      "texto": "Traslados a terapias, centro de día y escuela cuando la obra social los demora o los niega." },
+    { "titulo": "IOMA y obras sociales provinciales",
+      "texto": "Litigamos en el Departamento Judicial de Quilmes, donde tramitan los amparos contra IOMA de Florencio Varela, Berazategui y Quilmes." }
+  ],
+
+  "proceso": [
+    { "titulo": "Diagnóstico",
+      "texto": "Revisamos el CUD, el plan terapéutico y la prueba del incumplimiento (nota, mail, número de gestión o negativa) para definir viabilidad y urgencia. Primera consulta sin cargo." },
+    { "titulo": "Intimación y amparo",
+      "texto": "Formalizamos el reclamo para dejar constancia. Si no hay respuesta, iniciamos la acción judicial y, si hay corte de prestaciones esenciales, pedimos una cautelar." },
+    { "titulo": "Cumplimiento",
+      "texto": "Controlamos que la prestación se cumpla y, si persiste el incumplimiento, pedimos medidas de compulsión." }
+  ],
+
+  "faq": [
+    { "pregunta": "¿Qué hago si me cortaron las terapias o el transporte?",
+      "respuesta": "Si hay interrupción de prestaciones esenciales, evaluamos pedir una medida cautelar para restablecer la cobertura mientras se tramita el amparo de fondo." },
+    { "pregunta": "¿Sirve si mi obra social es IOMA?",
+      "respuesta": "Sí. Los amparos contra IOMA de Quilmes, Berazategui y Florencio Varela tramitan en el Departamento Judicial de Quilmes, donde está el estudio." },
+    { "pregunta": "¿Cuánto cuesta la consulta?",
+      "respuesta": "La primera consulta para amparos de salud por discapacidad no tiene cargo." }
+  ],
+
+  "cierre_titulo": "¿Le cortaron una prestación por discapacidad?",
+  "cierre_texto": "Escribinos por WhatsApp y contanos qué pasó. Primera consulta sin cargo.",
+
+  "wa_texto": "Hola, quisiera consultar sobre un amparo de salud por discapacidad.",
+  "wa_texto_ads": "Hola, quisiera consultar por un amparo de salud por discapacidad",
+
+  "conversion_visita": null,
+  "conversion_whatsapp": null
+}

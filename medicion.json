@@ -44,6 +44,14 @@
       "visita": null,
       "whatsapp": null,
       "texto_wa": "Hola, los contacto por el anuncio penal en Florencio Varela"
+    },
+    {
+      "area": "discapacidad",
+      "ruta": "discapacidad",
+      "legacy": "familia",
+      "visita": null,
+      "whatsapp": null,
+      "texto_wa": "Hola, quisiera consultar por un amparo de salud por discapacidad"
     }
   ],
   "home": {

@@ -24,12 +24,13 @@
     penal:   "AW-17938773454/rvIZCPy0tbIcEM7r7-lC"
   };
   var CONV = {
-    alimentos:  { visita: "AW-17938773454/1AnqCMm9ovIcEM7r7-lC", whatsapp: "AW-17938773454/80xzCLrsofIcEM7r7-lC", legacy: LEGACY.familia },
-    divorcio:   { visita: null, whatsapp: null, legacy: LEGACY.familia },
-    regimen:    { visita: null, whatsapp: null, legacy: LEGACY.familia },
-    sucesiones: { visita: null, whatsapp: null, legacy: LEGACY.familia },
-    penal:      { visita: null, whatsapp: null, legacy: LEGACY.penal },
-    home:       { visita: null, whatsapp: null, legacy: LEGACY.familia }
+    alimentos:    { visita: "AW-17938773454/1AnqCMm9ovIcEM7r7-lC", whatsapp: "AW-17938773454/80xzCLrsofIcEM7r7-lC", legacy: LEGACY.familia },
+    divorcio:     { visita: null, whatsapp: null, legacy: LEGACY.familia },
+    regimen:      { visita: null, whatsapp: null, legacy: LEGACY.familia },
+    sucesiones:   { visita: null, whatsapp: null, legacy: LEGACY.familia },
+    penal:        { visita: null, whatsapp: null, legacy: LEGACY.penal },
+    discapacidad: { visita: null, whatsapp: null, legacy: LEGACY.familia },
+    home:         { visita: null, whatsapp: null, legacy: LEGACY.familia }
   };
   // El área sale de la RUTA, no del utm_campaign. Antes salía del UTM y caía en
   // 'familia' por defecto: Alimentos, Divorcio, Régimen y Sucesiones contaban
@@ -42,6 +43,7 @@
     if (p.indexOf("regimen") !== -1) return "regimen";
     if (p.indexOf("sucesiones") !== -1) return "sucesiones";
     if (p.indexOf("penal") !== -1) return "penal";
+    if (p.indexOf("discapacidad") !== -1) return "discapacidad";
     return 'home';
   }
   function enviarConversion(evento, etiqueta) {
@@ -79,14 +81,15 @@
   // medición intacta, y el destino del anuncio sigue siendo dominio propio
   // (Google rechaza sitelinks que apuntan a wa.me directo).
   var TEXTO_WA = {
-    alimentos:  "Hola, quisiera consultar por una cuota alimentaria",
-    divorcio:   "Hola, los contacto por el anuncio de divorcios en Florencio Varela",
-    regimen:    "Hola, los contacto por el anuncio de régimen de comunicación",
-    sucesiones: "Hola, los contacto por el anuncio de sucesiones en Florencio Varela",
-    penal:      "Hola, los contacto por el anuncio penal en Florencio Varela",
-    reclaman:   "Hola, me reclaman alimentos y los contacto por el anuncio",
-    acuerdo:    "Hola, quiero pagar la cuota y ver a mis hijos, los contacto por el anuncio",
-    home:       "Hola, los contacto por el anuncio en Florencio Varela"
+    alimentos:    "Hola, quisiera consultar por una cuota alimentaria",
+    divorcio:     "Hola, los contacto por el anuncio de divorcios en Florencio Varela",
+    regimen:      "Hola, los contacto por el anuncio de régimen de comunicación",
+    sucesiones:   "Hola, los contacto por el anuncio de sucesiones en Florencio Varela",
+    penal:        "Hola, los contacto por el anuncio penal en Florencio Varela",
+    discapacidad: "Hola, quisiera consultar por un amparo de salud por discapacidad",
+    reclaman:     "Hola, me reclaman alimentos y los contacto por el anuncio",
+    acuerdo:      "Hola, quiero pagar la cuota y ver a mis hijos, los contacto por el anuncio",
+    home:         "Hola, los contacto por el anuncio en Florencio Varela"
   };
   // Dos landings pueden compartir área a propósito -- el corte se lee por ad
   // group en Ads -- pero necesitan su propio saludo. Esto se evalúa ANTES que

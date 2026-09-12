@@ -83,11 +83,20 @@ function validar(spec) {
     }
   });
 
-  const texto = JSON.stringify(spec);
-  PROHIBIDAS.forEach(re => {
-    const m = texto.match(re);
-    if (m) fallas.push('dice "' + m[0] + '": la consulta cuesta 1 JUS, ninguna landing puede prometer lo contrario');
-  });
+  // Excepción puntual: Pablo puede bonificar la consulta en un área específica
+  // (decisión 12-sep-2026, vertical Amparo por Discapacidad) sin tocar la regla
+  // general de las demás landings. Se declara a propósito en la ficha, igual
+  // que area_fuera_de_ruta, para que quede a la vista por qué se saltea.
+  if (spec.excepcion_consulta_sin_cargo) {
+    console.warn(gris('  ojo  esta ficha declara excepcion_consulta_sin_cargo: no se valida "gratis/sin cargo".'));
+  } else {
+    const texto = JSON.stringify(spec);
+    PROHIBIDAS.forEach(re => {
+      const m = texto.match(re);
+      if (m) fallas.push('dice "' + m[0] + '": la consulta cuesta 1 JUS, ninguna landing puede prometer lo contrario. ' +
+                          'Si esta área bonifica la consulta a propósito, agregá "excepcion_consulta_sin_cargo": true a la ficha.');
+    });
+  }
 
   // areaActual() decide el área mirando la RUTA. Si el slug no contiene el
   // nombre del área, cae en 'home' y la landing mide con la etiqueta legacy
