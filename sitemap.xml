@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://estudio-lalli-web.vercel.app/</loc>
+    <loc>https://www.estudiolalli.com.ar/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://estudio-lalli-web.vercel.app/alimentos</loc>
+    <loc>https://www.estudiolalli.com.ar/alimentos</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://estudio-lalli-web.vercel.app/me-reclaman-alimentos</loc>
+    <loc>https://www.estudiolalli.com.ar/me-reclaman-alimentos</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://estudio-lalli-web.vercel.app/acuerdo-alimentos-y-visitas</loc>
+    <loc>https://www.estudiolalli.com.ar/acuerdo-alimentos-y-visitas</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://estudio-lalli-web.vercel.app/divorcio</loc>
+    <loc>https://www.estudiolalli.com.ar/divorcio</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://estudio-lalli-web.vercel.app/regimen-comunicacion</loc>
+    <loc>https://www.estudiolalli.com.ar/regimen-comunicacion</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://estudio-lalli-web.vercel.app/penal</loc>
+    <loc>https://www.estudiolalli.com.ar/penal</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://estudio-lalli-web.vercel.app/sucesiones</loc>
+    <loc>https://www.estudiolalli.com.ar/sucesiones</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://estudio-lalli-web.vercel.app/privacidad</loc>
+    <loc>https://www.estudiolalli.com.ar/privacidad</loc>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
-    <loc>https://estudio-lalli-web.vercel.app/terminos</loc>
+    <loc>https://www.estudiolalli.com.ar/terminos</loc>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
-    <loc>https://estudio-lalli-web.vercel.app/amparo-discapacidad</loc>
+    <loc>https://www.estudiolalli.com.ar/amparo-discapacidad</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
