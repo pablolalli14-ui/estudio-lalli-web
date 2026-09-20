@@ -1,0 +1,55 @@
+{
+  "slug": "familia",
+  "area": "familia",
+
+  "titulo": "Abogado de Familia en Quilmes, Berazategui y Florencio Varela",
+  "descripcion": "Divorcios, cuota alimentaria, cuidado personal y división de bienes en el Departamento Judicial de Quilmes. Consultas virtuales y honorarios por escrito.",
+
+  "h1": "Abogado de Familia en Quilmes, Berazategui y Florencio Varela",
+  "bajada": "Llevamos divorcios, alimentos, cuidado personal y régimen de comunicación en todo el Departamento Judicial de Quilmes. La consulta es virtual: resolvés desde donde estés, sin trasladarte hasta el estudio.",
+
+  "sintesis": [
+    "Consulta virtual, sin trasladarte",
+    "Quilmes, Berazategui y Florencio Varela",
+    "Honorarios por escrito antes de empezar"
+  ],
+
+  "servicios_titulo": "Qué resolvemos en derecho de familia",
+  "servicios": [
+    { "titulo": "Divorcio y división de bienes",
+      "texto": "Tramitamos el divorcio, con acuerdo o sin él, la división de los bienes de la comunidad y la compensación económica cuando corresponde." },
+    { "titulo": "Cuota alimentaria",
+      "texto": "Reclamamos la cuota para tus hijos, pedimos el aumento cuando cambian los gastos o los ingresos, y ejecutamos la deuda si no se paga." },
+    { "titulo": "Cuidado personal y comunicación",
+      "texto": "Definimos con quién viven los hijos y cómo es el contacto con el otro progenitor, por acuerdo o por vía judicial si no hay diálogo." },
+    { "titulo": "Acuerdos y homologación",
+      "texto": "Redactamos el convenio de alimentos, cuidado y comunicación, y lo presentamos ante el juzgado para que quede homologado y sea exigible." }
+  ],
+
+  "proceso": [
+    { "titulo": "Consulta virtual",
+      "texto": "Nos escribís por WhatsApp y coordinamos una videollamada. Nos contás qué pasó, qué querés resolver y en qué estado está el tema." },
+    { "titulo": "Estrategia y presupuesto",
+      "texto": "Te decimos qué se puede reclamar y en qué plazos reales. Los honorarios y los gastos del juicio se presentan por escrito antes de iniciar." },
+    { "titulo": "Representación en el expediente",
+      "texto": "Iniciamos el trámite ante los juzgados de familia del departamento y te informamos cada movimiento, sin que tengas que ir a preguntar." }
+  ],
+
+  "faq": [
+    { "pregunta": "¿Atienden de manera virtual?",
+      "respuesta": "Sí. La consulta y el seguimiento del expediente se hacen por videollamada y WhatsApp, sin que tengas que venir al estudio. Si hay que firmar o asistir a una audiencia, te avisamos con tiempo." },
+    { "pregunta": "¿En qué juzgados tramitan los juicios de familia?",
+      "respuesta": "En los juzgados de familia del Departamento Judicial de Quilmes, que comprende los partidos de Quilmes, Berazategui y Florencio Varela." },
+    { "pregunta": "¿Cuánto cuesta iniciar un juicio de familia?",
+      "respuesta": "Depende del proceso y de si hay acuerdo entre las partes. En la consulta te damos el presupuesto por escrito, con honorarios y gastos detallados, antes de que decidas iniciar." }
+  ],
+
+  "cierre_titulo": "¿Tenés una consulta de familia?",
+  "cierre_texto": "Escribinos por WhatsApp y contanos tu situación. Te respondemos a la brevedad y con honestidad sobre lo que se puede reclamar y lo que no.",
+
+  "wa_texto": "Hola, tengo una consulta de familia.",
+  "wa_texto_ads": "Hola, tengo una consulta de familia",
+
+  "conversion_visita": null,
+  "conversion_whatsapp": null
+}

@@ -30,6 +30,7 @@
     sucesiones:   { visita: null, whatsapp: null, legacy: LEGACY.familia },
     penal:        { visita: null, whatsapp: null, legacy: LEGACY.penal },
     discapacidad: { visita: null, whatsapp: null, legacy: LEGACY.familia },
+    familia:      { visita: null, whatsapp: null, legacy: LEGACY.familia },
     home:         { visita: null, whatsapp: null, legacy: LEGACY.familia }
   };
   // El área sale de la RUTA, no del utm_campaign. Antes salía del UTM y caía en
@@ -44,6 +45,7 @@
     if (p.indexOf("sucesiones") !== -1) return "sucesiones";
     if (p.indexOf("penal") !== -1) return "penal";
     if (p.indexOf("discapacidad") !== -1) return "discapacidad";
+    if (p.indexOf("familia") !== -1) return "familia";
     return 'home';
   }
   function enviarConversion(evento, etiqueta) {
@@ -87,6 +89,7 @@
     sucesiones:   "Hola, los contacto por el anuncio de sucesiones en Florencio Varela",
     penal:        "Hola, los contacto por el anuncio penal en Florencio Varela",
     discapacidad: "Hola, quisiera consultar por un amparo de salud por discapacidad",
+    familia:      "Hola, tengo una consulta de familia",
     reclaman:     "Hola, me reclaman alimentos y los contacto por el anuncio",
     acuerdo:      "Hola, quiero pagar la cuota y ver a mis hijos, los contacto por el anuncio",
     home:         "Hola, los contacto por el anuncio en Florencio Varela"
