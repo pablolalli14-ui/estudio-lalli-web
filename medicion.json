@@ -52,6 +52,14 @@
       "visita": null,
       "whatsapp": null,
       "texto_wa": "Hola, quisiera consultar por un amparo de salud por discapacidad"
+    },
+    {
+      "area": "familia",
+      "ruta": "familia",
+      "legacy": "familia",
+      "visita": null,
+      "whatsapp": null,
+      "texto_wa": "Hola, tengo una consulta de familia"
     }
   ],
   "home": {
