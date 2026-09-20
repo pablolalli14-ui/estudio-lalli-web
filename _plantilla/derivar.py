@@ -53,17 +53,28 @@ for txt, marcador, minimo in reemplazos:
         faltantes.append('%-26s esperaba >=%d, hay %d  :: %s' % (marcador, minimo, n, txt[:58]))
     s = s.replace(txt, marcador)
 
-# Estos van por patron: 'alimentos' aparece tambien adentro de frases y
-# reemplazarlo a secas destruiria el contenido.
-s, n_track = re.subn(r'whatsapp_' + re.escape(spec['area']) + r'_', 'whatsapp_{{area}}_', s)
-s, n_url   = re.subn(r'(https://estudio-lalli-web\.vercel\.app)/' + re.escape(spec['slug']) + r'(?=["\s])',
-                     r'\1/{{slug}}', s)
-
 # ── Datos del sitio ────────────────────────────────────────────────────────
 # Lo que no es del area sino del estudio: dominio, telefono, IDs de medicion,
 # datos de matricula. Es lo que hay que cambiar para levantar el kit en otra
 # cuenta, asi que sale a sitio.json en vez de quedar escrito en la maqueta.
 sitio = json.load(io.open('sitio.json', encoding='utf-8'))
+
+# Estos van por patron: 'alimentos' aparece tambien adentro de frases y
+# reemplazarlo a secas destruiria el contenido.
+#
+# El dominio sale de sitio.json y NO se escribe aca. Estuvo hardcodeado al
+# viejo `estudio-lalli-web.vercel.app`, y cuando el sitio paso a
+# estudiolalli.com.ar el patron dejo de matchear: `urls: 0` y la plantilla
+# salia con `/alimentos` fijo en el canonical, el og:url y el JSON-LD. O sea
+# que toda landing generada despues de eso se declaraba canonica de
+# /alimentos. Por eso el contador de abajo ahora es una falla, no un aviso.
+s, n_track = re.subn(r'whatsapp_' + re.escape(spec['area']) + r'_', 'whatsapp_{{area}}_', s)
+s, n_url   = re.subn(r'(' + re.escape(sitio['dominio']) + r')/' + re.escape(spec['slug']) + r'(?=["\s])',
+                     r'\1/{{slug}}', s)
+if n_url == 0:
+    raise SystemExit('\n  x  no se encontro ninguna URL "%s/%s": revisa el dominio de sitio.json\n'
+                     % (sitio['dominio'], spec['slug']))
+
 del_sitio = [
     ('dominio', sitio['dominio']),
     ('whatsapp', sitio['whatsapp']),
