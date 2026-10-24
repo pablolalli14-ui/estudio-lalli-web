@@ -87,7 +87,7 @@
     divorcio:     "Hola, los contacto por el anuncio de divorcios en Florencio Varela",
     regimen:      "Hola, los contacto por el anuncio de régimen de comunicación",
     sucesiones:   "Hola, los contacto por el anuncio de sucesiones en Florencio Varela",
-    penal:        "Hola, los contacto por el anuncio penal en Florencio Varela",
+    penal:        "Hola, tengo una consulta penal",
     discapacidad: "Hola, quisiera consultar por un amparo de salud por discapacidad",
     familia:      "Hola, tengo una consulta de familia",
     reclaman:     "Hola, me reclaman alimentos y los contacto por el anuncio",

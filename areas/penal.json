@@ -1,0 +1,63 @@
+{
+  "slug": "penal",
+  "area": "penal",
+  "legacy": "penal",
+
+  "titulo": "Abogado Penalista en Quilmes, Berazategui y Florencio Varela",
+  "descripcion": "Defensa penal en el Departamento Judicial de Quilmes: denuncias, citaciones, detenciones, excarcelación y juicio. Honorarios por escrito.",
+
+  "h1": "Abogado Penalista en Quilmes, Berazategui y Florencio Varela",
+  "bajada": "Si te denunciaron, te citaron o detuvieron a un familiar, lo primero es saber en qué estado está la causa. Te atiende directamente el abogado que después lleva tu defensa.",
+
+  "sintesis": [
+    "Trato directo con el abogado, sin intermediarios",
+    "Fiscalías y juzgados del Departamento Judicial de Quilmes",
+    "Honorarios por escrito antes de empezar"
+  ],
+
+  "servicios_titulo": "Qué resolvemos en derecho penal",
+  "servicios": [
+    { "titulo": "Me denunciaron",
+      "texto": "Averiguamos si hay una causa abierta, en qué fiscalía está y de qué se te acusa. Con eso definimos si conviene presentarse antes de que te citen." },
+    { "titulo": "Citación a declarar o a indagatoria",
+      "texto": "Revisamos el expediente antes de que te presentes y decidimos con vos si conviene declarar, cuándo y cómo. No vas solo a la fiscalía." },
+    { "titulo": "Detenciones y excarcelación",
+      "texto": "Si hay riesgo de detención pedimos la eximición de prisión; si ya hubo una, la excarcelación. Son trámites de plazos cortos y se mueven rápido." },
+    { "titulo": "Defensa en juicio",
+      "texto": "Llevamos la causa desde la investigación hasta el juicio oral: pruebas, audiencias, alternativas como la probation y recursos si hace falta." }
+  ],
+
+  "proceso": [
+    { "titulo": "Consulta",
+      "texto": "Nos escribís por WhatsApp y coordinamos una llamada o videollamada. Nos contás qué pasó y qué papeles te llegaron, si te llegó alguno." },
+    { "titulo": "Estrategia y presupuesto",
+      "texto": "Te decimos en qué situación estás y qué se puede hacer. Los honorarios se presentan por escrito, con un anticipo para empezar y el resto en cuotas." },
+    { "titulo": "Defensa en la causa",
+      "texto": "Nos presentamos en el expediente como tu defensa, vamos a cada audiencia y te avisamos de cada movimiento, sin que tengas que ir a preguntar." }
+  ],
+
+  "faq": [
+    { "pregunta": "¿Cómo sé si me denunciaron?",
+      "respuesta": "Muchas veces la persona denunciada no recibe aviso hasta que la citan. Con tus datos podemos averiguar si hay una causa abierta y en qué fiscalía, y decidir si conviene presentarse antes." },
+    { "pregunta": "¿Qué pasa si me citan y no me presento?",
+      "respuesta": "No presentarse a una citación puede terminar en una orden de comparendo o de detención. Antes de ir conviene que un abogado vea el expediente y te acompañe." },
+    { "pregunta": "¿Cuánto cuesta un abogado penalista?",
+      "respuesta": "Depende de la etapa de la causa y de lo que haya que hacer. En la consulta te damos el presupuesto por escrito: un anticipo para empezar y el resto en cuotas acordadas." }
+  ],
+
+  "cierre_titulo": "¿Te denunciaron o te citaron?",
+  "cierre_texto": "Escribinos por WhatsApp y contanos qué pasó. En una causa penal los plazos corren desde el primer día: cuanto antes se mira, más opciones hay.",
+
+  "wa_texto": "Hola, tengo una consulta penal.",
+  "wa_texto_ads": "Hola, tengo una consulta penal",
+
+  "foto": {
+    "archivo": "foto-perfil.jpg",
+    "alt": "abogado penalista en Quilmes, Berazategui y Florencio Varela",
+    "titulo": "Te atiende el abogado que lleva tu causa",
+    "texto": "Soy Pablo Lalli. En una causa penal no hablás con una secretaría ni con un abogado distinto cada vez: la consulta, la estrategia y cada audiencia las llevo yo. Trabajo en las fiscalías y juzgados del Departamento Judicial de Quilmes."
+  },
+
+  "conversion_visita": null,
+  "conversion_whatsapp": null
+}

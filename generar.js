@@ -160,6 +160,56 @@ function renderizar(plantilla, spec) {
   return html;
 }
 
+// ── Bloque opcional: foto del abogado ──────────────────────────────────────
+// Va fuera de la plantilla a propósito: base.html sale de alimentos.html byte a
+// byte, y meterle un hueco rompería esa prueba. Las fichas sin "foto" quedan
+// exactamente igual que antes. Se inserta debajo del hero, donde está la
+// primera línea dorada (opacity-20 aparece una sola vez en la plantilla).
+// En penal la gente contrata a una persona, no a un estudio: por eso existe.
+
+const ANCLA_FOTO = '<div class="gold-line max-w-5xl mx-auto opacity-20"></div>';
+
+const CSS_FOTO = `
+    /* ── Foto del abogado (bloque opcional, generar.js) ── */
+    .photo-frame { border-radius: 1.75rem; overflow: hidden; position: relative; }
+    .photo-frame::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(to top, rgb(var(--pine-950-rgb) / 0.6) 0%, transparent 45%); }
+    .photo-frame img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+  </style>`;
+
+function bloqueFoto(spec) {
+  const f = spec.foto;
+  const h = escaparHtml;
+  return `${ANCLA_FOTO}
+
+  <!-- ════════════════════════════════════════
+       QUIÉN TE ATIENDE — bloque opcional (ficha.foto)
+  ════════════════════════════════════════ -->
+  <section id="abogado" class="py-20 px-5">
+    <div class="max-w-5xl mx-auto grid md:grid-cols-[320px_1fr] gap-10 md:gap-14 items-center">
+      <div class="photo-frame border border-gold-500/15 mx-auto w-full max-w-[320px] fade-in" style="aspect-ratio: 960 / 1005">
+        <img src="/${h(f.archivo)}" alt="${h(SITIO.titular)}, ${h(f.alt)}" width="960" height="1005" loading="lazy" />
+      </div>
+      <div class="fade-up">
+        <p class="text-gold-400 text-xs font-body font-medium tracking-widest uppercase mb-3">Quién te atiende</p>
+        <h2 class="font-display font-bold tracking-tighter text-cream mb-5" style="font-size: clamp(1.9rem, 4vw, 2.8rem)">${h(f.titulo)}</h2>
+        <p class="text-cream/70 font-body text-base leading-relaxed mb-5 max-w-[56ch]">${h(f.texto)}</p>
+        <p class="text-cream/50 font-body text-sm">${h(SITIO.titular)} · Abogado matriculado en el ${h(SITIO.colegio)}</p>
+      </div>
+    </div>
+  </section>`;
+}
+
+function insertarFoto(html, spec) {
+  if (!spec.foto) return html;
+  ['archivo', 'alt', 'titulo', 'texto'].forEach(k => {
+    if (!spec.foto[k]) morir('foto.' + k + ' está vacío');
+  });
+  if (!fs.existsSync(path.join(RAIZ, spec.foto.archivo))) morir('no existe ' + spec.foto.archivo);
+  if (html.split(ANCLA_FOTO).length !== 2) morir('la plantilla cambió: no encuentro una sola línea dorada para colgar la foto');
+  return html.replace(ANCLA_FOTO, bloqueFoto(spec)).replace('  </style>', CSS_FOTO.replace(/^\n/, ''));
+}
+
 // ── Enganches: medición y sitemap ──────────────────────────────────────────
 
 function engancharMedicion(spec, dry) {
@@ -249,7 +299,7 @@ function main() {
   validar(spec);
 
   const plantilla = fs.readFileSync(path.join(RAIZ, '_plantilla', 'base.html'), 'utf8');
-  const html = renderizar(plantilla, spec);
+  const html = insertarFoto(renderizar(plantilla, spec), spec);
 
   const destino = path.join(RAIZ, slug + '.html');
   const existia = fs.existsSync(destino);
