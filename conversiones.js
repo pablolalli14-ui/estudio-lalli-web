@@ -28,7 +28,7 @@
     divorcio:     { visita: null, whatsapp: null, legacy: LEGACY.familia },
     regimen:      { visita: null, whatsapp: null, legacy: LEGACY.familia },
     sucesiones:   { visita: null, whatsapp: null, legacy: LEGACY.familia },
-    penal:        { visita: null, whatsapp: null, legacy: LEGACY.penal },
+    penal:        { visita: null, whatsapp: "AW-17938773454/CbwfCIiUh60dEM7r7-lC", legacy: LEGACY.penal },
     discapacidad: { visita: null, whatsapp: null, legacy: LEGACY.familia },
     familia:      { visita: null, whatsapp: null, legacy: LEGACY.familia },
     home:         { visita: null, whatsapp: null, legacy: LEGACY.familia }
