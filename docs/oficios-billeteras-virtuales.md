@@ -3,7 +3,7 @@
 Referencia interna del estudio (no es parte del sitio). Datos **públicos**: los publicó el
 Juzgado Nacional de 1ª Instancia en lo Civil N.º 79 (Instagram `@jncivil79`, "Mail para
 enviar oficios"). Copia también en Notion (ESTUDIO JURIDICO LALLI & ASOC → OFICIOS) y en
-Drive (ESCRITOS Y NOTAS / EJ LALLI / 00 - RECURSOS).
+Drive (ESTUDIO JURIDICO LALLI & ASOC / 00 - RECURSOS).
 
 Cargado el 06/11/2026. Los dígitos verificadores de todos los CUIT se chequearon (módulo 11)
 y dan bien; los correos se transcribieron de la placa y **no** están confirmados por cada
